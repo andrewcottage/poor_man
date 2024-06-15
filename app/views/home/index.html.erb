@@ -1,7 +1,8 @@
 <div class="bg-white">
-  <%= render "header" %>
-
+  <h1 class="text-3xl font-semibold text-gray-900 text-center">Featured Recipes</h1>
+  <div class="mx-auto my-4 w-full sm:w-2/3">
+    <%= render 'shared/search', label: "Search Recipes", placeholder: "French Toast", path: recipes_path %>
+  </div>
+  
   <%= render "featured" %>
-
-  <%= render "footer" %>
 </div>

@@ -1,0 +1,24 @@
+<div class="w-full">
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+  <% end %>
+
+  <% content_for :title, "Categories" %>
+
+  <div class="bg-white">
+    <div class="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
+      <h1 class="text-center text-3xl font-semibold text-gray-900">Browse Categories</h1>
+      <div class="mx-auto w-full md:w-2/3 my-4">
+        <%= render 'shared/search', label: "Search Categories", placeholder: "Breakfast", path: categories_path %>
+      </div>
+
+      <div id="recipes" class="-mx-px grid grid-cols-2 border-l border-gray-200 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
+        <% @categories.each do |category| %>
+          <%= render "card", category: category %>
+        <% end %>
+      </div>
+      <%== pagy_nav_custom(@pagy) %>
+    </div>
+  </div>
+</div>
+  

@@ -100,6 +100,9 @@ GEM
   specs:
     addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
+    annotate (3.2.0)
+      activerecord (>= 3.2, < 8.0)
+      rake (>= 10.4, < 14.0)
     base64 (0.2.0)
     bcrypt (3.1.20)
     bigdecimal (3.1.8)
@@ -186,6 +189,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.5-x86_64-linux)
       racc (~> 1.4)
+    pagy (8.4.4)
     psych (5.1.2)
       stringio
     public_suffix (5.0.5)
@@ -288,6 +292,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  annotate
   bcrypt (~> 3.1.7)
   bootsnap
   capybara
@@ -295,6 +300,7 @@ DEPENDENCIES
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
+  pagy
   puma (>= 5.0)
   rails!
   redis (>= 4.0.1)

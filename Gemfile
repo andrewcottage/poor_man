@@ -58,6 +58,8 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+
+  gem 'annotate'
 end
 
 group :test do
@@ -67,3 +69,4 @@ group :test do
 end
 
 gem "tailwindcss-rails", "~> 2.6"
+gem 'pagy'

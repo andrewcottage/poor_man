@@ -1,0 +1,24 @@
+# == Schema Information
+#
+# Table name: categories
+#
+#  id             :integer          not null, primary key
+#  title          :string
+#  slug           :string
+#  description    :text
+#  recipies_count :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#
+
+one:
+  title: MyString
+  slug: <%= SecureRandom.uuid %>
+  description: MyText
+  recipies_count: 1
+
+two:
+  title: MyString
+  slug: <%= SecureRandom.uuid %>
+  description: MyText
+  recipies_count: 1
