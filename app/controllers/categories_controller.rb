@@ -6,7 +6,7 @@ class CategoriesController < ApplicationController
 # GET /categories or /categories.json
   def index
     if params[:q].present?
-      @pagy, @categories = pagy(Category.where("name LIKE ?", "%#{params[:q]}%"), items: ITEMS)
+      @pagy, @categories = pagy(Category.where("title LIKE ?", "%#{params[:q]}%"), items: ITEMS)
     else
       @pagy, @categories = pagy(Category.all, items: ITEMS)
     end

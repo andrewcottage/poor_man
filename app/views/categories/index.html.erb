@@ -12,11 +12,24 @@
         <%= render 'shared/search', label: "Search Categories", placeholder: "Breakfast", path: categories_path %>
       </div>
 
-      <div id="recipes" class="-mx-px grid grid-cols-2 border-l border-gray-200 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
-        <% @categories.each do |category| %>
-          <%= render "card", category: category %>
-        <% end %>
-      </div>
+      <section aria-labelledby="products-heading" class="my-8">
+        <h2 id="products-heading" class="sr-only">Products</h2>
+
+        <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+          <% @categories.each do |category| %>
+            <%= link_to category_path(category.slug), class: "group" do %>
+              <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg sm:aspect-h-3 sm:aspect-w-2">
+                <%= image_tag category.image, alt: category.title, class: "h-full w-full object-cover object-center group-hover:opacity-75" %>
+              </div>
+              <div class="mt-4 flex items-center justify-between text-base font-medium text-gray-900">
+                <h3><%= category.title %></h3>
+              </div>
+              <p class="mt-1 text-sm italic text-gray-500"><%= number_with_delimiter category.recipes.count %> recipies to choose from</p>
+            <% end %>
+          <% end %>
+        </div>
+      </section>
+
       <%== pagy_nav_custom(@pagy) %>
     </div>
   </div>

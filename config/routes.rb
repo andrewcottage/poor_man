@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   get "about" => "home#about"
   
+  resources :featured, only: %i[index]
+  resources :sessions, only: %i[new create destroy]
   resources :recipes, param: :slug
   resources :categories, param: :slug
   

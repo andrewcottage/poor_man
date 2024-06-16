@@ -16,10 +16,10 @@
   <div class="hidden lg:flex lg:gap-x-12">
     <%= link_to "Recipes", recipes_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
     <%= link_to "Categories", categories_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
-    <a href="/test" class="text-sm font-semibold leading-6 text-gray-900">Popular</a>
+    <%= link_to "Featured", featured_index_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
     <%= link_to "About", about_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
   </div>
   <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-    <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+    <%= link_to "Log In", new_session_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
   </div>
 </nav>
