@@ -13,9 +13,11 @@
 
   <body class="h-full">
     <%= render 'layouts/header' %>
-    <main class="container mx-auto mt-28 px-5 flex">
+
+    <main class="mx-auto mt-28 px-5 flex">
       <%= yield %>
     </main>
+    
     <%= render 'layouts/footer' %>
   </body>
 </html>

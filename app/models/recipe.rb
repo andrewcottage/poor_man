@@ -20,5 +20,4 @@ class Recipe < ApplicationRecord
   validates :title, presence: true
   validates :slug, presence: true, uniqueness: true
 
-  scope :latest, -> { order(created_at: :desc) }
 end
