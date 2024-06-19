@@ -11,12 +11,20 @@
 #  updated_at  :datetime         not null
 #
 class Recipe < ApplicationRecord
+  has_rich_text :instructions
   has_rich_text :content
 
   has_one_attached :image
 
   belongs_to :category
 
+  has_many :ratings
+  has_many :users, through: :ratings
+
   validates :title, presence: true
   validates :slug, presence: true, uniqueness: true
+
+  def rating 
+    ratings.average(:value) || 0
+  end
 end

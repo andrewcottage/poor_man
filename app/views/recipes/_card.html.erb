@@ -9,6 +9,6 @@
         <%= recipe.title %>
       <% end %>
     </h3>
-    <%= render 'recipes/card/rating', rating: 4, number_of_reviews: 38 %>
+    <%= render 'recipes/card/rating', rating: recipe.rating, number_of_reviews: recipe.ratings.count %>
   </div>
 </div>

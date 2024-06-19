@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_06_16_161319) do
+ActiveRecord::Schema[8.0].define(version: 2024_06_19_133534) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -59,6 +59,17 @@ ActiveRecord::Schema[8.0].define(version: 2024_06_16_161319) do
     t.index ["slug"], name: "index_categories_on_slug", unique: true
   end
 
+  create_table "ratings", force: :cascade do |t|
+    t.integer "recipe_id", null: false
+    t.integer "user_id", null: false
+    t.integer "value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["recipe_id", "user_id"], name: "index_ratings_on_recipe_id_and_user_id", unique: true
+    t.index ["recipe_id"], name: "index_ratings_on_recipe_id"
+    t.index ["user_id"], name: "index_ratings_on_user_id"
+  end
+
   create_table "recipes", force: :cascade do |t|
     t.integer "category_id", null: false
     t.string "title"
@@ -82,5 +93,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_06_16_161319) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "ratings", "recipes"
+  add_foreign_key "ratings", "users"
   add_foreign_key "recipes", "categories"
 end
