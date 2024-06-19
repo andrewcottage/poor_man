@@ -33,13 +33,18 @@
 
       <!-- Dropdown menu -->
       <div data-account-dropdown-target="menu" class="hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+      <% if Current.user %>
+        <div class="py-1" role="none">
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0">Profile</a>
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-1">Favorites</a>
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-2">Something Else</a>
+          
+          <%= button_to "Sign out", session_path(Current.user), method: :delete, class: "block w-full px-4 py-2 text-left text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-3" %>
+        </div>
+      <% else %>
       <div class="py-1" role="none">
-        <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0">Profile</a>
-        <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-1">Favorites</a>
-        <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-2">Something Else</a>
-        
-        <%= button_to "Sign out", session_path(Current.user), method: :delete, class: "block w-full px-4 py-2 text-left text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-3" %>
-      </div>
+        <%= link_to "Sign in", new_session_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-0" %>
+        <%= link_to "Sign up", new_registration_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-1" %>
       </div>
     </div>
   </div>
