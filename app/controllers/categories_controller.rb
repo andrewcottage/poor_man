@@ -2,6 +2,7 @@ class CategoriesController < ApplicationController
   ITEMS = 12
 
   before_action :set_category, only: %i[ show edit update destroy ]
+  before_action :require_admin!, only: %i[ new create edit update destroy ]
 
 # GET /categories or /categories.json
   def index
