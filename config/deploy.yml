@@ -33,6 +33,7 @@ traefik:
 
 volumes:
   - "/storage:/rails/storage"
+  - "/logs:/rails/logs"
 # Credentials for your image host.
 registry:
   # Specify the registry server, if you're not using Docker Hub
