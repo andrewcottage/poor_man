@@ -20,6 +20,11 @@
     <%= link_to "About", about_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
   </div>
   <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-    <%= link_to "Log In", new_session_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
+    <% if Current.user %>
+      <%= link_to Current.user.email, "#", class: "text-sm font-semibold leading-6 text-gray-900 mr-3" %>
+      <%= button_to "Log Out", session_path(Current.user), method: :delete, class: "text-sm font-semibold leading-6 text-gray-900", data: { confirm: "Are you sure?" } %>
+    <% else %>
+      <%= link_to "Log In", new_session_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
+    <% end %>
   </div>
 </nav>
