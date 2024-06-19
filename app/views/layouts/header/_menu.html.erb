@@ -42,10 +42,11 @@
           <%= button_to "Sign out", session_path(Current.user), method: :delete, class: "block w-full px-4 py-2 text-left text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-3" %>
         </div>
       <% else %>
-      <div class="py-1" role="none">
-        <%= link_to "Sign in", new_session_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-0" %>
-        <%= link_to "Sign up", new_registration_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-1" %>
-      </div>
+        <div class="py-1" role="none">
+          <%= link_to "Sign in", new_session_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-0" %>
+          <%= link_to "Sign up", new_registration_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-1" %>
+        </div>
+      <% end %>
     </div>
   </div>
 </nav>
