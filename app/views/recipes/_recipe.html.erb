@@ -3,9 +3,9 @@
 
   <div class="mx-auto pb-16 pt-6 sm:pb-24">
     <%= render 'shared/breadcrumbs', links: [
-      { text: 'Recipies', url: '#' },
-      { text: 'Clothing', url: '#' },
-      { text: 'Basic Tee', url: '#' }
+      { text: 'Recipies', url: recipes_path },
+      { text: recipe.category.title, url: category_path(recipe.category.slug) },
+      { text: recipe.title, url: recipe_path(recipe.slug) }
     ] %>
     
     <div class="mx-auto mt-8 max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">

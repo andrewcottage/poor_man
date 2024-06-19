@@ -56,3 +56,7 @@ end
   )
 end
 
+User.create!(
+  email: "andcott@gmail.com",
+  password: "password"
+)
