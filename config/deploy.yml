@@ -11,7 +11,7 @@ servers:
       - 167.71.99.38
     labels:
       traefik.http.routers.blog.entrypoints: websecure
-      traefik.http.routers.blog.rule: Host(`example.com`)
+      traefik.http.routers.blog.rule: Host(`poormanwithapan.com`)
       traefik.http.routers.blog.tls.certresolver: letsencrypt
 
 traefik:
