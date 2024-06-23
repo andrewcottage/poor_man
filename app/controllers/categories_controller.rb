@@ -15,6 +15,7 @@ class CategoriesController < ApplicationController
 
   # GET /categories/1 or /categories/1.json
   def show
+    @pagy, @recipes = pagy(@category.recipes)
   end
 
   # GET /categories/new

@@ -1,22 +1,16 @@
-<div id="<%= dom_id category %>">
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Name:</strong>
-    <%= category.title %>
-  </p>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Slug:</strong>
-    <%= category.slug %>
-  </p>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Description:</strong>
-    <%= category.description %>
-  </p>
+<div class="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
+  <h1 class="text-center text-3xl font-semibold text-gray-900">Browse <%= @category.title %> Recipes</h1>
+  <div class="mx-auto w-full sm:w-2/3 my-4">
+    <%= render 'shared/search', label: "Search Recipes", placeholder: "Lemon Drinks", path: recipes_path %>
+  </div>
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Recipies count:</strong>
-    <%= category.recipies_count %>
-  </p>
-
+  <div id="recipes" class="-mx-px my-6 grid grid-cols-1 border-l border-gray-200 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
+    <% @recipes.each do |recipe| %>
+      <%= render "recipes/card", recipe: recipe %>
+    <% end %>
+  </div>
+  <%== pagy_nav_custom(@pagy) %>
 </div>
+  

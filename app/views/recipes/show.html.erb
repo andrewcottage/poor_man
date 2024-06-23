@@ -1,1 +1,4 @@
+<% content_for :title, @recipe.title %>
+<% content_for :description, "Learn how to make a #{@recipe.title} with this simple recipe. It is a #{@recipe.category.title} recipe." %>
+
 <%= render @recipe %>
