@@ -6,4 +6,8 @@ class User < ApplicationRecord
   normalizes :email, with: -> email { email.downcase } 
 
   attribute :admin, :boolean, default: true
+
+  def self.default_author
+    User.where(admin: true).first
+  end
 end

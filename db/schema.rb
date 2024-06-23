@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_06_19_133534) do
+ActiveRecord::Schema[8.0].define(version: 2024_06_23_161347) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -77,6 +77,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_06_19_133534) do
     t.string "tags"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "author_id"
+    t.text "blurb"
+    t.index ["author_id"], name: "index_recipes_on_author_id"
     t.index ["category_id"], name: "index_recipes_on_category_id"
     t.index ["slug"], name: "index_recipes_on_slug", unique: true
   end
@@ -88,6 +91,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_06_19_133534) do
     t.boolean "admin"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
@@ -96,4 +100,5 @@ ActiveRecord::Schema[8.0].define(version: 2024_06_19_133534) do
   add_foreign_key "ratings", "recipes"
   add_foreign_key "ratings", "users"
   add_foreign_key "recipes", "categories"
+  add_foreign_key "recipes", "users", column: "author_id"
 end
