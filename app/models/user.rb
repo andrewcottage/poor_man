@@ -7,6 +7,10 @@ class User < ApplicationRecord
 
   attribute :admin, :boolean, default: true
 
+  has_many :recipes, foreign_key: 'author_id'
+
+  has_one_attached :avatar
+
   def self.default_author
     User.where(admin: true).first
   end
