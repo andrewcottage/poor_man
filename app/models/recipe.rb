@@ -17,7 +17,7 @@ class Recipe < ApplicationRecord
   has_one_attached :image
 
   belongs_to :category
-  belongs_to :author, class_name: 'User', foreign_key: 'author_id'
+  belongs_to :author, class_name: 'User', foreign_key: 'author_id', optional: true
 
   has_many :ratings
   has_many :users, through: :ratings
@@ -25,7 +25,7 @@ class Recipe < ApplicationRecord
   validates :title, presence: true
   validates :slug, presence: true, uniqueness: true
 
-  attribute :author, default: -> { User.current || User.default_author }
+  attribute :author, default: -> { Current.user || User.default_author }
 
   def rating 
     ratings.average(:value) || 0
