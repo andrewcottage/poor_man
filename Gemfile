@@ -70,3 +70,7 @@ end
 
 gem "tailwindcss-rails", "~> 2.6"
 gem 'pagy'
+
+gem "active_storage_validations", "~> 1.1"
+
+gem "faker", "~> 3.4"

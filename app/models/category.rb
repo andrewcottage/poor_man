@@ -15,6 +15,7 @@ class Category < ApplicationRecord
 
   has_one_attached :image
 
+  validates :image, attached: true
   validates :title, presence: true
   validates :slug, presence: true, uniqueness: true
 end

@@ -1,0 +1,16 @@
+<div class="mt-4">
+  <h2 class="sr-only">Reviews</h2>
+  <div class="flex items-center">
+    <p class="text-sm text-gray-700">
+      <%= recipe.rating.round(2) %>
+      <span class="sr-only"> out of 5 stars</span>
+    </p>
+    <div class="ml-1 flex items-center">
+      <%= render "recipes/recipe/stars", rating: recipe.rating %>
+    </div>
+    <div aria-hidden="true" class="ml-4 text-sm text-gray-300">·</div>
+    <div class="ml-4 flex">
+      <a href="#reviews" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">See all <%= recipe.ratings.count %> reviews</a>
+    </div>
+  </div>
+</div>

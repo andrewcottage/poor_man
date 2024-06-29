@@ -68,11 +68,11 @@ class CategoriesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_category
-      @category = Category.find_by!(slug: params[:slug])
+      @category = Category.find_by(slug: params[:slug]) || Category.find_by(id: params[:slug])
     end
 
     # Only allow a list of trusted parameters through.
     def category_params
-      params.require(:category).permit(:name, :slug, :description, :recipies_count, :image)
+      params.require(:category).permit(:title, :slug, :description, :recipies_count, :image)
     end
 end

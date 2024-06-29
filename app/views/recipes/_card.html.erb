@@ -9,6 +9,6 @@
         <%= recipe.title %>
       <% end %>
     </h3>
-    <%= render 'recipes/card/rating', rating: recipe.rating, number_of_reviews: recipe.ratings.count %>
+    <%= render 'recipes/card/rating', rating: recipe.rating.to_i, number_of_reviews: recipe.ratings.count %>
   </div>
 </div>

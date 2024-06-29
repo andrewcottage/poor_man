@@ -9,6 +9,8 @@
 #  tags        :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  author_id   :integer
+#  blurb       :text
 #
 require "test_helper"
 

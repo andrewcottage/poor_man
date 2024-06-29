@@ -49,14 +49,44 @@ end
 
   Recipe.create!(
     title: "Recipe #{i}",
-    content: "This is the content for recipe #{i}",
+    instructions: Faker::Lorem.paragraph(sentence_count: 4),
+    blurb: Faker::Lorem.paragraph(sentence_count: 2),
+    content: Faker::Lorem.paragraph(sentence_count: 4),
     slug: SecureRandom.uuid,
     image: {io: File.open(image), filename: "image.jpg"},
     category: Category.all.sample,
   )
 end
 
-User.create!(
+user = User.create!(
+  username: "AnCapAndrew",
   email: "andcott@gmail.com",
   password: "password"
 )
+
+
+other_users = []
+
+5.times do |i|
+  other_users << User.create!(
+    username: "user_#{i}",
+    email: "user_#{i}@gmail.com",
+    password: "password"
+  )
+end
+
+Recipe.find_each do |recipe|
+  recipe.ratings.create!(
+    user: user,
+    value: (1..5).to_a.sample,
+    comment: Faker::Lorem.paragraph(sentence_count: 3)
+  )
+
+  other_users.each do |user|
+    recipe.ratings.create!(
+      user: user,
+      value: (1..5).to_a.sample,
+      comment: Faker::Lorem.paragraph(sentence_count: 3)
+    )
+  end
+end
