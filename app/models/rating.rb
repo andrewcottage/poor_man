@@ -16,6 +16,8 @@ class Rating < ApplicationRecord
 
   attribute :user, default: -> { Current.user }
 
+  validates :comment, :title, presence: true
+
   validates :value, presence: true, inclusion: { in: 1..5 }
   validates :recipe_id, uniqueness: { scope: :user_id }
 end

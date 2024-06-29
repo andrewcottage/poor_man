@@ -63,6 +63,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_06_23_161347) do
     t.integer "recipe_id", null: false
     t.integer "user_id", null: false
     t.integer "value", null: false
+    t.string "title"
     t.text "comment", limit: 200
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -79,6 +79,7 @@ Recipe.find_each do |recipe|
   recipe.ratings.create!(
     user: user,
     value: (1..5).to_a.sample,
+    title: Faker::Lorem.paragraph(sentence_count: 1),
     comment: Faker::Lorem.paragraph(sentence_count: 3)
   )
 
@@ -86,6 +87,7 @@ Recipe.find_each do |recipe|
     recipe.ratings.create!(
       user: user,
       value: (1..5).to_a.sample,
+      title: Faker::Lorem.paragraph(sentence_count: 1),
       comment: Faker::Lorem.paragraph(sentence_count: 3)
     )
   end
