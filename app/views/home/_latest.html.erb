@@ -10,7 +10,7 @@
       <div class="max-w-xl">
         <div class="mt-8 flex items-center gap-x-4 text-xs">
           <time datetime="2020-03-16" class="text-gray-500"><%= recipe.created_at.strftime("%B %d, %Y") %></time>
-          <a href="#" class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
+          <a href="#" class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"><%= recipe.tags.split(" ").first %></a>
         </div>
         <div class="group relative">
           <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
@@ -33,10 +33,10 @@
             <p class="font-semibold text-gray-900">
               <a href="#">
                 <span class="absolute inset-0"></span>
-                <%= recipe.author&.name %>
+                <%= recipe.author&.username %>
               </a>
             </p>
-            <p class="text-gray-600">Recipe Author</p>
+            <p class="text-gray-600"><%= recipe.author&.username %></p>
           </div>
         </div>
       </div>
