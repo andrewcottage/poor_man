@@ -31,7 +31,7 @@ class RecipesController < ApplicationController
   # POST /recipes or /recipes.json
   def create
     @recipe = Current.user.recipes.new(recipe_params)
-
+  
     respond_to do |format|
       if @recipe.save
         format.html { redirect_to recipe_url(@recipe.slug), notice: "Recipe was successfully created." }

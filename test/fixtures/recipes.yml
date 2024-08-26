@@ -17,8 +17,12 @@ one:
   title: MyString
   slug: <%= SecureRandom.uuid %>
   tags: MyString
+  category: one
+  blurb: MyText
 
 two:
   title: MyString
   slug: <%= SecureRandom.uuid %>
   tags: MyString
+  category: two
+  blurb: MyText

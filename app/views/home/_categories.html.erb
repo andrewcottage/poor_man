@@ -14,7 +14,7 @@
             <% @categories.each do |category| %>
               <%= link_to category_path(category.slug), class: "relative flex h-80 w-56 flex-col overflow-hidden rounded-lg p-6 hover:opacity-75 xl:w-auto" do %>
                 <span aria-hidden="true" class="absolute inset-0">
-                  <%= image_tag category.image, alt: category.title, class: "h-full w-full object-cover object-center" %>
+                  <%= image_tag(category.image, alt: category.title, class: "h-full w-full object-cover object-center") if category.image.attached? %>
                 </span>
                 <span aria-hidden="true" class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-gray-800 opacity-50"></span>
                 <span class="relative mt-auto text-center text-xl font-bold text-white"><%= category.title %></span>

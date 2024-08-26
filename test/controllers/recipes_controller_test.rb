@@ -2,6 +2,7 @@ require "test_helper"
 
 class RecipesControllerTest < ActionDispatch::IntegrationTest
   setup do
+    login
     @recipe = recipes(:one)
   end
 
@@ -17,10 +18,21 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create recipe" do
     assert_difference("Recipe.count") do
-      post recipes_url, params: { recipe: { slug: @recipe.slug, tags: @recipe.tags, title: @recipe.title } }
+      post recipes_url, params: {
+        recipe: { 
+          slug: SecureRandom.uuid,
+          tags: @recipe.tags,
+          title: @recipe.title,  
+          blurb: @recipe.blurb,
+          instructions: Faker::Lorem.paragraph,
+          content: Faker::Lorem.paragraph,
+          category_id: categories(:one).id,
+          image: fixture_file_upload('vaporwave.jpeg', 'image/jpg'),
+        } 
+      }
     end
 
-    assert_redirected_to recipe_url(Recipe.last)
+    assert_redirected_to recipe_url(Recipe.last.slug)
   end
 
   test "should show recipe" do
@@ -34,8 +46,9 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update recipe" do
-    patch recipe_url(@recipe), params: { recipe: { slug: @recipe.slug, tags: @recipe.tags, title: @recipe.title } }
-    assert_redirected_to recipe_url(@recipe)
+    patch recipe_url(@recipe), params: { recipe: { title: SecureRandom.uuid, image: fixture_file_upload('vaporwave.jpeg', 'image/jpg'),          instructions: Faker::Lorem.paragraph,
+          content: Faker::Lorem.paragraph, } }
+    assert_redirected_to recipe_url(@recipe.slug)
   end
 
   test "should destroy recipe" do

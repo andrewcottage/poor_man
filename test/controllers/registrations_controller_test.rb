@@ -1,13 +1,13 @@
 require "test_helper"
 
 class RegistrationsControllerTest < ActionDispatch::IntegrationTest
-  test "should get new" do
-    get registrations_new_url
+  test "#new" do
+    get new_registration_url
     assert_response :success
   end
 
-  test "should get create" do
-    get registrations_create_url
+  test "#create" do
+    post registrations_url, params: { registration: { email: Faker::Internet.email, password: 'password', password_confirmation: 'password' } }
     assert_response :success
   end
 end

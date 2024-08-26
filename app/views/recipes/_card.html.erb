@@ -1,6 +1,6 @@
 <div class="group relative border-b border-r border-gray-200 p-4 sm:p-6">
   <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-200 group-hover:opacity-75">
-    <%= image_tag recipe.image, class: 'h-full w-full object-cover object-center' %>
+    <%= image_tag(recipe.image, class: 'h-full w-full object-cover object-center') if recipe.image.attached? %>
   </div>
   <div class="pb-4 pt-10 text-center">
     <h3 class="text-sm font-medium text-gray-900">

@@ -11,7 +11,7 @@
 #  updated_at     :datetime         not null
 #
 class Category < ApplicationRecord
-  has_many :recipes, counter_cache: true
+  has_many :recipes, counter_cache: true, dependent: :nullify
 
   has_one_attached :image
 

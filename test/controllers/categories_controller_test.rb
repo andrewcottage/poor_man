@@ -2,6 +2,7 @@ require "test_helper"
 
 class CategoriesControllerTest < ActionDispatch::IntegrationTest
   setup do
+    login
     @category = categories(:one)
   end
 
@@ -34,8 +35,8 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update category" do
-    patch category_url(@category), params: { category: { description: @category.description, title: @category.title, recipies_count: @category.recipies_count, slug: @category.slug } }
-    assert_redirected_to category_url(@category)
+    patch category_url(@category), params: { category: { title: SecureRandom.uuid, image: fixture_file_upload('vaporwave.jpeg', 'image/jpg') } }
+    assert_redirected_to category_url(@category.slug)
   end
 
   test "should destroy category" do

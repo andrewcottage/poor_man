@@ -14,7 +14,7 @@
         <% @categories.each do |category| %>
           <%= link_to category_path(category.slug), class: "group" do %>
             <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg sm:aspect-h-3 sm:aspect-w-2">
-              <%= image_tag category.image, alt: category.title, class: "h-full w-full object-cover object-center group-hover:opacity-75" %>
+              <%= image_tag(category.image, alt: category.title, class: "h-full w-full object-cover object-center group-hover:opacity-75") if category.image.attached? %>
             </div>
             <div class="mt-4 flex items-center justify-between text-base font-medium text-gray-900">
               <h3><%= category.title %></h3>

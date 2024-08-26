@@ -14,13 +14,6 @@
 #
 
 one:
-  email: MyString
-  password_digest: MyString
-  recovery_digest: MyString
-  admin: false
-
-two:
-  email: MyString
-  password_digest: MyString
-  recovery_digest: MyString
-  admin: false
+  email: andcott@gmail.com
+  password_digest: <%= BCrypt::Password.create('password') %>
+  admin: true
