@@ -69,3 +69,6 @@ gem "faker", "~> 3.4"
 gem "solid_queue", "~> 1.0"
 gem "solid_cache", "~> 1.0"
 gem "solid_cable", "~> 3.0"
+gem 'omniauth'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-rails_csrf_protection'

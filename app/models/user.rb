@@ -29,4 +29,15 @@ class User < ApplicationRecord
   def self.default_author
     User.where(admin: true).first
   end
+
+  def self.from_omniauth(auth)
+    pp auth
+    
+    User.find_or_create_by(uid: auth['uid'], provider: auth['provider']) do |u|
+      auth_email = auth.dig("info", "email")
+      u.email = auth_email
+      u.username = auth_email.split('@').first
+      u.password = SecureRandom.hex(15)     
+    end
+  end
 end

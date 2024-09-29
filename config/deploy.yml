@@ -9,13 +9,9 @@ servers:
   web: # Use a named role, so it can be used as entrypoint by Traefik
     hosts:
       - 167.71.99.38
-    labels:
-      traefik.http.routers.blog.entrypoints: websecure
-      traefik.http.routers.blog.rule: Host(`poormanwithapan.com`)
-      traefik.http.routers.blog.tls.certresolver: letsencrypt
 
 proxy:
-  hosts: "poormanwithapan.com"
+  host: "poormanwithapan.com"
   ssl: true
 
 volumes:
@@ -43,7 +39,8 @@ env:
 #   user: app
 
 # Configure builder setup.
-# builder:
+builder:
+  arch: amd64
 #   args:
 #     RUBY_VERSION: 3.2.0
 #   secrets:
@@ -74,12 +71,6 @@ env:
 #     port: 6379
 #     directories:
 #       - data:/data
-
-# Configure custom arguments for Traefik. Be sure to reboot traefik when you modify it.
-# traefik:
-#   args:
-#     accesslog: true
-#     accesslog.format: json
 
 # Configure a custom healthcheck (default is /up on port 3000)
 # healthcheck:
