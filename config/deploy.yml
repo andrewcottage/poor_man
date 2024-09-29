@@ -16,8 +16,7 @@ servers:
 
 proxy:
   hosts: "poormanwithapan.com"
-
-ssl: true
+  ssl: true
 
 volumes:
   - "/storage:/rails/storage"
