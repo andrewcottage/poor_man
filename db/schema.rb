@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_09_29_130651) do
+ActiveRecord::Schema[8.0].define(version: 2024_09_29_135326) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
@@ -84,6 +84,16 @@ ActiveRecord::Schema[8.0].define(version: 2024_09_29_130651) do
     t.index ["author_id"], name: "index_recipes_on_author_id"
     t.index ["category_id"], name: "index_recipes_on_category_id"
     t.index ["slug"], name: "index_recipes_on_slug", unique: true
+  end
+
+  create_table "solid_cable_messages", force: :cascade do |t|
+    t.binary "channel", limit: 1024, null: false
+    t.binary "payload", limit: 536870912, null: false
+    t.datetime "created_at", null: false
+    t.integer "channel_hash", limit: 8, null: false
+    t.index ["channel"], name: "index_solid_cable_messages_on_channel"
+    t.index ["channel_hash"], name: "index_solid_cable_messages_on_channel_hash"
+    t.index ["created_at"], name: "index_solid_cable_messages_on_created_at"
   end
 
   create_table "users", force: :cascade do |t|
