@@ -14,22 +14,10 @@ servers:
       traefik.http.routers.blog.rule: Host(`poormanwithapan.com`)
       traefik.http.routers.blog.tls.certresolver: letsencrypt
 
-traefik:
-  options:
-    publish:
-      - "443:443"
-    volume:
-      - "/letsencrypt/acme.json:/letsencrypt/acme.json" # To save the configuration file.
-  args:
-    entryPoints.web.address: ":80"
-    entryPoints.websecure.address: ":443"
-    entryPoints.web.http.redirections.entryPoint.to: websecure # We want to force https
-    entryPoints.web.http.redirections.entryPoint.scheme: https
-    entryPoints.web.http.redirections.entrypoint.permanent: true
-    certificatesResolvers.letsencrypt.acme.email: "andcott@gmail.com"
-    certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json" # Must match the path in `volume`
-    certificatesResolvers.letsencrypt.acme.httpchallenge: true
-    certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web
+proxy:
+  hosts: "poormanwithapan.com"
+
+ssl: true
 
 volumes:
   - "/storage:/rails/storage"

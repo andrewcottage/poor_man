@@ -9,7 +9,7 @@ gem "rails", github: "rails/rails", branch: "main"
 gem "sprockets-rails"
 
 # Use sqlite3 as the database for Active Record
-gem "sqlite3", "~> 1.4"
+gem "sqlite3"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
@@ -25,12 +25,6 @@ gem "stimulus-rails"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
-
-# Use Redis adapter to run Action Cable in production
-gem "redis", ">= 4.0.1"
-
-# Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
-# gem "kredis"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
@@ -70,7 +64,8 @@ end
 
 gem "tailwindcss-rails", "~> 2.6"
 gem 'pagy'
-
 gem "active_storage_validations", "~> 1.1"
-
 gem "faker", "~> 3.4"
+gem "solid_queue", "~> 1.0"
+gem "solid_cache", "~> 1.0"
+gem "solid_cable", "~> 3.0"
