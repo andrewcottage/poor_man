@@ -1,10 +1,22 @@
 Rails.application.routes.draw do
+  resources :pages, only: [] do
+    collection do
+      get :privacy
+      get :terms
+    end
+  end
+
   root to: "home#index"
 
   get "about" => "home#about"
   
   resources :featured, only: %i[index]
   resources :sessions, only: %i[new create destroy]
+  resources :auth, only: [] do
+    collection do 
+      get "/:provider/callback" => "auth#callback"
+    end
+  end
   resources :recipes, param: :slug
   resources :categories, param: :slug
   resources :registrations, only: %i[new create]
