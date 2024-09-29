@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  resources :pages, only: [] do
+    collection do
+      get :privacy
+      get :terms
+    end
+  end
+
   root to: "home#index"
 
   get "about" => "home#about"
