@@ -23,7 +23,7 @@ class Recipe < ApplicationRecord
   belongs_to :author, class_name: 'User', foreign_key: 'author_id', optional: true
 
   has_many :ratings
-  has_many :users, through: :ratings
+  has_many :reviewers, through: :ratings, source: :user
 
   validates :image, attached: true
   validates :title, :slug, :instructions, :blurb, presence: true
@@ -33,5 +33,9 @@ class Recipe < ApplicationRecord
 
   def rating 
     ratings.average(:value) || 0
+  end
+
+  def current_user_rating
+    Current.user.ratings.find_by(recipe_id: id)
   end
 end

@@ -17,7 +17,9 @@ Rails.application.routes.draw do
       get "/:provider/callback" => "auth#callback"
     end
   end
-  resources :recipes, param: :slug
+  resources :recipes, param: :slug do 
+    resources :ratings, controller: "recipes/ratings"
+  end
   resources :categories, param: :slug
   resources :registrations, only: %i[new create]
   
