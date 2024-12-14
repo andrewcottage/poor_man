@@ -54,6 +54,8 @@ group :development do
   # gem "spring"
 
   gem 'annotate'
+
+  gem "kamal", "~> 2.4"
 end
 
 group :test do
@@ -72,3 +74,4 @@ gem "solid_cable", "~> 3.0"
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
+
