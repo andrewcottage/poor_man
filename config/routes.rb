@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  namespace :recipes do
+    get "favorites/create"
+  end
   resources :pages, only: [] do
     collection do
       get :privacy
@@ -19,6 +22,7 @@ Rails.application.routes.draw do
   end
   resources :recipes, param: :slug do 
     resources :ratings, controller: "recipes/ratings"
+    resources :favorites, controller: "recipes/favorites", only: %i[create destroy]
   end
   resources :categories, param: :slug
   resources :registrations, only: %i[new create]

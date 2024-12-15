@@ -11,8 +11,11 @@
                 <div class="flex justify-between">
                     <h1 class="text-xl font-medium text-gray-900"><%= recipe.title %></h1>
                     <%= link_to "Leave a Review", new_recipe_rating_path(recipe), class: "text-xs font-medium text-gray-900" %>
-
-
+                    <% if recipe.current_user_favorite %>
+                    <%= button_to "Unfavorite", recipe_favorite_path(recipe, recipe.current_user_favorite), method: :delete, class: "text-xs font-medium text-gray-900" %>
+                    <% else %>
+                    <%= button_to "Favorite", recipe_favorites_path(recipe), method: :post, class: "text-xs font-medium text-gray-900" %>
+                    <% end %>
                 </div>
                 <%= render 'recipes/recipe/ratings', recipe: recipe %>
             </div>
