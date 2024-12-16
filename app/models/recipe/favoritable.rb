@@ -8,6 +8,6 @@ module Recipe::Favoritable
 
 
   def current_user_favorite
-    Current.user.favorites.find_by(recipe_id: id)
+    Current.user&.favorites&.find_by(recipe_id: id)
   end
 end
