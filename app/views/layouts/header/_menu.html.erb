@@ -1,51 +1,51 @@
 <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
-  <div class="flex lg:flex-1">
-    <%= link_to root_path, class: "-m-1.5 p-1.5" do %>
-      <span class="sr-only">Poor Man With a Pan</span>
-      <img class="h-16 w-auto" src="/logo.webp" alt="">
-    <% end %>
-  </div>
-  <div class="flex lg:hidden">
-    <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700" data-action="click->mobile-menu#toggle">
-      <span class="sr-only">Open main menu</span>
-      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-      </svg>
-    </button>
-  </div>
-  <div class="hidden lg:flex lg:gap-x-12">
-    <%= link_to "Recipes", recipes_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
-    <%= link_to "Categories", categories_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
-    <%= link_to "About", about_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
-  </div>
- 
-  <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-    <div data-controller="account-dropdown" class="relative inline-block text-left">
-      <div>
-      <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900" id="menu-button" aria-expanded="true" aria-haspopup="true" data-action="click->account-dropdown#toggle">
-        <%= Current.user&.email || "Account" %>
-        <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-        </svg>
-      </button>
-      </div>
-
-      <!-- Dropdown menu -->
-      <div data-account-dropdown-target="menu" class="hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-      <% if Current.user %>
-        <div class="py-1" role="none">
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0">Profile</a>
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-1">Favorites</a>
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-2">Something Else</a>
-          
-          <%= button_to "Sign out", session_path(Current.user), method: :delete, class: "block w-full px-4 py-2 text-left text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-3" %>
-        </div>
-      <% else %>
-        <div class="py-1" role="none">
-          <%= link_to "Sign in", new_session_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-0" %>
-          <%= link_to "Sign up", new_registration_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-1" %>
-        </div>
-      <% end %>
+    <div class="flex lg:flex-1">
+        <%= link_to root_path, class: "-m-1.5 p-1.5" do %>
+        <span class="sr-only">Poor Man With a Pan</span>
+        <img class="h-16 w-auto" src="/logo.webp" alt="">
+        <% end %>
     </div>
-  </div>
+    <div class="flex lg:hidden">
+        <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700" data-action="click->mobile-menu#toggle">
+            <span class="sr-only">Open main menu</span>
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </button>
+    </div>
+    <div class="hidden lg:flex lg:gap-x-12">
+        <%= link_to "Recipes", recipes_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
+        <%= link_to "Categories", categories_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
+        <%= link_to "About", about_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
+    </div>
+
+    <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+        <div data-controller="account-dropdown" class="relative inline-block text-left">
+            <div>
+                <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900" id="menu-button" aria-expanded="true" aria-haspopup="true" data-action="click->account-dropdown#toggle">
+                    <%= Current.user&.email || "Account" %>
+                    <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Dropdown menu -->
+            <div data-account-dropdown-target="menu" class="hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                <% if Current.user %>
+                <div class="py-1" role="none">
+                    <%= link_to "Profile", profile_path(Current.user), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-0" %>
+                    <%= link_to "Favorites", profiles_favorites_path(Current.user), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-1" %>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-2">Something Else</a>
+
+                    <%= button_to "Sign out", session_path(Current.user), method: :delete, class: "block w-full px-4 py-2 text-left text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-3" %>
+                </div>
+                <% else %>
+                <div class="py-1" role="none">
+                    <%= link_to "Sign in", new_session_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-0" %>
+                    <%= link_to "Sign up", new_registration_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-1" %>
+                </div>
+                <% end %>
+            </div>
+        </div>
 </nav>

@@ -1,6 +1,4 @@
 class AuthController < ApplicationController
-
-
   def callback
     user = User.from_omniauth(request.env['omniauth.auth'])
 

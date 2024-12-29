@@ -1,7 +1,13 @@
 Rails.application.routes.draw do
+  namespace :profiles do
+    resources :favorites, only: %i[index]
+  end
+  resources :profiles, only: %i[show edit update]
+
   namespace :recipes do
     get "favorites/create"
   end
+
   resources :pages, only: [] do
     collection do
       get :privacy
