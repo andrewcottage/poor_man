@@ -91,7 +91,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Enable DNS rebinding protection and other `Host` header attacks.
-  conifg.hosts = [
+  config.hosts = [
     "poormanwithapan.com"
   ] 
   
