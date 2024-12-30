@@ -65,7 +65,7 @@ Rails.application.configure do
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   # Use a different cache store in production.
-  config.cache_store = :solid_cache_store
+  # config.cache_store = :solid_cache_store
 
   # Use a solid cache store for session storage.
   config.session_store :cache_store, key: '_poor_man_session'
