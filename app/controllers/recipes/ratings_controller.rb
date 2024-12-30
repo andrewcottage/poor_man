@@ -8,8 +8,8 @@ class Recipes::RatingsController < ApplicationController
     @rating = @recipe.ratings.new
   end
 
-
   def edit
+    @rating = @recipe.current_user_rating
   end
 
   def create
@@ -28,8 +28,10 @@ class Recipes::RatingsController < ApplicationController
   end
 
   def update
+    @rating = @recipe.current_user_rating
+    
     respond_to do |format|
-      if @recipe.update(recipe_params)
+      if @rating.update(rating_params)
         format.html { redirect_to recipe_url(@recipe.slug), notice: "Recipe was successfully updated." }
         format.json { render :show, status: :ok, location: @recipe }
       else

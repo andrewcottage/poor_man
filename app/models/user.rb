@@ -33,9 +33,7 @@ class User < ApplicationRecord
     User.where(admin: true).first
   end
 
-  def self.from_omniauth(auth)
-    pp auth
-    
+  def self.from_omniauth(auth)   
     User.find_or_create_by(uid: auth['uid'], provider: auth['provider']) do |u|
       auth_email = auth.dig("info", "email")
       u.email = auth_email
