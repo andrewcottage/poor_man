@@ -11,6 +11,6 @@ module Recipe::Ratable
   end
 
   def current_user_rating
-    Current.user.ratings.find_by(recipe_id: id)
+    Current.user&.ratings&.find_by(recipe_id: id)
   end
 end
