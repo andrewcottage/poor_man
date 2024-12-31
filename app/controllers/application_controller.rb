@@ -6,19 +6,13 @@ class ApplicationController < ActionController::Base
   private
 
   def require_admin!
-    return unless Current.user&.admin&.present?
-
-    redirect_to new_session_path(
-      return_to: request.fullpath
-    ), alert: 'You are not authorized to access this page' 
+    session[:return_to] = request.fullpath
+    redirect_to new_session_path, alert: 'You are not authorized to access this page' unless Current.user&.admin&.present?
   end
 
   def require_user!
-    return unless Current.user.present?
-
-    redirect_to new_session_path(
-      return_to: request.fullpath
-    ), alert: 'You must be logged in to access this page'
+    session[:return_to] = request.fullpath
+    redirect_to new_session_path, alert: 'You must be logged in to access this page' if Current.user.nil?
   end
 
   def set_current_user
