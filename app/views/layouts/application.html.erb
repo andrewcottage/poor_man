@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html class="h-full">
-  <head>
+
+<head>
     <title><%= yield(:title) || "Poor Man With a Pan" %></title>
     <meta name="description" content="<%= yield(:description) || "Simple Easy Recipes for the Everyday Living" %>">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -11,17 +12,21 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     <%= render "layouts/analytics" %>
-  </head>
+    <%= opengraph_title %>
+    <%= opengraph_description %>
+    <%= opengraph_image %>
+</head>
 
-  <body class="h-full bg-white">
+<body class="h-full bg-white">
     <%= render 'layouts/header' %>
 
     <%= render 'layouts/flash' %>
 
     <main class="mx-auto mt-28 px-5 flex">
-      <%= yield %>
+        <%= yield %>
     </main>
-    
+
     <%= render 'layouts/footer' %>
-  </body>
+</body>
+
 </html>

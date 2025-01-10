@@ -84,5 +84,5 @@
         </div>
     </div>
 
-    <%= render 'recipes/recipe/reviews', ratings: recipe.ratings %>
+    <%= render('recipes/recipe/reviews', ratings: recipe.ratings) if recipe.ratings.present? %>
 </div>

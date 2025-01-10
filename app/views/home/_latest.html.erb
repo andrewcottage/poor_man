@@ -1,45 +1,45 @@
 <div class="mx-auto mt-8 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-  <% @latest.each do |recipe| %>
+    <% @latest.each do |recipe| %>
     <article class="flex flex-col items-start justify-between">
-      <div class="relative w-full">
-        <%= link_to recipe_path(recipe.slug) do %>
-          <%= image_tag(recipe.image, class: "aspect-[16/9] w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2]") if recipe.image.attached? %>
-          <div class="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
-        <% end %>
-      </div>
-      <div class="max-w-xl">
-        <div class="mt-8 flex items-center gap-x-4 text-xs">
-          <time datetime="2020-03-16" class="text-gray-500"><%= recipe.created_at.strftime("%B %d, %Y") %></time>
-          <a href="#" class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"><%= recipe.category.title %></a>
+        <div class="relative w-full">
+            <%= link_to recipe_path(recipe.slug) do %>
+            <%= image_tag(recipe.image, class: "aspect-[16/9] w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2]") if recipe.image.attached? %>
+            <div class="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
+            <% end %>
         </div>
-        <div class="group relative">
-          <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-            <a href="#">
-              <span class="absolute inset-0"></span>
-              <%= recipe.title %>
-            </a>
-          </h3>
-          <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600"><%= recipe.blurb %></p>
+        <div class="max-w-xl">
+            <div class="mt-8 flex items-center gap-x-4 text-xs">
+                <time datetime="2020-03-16" class="text-gray-500"><%= recipe.created_at.strftime("%B %d, %Y") %></time>
+                <%= link_to recipe.category.title, category_path(recipe.category.slug), class: "relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100"  %>
+            </div>
+            <div class="group relative">
+                <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                    <a href="#">
+                        <span class="absolute inset-0"></span>
+                        <%= recipe.title %>
+                    </a>
+                </h3>
+                <p class="mt-5 line-clamp-3 text-sm leading-6 text-gray-600"><%= recipe.blurb %></p>
+            </div>
+            <div class="relative mt-8 flex items-center gap-x-4">
+                <% if recipe&.author&.avatar&.attached? %>
+                <%= image_tag(recipe.author.avatar, class: "h-10 w-10 rounded-full bg-gray-100") %>
+                <% else %>
+                <svg class="h-10 w-10 rounded-full bg-gray-100" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                </svg>
+                <% end %>
+                <div class="text-sm leading-6">
+                    <p class="font-semibold text-gray-900">
+                        <a href="#">
+                            <span class="absolute inset-0"></span>
+                            <%= recipe.author&.username %>
+                        </a>
+                    </p>
+                    <p class="text-gray-600"><%= recipe.author&.username %></p>
+                </div>
+            </div>
         </div>
-        <div class="relative mt-8 flex items-center gap-x-4">
-          <% if recipe&.author&.avatar&.attached? %>
-            <%= image_tag(recipe.author.avatar, class: "h-10 w-10 rounded-full bg-gray-100") %>
-          <% else %>
-            <svg class="h-10 w-10 rounded-full bg-gray-100" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-            </svg>
-          <% end %>
-          <div class="text-sm leading-6">
-            <p class="font-semibold text-gray-900">
-              <a href="#">
-                <span class="absolute inset-0"></span>
-                <%= recipe.author&.username %>
-              </a>
-            </p>
-            <p class="text-gray-600"><%= recipe.author&.username %></p>
-          </div>
-        </div>
-      </div>
     </article>
-  <% end %>
+    <% end %>
 </div>
