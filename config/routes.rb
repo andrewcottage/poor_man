@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   namespace :profiles do
     resources :favorites, only: %i[index]
+    resources :recipes, only: %i[index]
   end
   resources :profiles, only: %i[show edit update]
 

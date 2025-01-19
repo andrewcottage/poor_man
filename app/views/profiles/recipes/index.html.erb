@@ -1,0 +1,30 @@
+<div class="w-full">
+    <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+    <% end %>
+
+    <% content_for :title, "Recipes" %>
+
+    <div class="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
+        <h1 class="text-center text-3xl font-semibold text-gray-900">Browse My Recipes</h1>
+        <div class="mx-auto w-full sm:w-2/3 my-4">
+            <%= render 'shared/search', label: "Search My Recipes", placeholder: "Lemon Drinks", path: profiles_recipes_path(Current.user) %>
+        </div>
+
+        <div class="my-4 flex items-center justify-end">
+            <%= link_to new_recipe_path, class: "flex items-center" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+            </svg>
+            <span class="ml-2 text-sm font-semibold text-gray-900">Add Recipe</span>
+            <% end %>
+        </div>
+
+        <div id="recipes" class="-mx-px my-6 grid grid-cols-1 border-l border-gray-200 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
+            <% @recipes.each do |recipe| %>
+            <%= render "card", recipe: recipe %>
+            <% end %>
+        </div>
+        <%== pagy_nav_custom(@pagy) %>
+    </div>
+</div>
