@@ -35,7 +35,7 @@
                 <% if Current.user %>
                 <div class="py-1" role="none">
                     <%= link_to "Profile", profile_path(Current.user), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-0" %>
-                    <%= link_to "Favorites", profiles_favorites_path(Current.user), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-1" %>
+                    <%= link_to "Favorites", profiles_favorites_path(), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-1" %>
                     <%= link_to "Add a Recipe" , new_recipe_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-2" %>
 
                     <%= button_to "Sign out", session_path(Current.user), method: :delete, class: "block w-full px-4 py-2 text-left text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-3" %>
