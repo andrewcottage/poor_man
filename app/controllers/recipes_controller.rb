@@ -11,7 +11,7 @@ class RecipesController < ApplicationController
     if params[:q]
       @pagy, @recipes = pagy(Recipe.where("title LIKE ?", "%#{params[:q]}%"), items: ITEMS)
     else
-      @pagy, @recipes = pagy(Recipe.all, items: ITEMS)
+      @pagy, @recipes = pagy(Recipe.descending, items: ITEMS)
     end
   end
 
