@@ -16,6 +16,7 @@ class Recipe < ApplicationRecord
   include Favoritable
   include Ratable
   include Stars
+  include Editable
 
   has_rich_text :instructions
   has_rich_text :content
