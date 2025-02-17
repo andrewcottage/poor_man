@@ -19,7 +19,7 @@ class RecipesController < ApplicationController
   def show
     @opengraph_title = @recipe.title
     @opengraph_description = @recipe.blurb
-    @opengraph_image = url_for(@recipe.image)
+    @opengraph_image = @recipe.image.attached? ? url_for(@recipe.image) : nil
   end
 
   # GET /recipes/new
