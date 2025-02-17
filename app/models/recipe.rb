@@ -19,7 +19,6 @@ class Recipe < ApplicationRecord
   include Editable
 
   has_rich_text :instructions
-  has_rich_text :content
 
   has_one_attached :image
   has_many_attached :images
