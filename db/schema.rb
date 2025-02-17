@@ -10,36 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2024_12_15_203226) do
+ActiveRecord::Schema[8.1].define(version: 2025_02_17_130819) do
   create_table "action_text_rich_texts", force: :cascade do |t|
-    t.string "name", null: false
     t.text "body"
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
     t.datetime "updated_at", null: false
     t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
-    t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum"
+    t.string "content_type"
     t.datetime "created_at", null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
+    t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -50,47 +50,47 @@ ActiveRecord::Schema[8.1].define(version: 2024_12_15_203226) do
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string "title"
-    t.string "slug"
+    t.datetime "created_at", null: false
     t.text "description"
     t.integer "recipies_count"
-    t.datetime "created_at", null: false
+    t.string "slug"
+    t.string "title"
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_categories_on_slug", unique: true
   end
 
   create_table "favorites", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "recipe_id", null: false
     t.datetime "created_at", null: false
+    t.integer "recipe_id", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
     t.index ["recipe_id"], name: "index_favorites_on_recipe_id"
     t.index ["user_id", "recipe_id"], name: "index_favorites_on_user_id_and_recipe_id", unique: true
     t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
   create_table "ratings", force: :cascade do |t|
-    t.integer "recipe_id", null: false
-    t.integer "user_id", null: false
-    t.integer "value", null: false
-    t.string "title"
     t.text "comment", limit: 200
     t.datetime "created_at", null: false
+    t.integer "recipe_id", null: false
+    t.string "title"
     t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.integer "value", null: false
     t.index ["recipe_id", "user_id"], name: "index_ratings_on_recipe_id_and_user_id", unique: true
     t.index ["recipe_id"], name: "index_ratings_on_recipe_id"
     t.index ["user_id"], name: "index_ratings_on_user_id"
   end
 
   create_table "recipes", force: :cascade do |t|
-    t.integer "category_id", null: false
-    t.string "title"
-    t.string "slug"
-    t.string "tags"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "author_id"
     t.text "blurb"
+    t.integer "category_id", null: false
+    t.datetime "created_at", null: false
+    t.string "slug"
+    t.string "tags"
+    t.string "title"
+    t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_recipes_on_author_id"
     t.index ["category_id"], name: "index_recipes_on_category_id"
     t.index ["slug"], name: "index_recipes_on_slug", unique: true
@@ -98,25 +98,27 @@ ActiveRecord::Schema[8.1].define(version: 2024_12_15_203226) do
 
   create_table "solid_cable_messages", force: :cascade do |t|
     t.binary "channel", limit: 1024, null: false
-    t.binary "payload", limit: 536870912, null: false
-    t.datetime "created_at", null: false
     t.integer "channel_hash", limit: 8, null: false
+    t.datetime "created_at", null: false
+    t.binary "payload", limit: 536870912, null: false
     t.index ["channel"], name: "index_solid_cable_messages_on_channel"
     t.index ["channel_hash"], name: "index_solid_cable_messages_on_channel_hash"
     t.index ["created_at"], name: "index_solid_cable_messages_on_created_at"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email", null: false
-    t.string "username"
-    t.string "password_digest"
-    t.string "recovery_digest"
     t.boolean "admin"
+    t.string "api_key"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "email", null: false
     t.string "name"
-    t.string "uid"
+    t.string "password_digest"
     t.string "provider"
+    t.string "recovery_digest"
+    t.string "uid"
+    t.datetime "updated_at", null: false
+    t.string "username"
+    t.index ["api_key"], name: "index_users_on_api_key", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end

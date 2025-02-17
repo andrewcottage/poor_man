@@ -21,6 +21,7 @@ class User < ApplicationRecord
   normalizes :email, with: -> email { email.downcase } 
 
   attribute :admin, :boolean, default: true
+  attribute :api_key, default: -> { SecureRandom.hex(15) }
 
   has_many :recipes, foreign_key: 'author_id'
   has_many :ratings
@@ -28,6 +29,8 @@ class User < ApplicationRecord
   has_many :favorite_recipes, through: :favorites, source: :recipe
 
   has_one_attached :avatar
+
+  before_create :set_api_key
 
   def self.default_author
     User.where(admin: true).first
@@ -41,4 +44,6 @@ class User < ApplicationRecord
       u.password = SecureRandom.hex(15)     
     end
   end
+
+
 end
