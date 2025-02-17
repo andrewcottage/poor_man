@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_current_user
-    Current.user = User.find_by(id: session[:user_id])
+    Current.user = User.find_by(id: session[:user_id]) 
+    Current.user ||= User.find_by(api_key: request.headers['X-Api-Key']) if request.headers['X-Api-Key'].present?
   end
 end
