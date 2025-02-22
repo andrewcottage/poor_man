@@ -12,18 +12,28 @@
 
       <div class="grid gap-6">
         <div class="bg-gray-50 p-4 rounded-lg">
-          <p class="text-sm font-medium text-black-600">Username</p>
-          <p class="text-lg font-semibold text-gray-900 mt-1"><%= Current.user.username %></p>
+          <p class="text-sm font-bold text-black-600">Username</p>
+          <p class="text-lg text-gray-900 mt-1"><%= Current.user.username %></p>
         </div>
 
         <div class="bg-gray-50 p-4 rounded-lg">
-          <p class="text-sm font-medium text-black-600">Email</p>
-          <p class="text-lg font-semibold text-gray-900 mt-1"><%= Current.user.email %></p>
+          <p class="text-sm font-bold text-black-600">Email</p>
+          <p class="text-lg text-gray-900 mt-1"><%= Current.user.email %></p>
         </div>
 
         <div class="bg-gray-50 p-4 rounded-lg">
-          <p class="text-sm font-medium text-black-600">Member since</p>
-          <p class="text-lg font-semibold text-gray-900 mt-1"><%= time_ago_in_words(Current.user.created_at) %> ago</p>
+          <p class="text-sm font-bold text-black-600">Member since</p>
+          <p class="text-lg text-gray-900 mt-1"><%= time_ago_in_words(Current.user.created_at) %> ago</p>
+        </div>
+
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <p class="text-sm font-bold text-black-600">API Key</p>
+          <p class="text-lg text-gray-900 mt-1"><%= Current.user.api_key %></p>
+        </div>
+
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <p class="text-sm font-bold text-black-600">Recipes</p>
+          <p class="text-lg text-gray-900 mt-1"><%= Current.user.recipes.count %></p>
         </div>
       </div>
     </div>
