@@ -2,31 +2,32 @@
 <html class="h-full">
 
 <head>
-    <title><%= yield(:title) || "Poor Man With a Pan" %></title>
-    <meta name="description" content="<%= yield(:description) || "Simple Easy Recipes for the Everyday Living" %>">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+  <title><%= yield(:title) || "Poor Man With a Pan" %></title>
+  <meta name="description" content="<%= yield(:description) || "Simple Easy Recipes for the Everyday Living" %>">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-    <%= render "layouts/analytics" %>
-    <%= opengraph_title %>
-    <%= opengraph_description %>
-    <%= opengraph_image %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+  <%= render "layouts/analytics" %>
+  <%= opengraph_title %>
+  <%= opengraph_description %>
+  <%= opengraph_image %>
 </head>
 
 <body class="h-full bg-white">
-    <%= render 'layouts/header' %>
+  <%= render 'layouts/flash' %>
 
-    <%= render 'layouts/flash' %>
+  <%= render 'layouts/header' %>
 
-    <main class="mx-auto mt-28 px-5 flex">
-        <%= yield %>
-    </main>
 
-    <%= render 'layouts/footer' %>
+  <main class="mx-auto mt-28 px-5 flex">
+    <%= yield %>
+  </main>
+
+  <%= render 'layouts/footer' %>
 </body>
 
 </html>
