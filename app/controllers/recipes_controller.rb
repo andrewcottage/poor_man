@@ -34,13 +34,6 @@ class RecipesController < ApplicationController
 
   # POST /recipes or /recipes.json
   def create
-
-    # somtimes the image will be sent as a URL and not an active storage upload
-    if recipe_params[:image].start_with?("http")
-      image = Down.download(recipe_params[:image])
-      recipe_params[:image] = { io: image, filename: File.basename(image.original_filename) }
-    end
-
     @recipe = Current.user.recipes.new(recipe_params)
   
     respond_to do |format|
