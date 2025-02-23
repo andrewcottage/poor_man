@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_02_17_130819) do
+ActiveRecord::Schema[8.1].define(version: 2025_02_23_141343) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -88,7 +88,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_02_17_130819) do
     t.integer "category_id", null: false
     t.datetime "created_at", null: false
     t.string "slug"
-    t.string "tags"
+    t.string "tag_names"
     t.string "title"
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_recipes_on_author_id"
@@ -104,6 +104,23 @@ ActiveRecord::Schema[8.1].define(version: 2025_02_17_130819) do
     t.index ["channel"], name: "index_solid_cable_messages_on_channel"
     t.index ["channel_hash"], name: "index_solid_cable_messages_on_channel_hash"
     t.index ["created_at"], name: "index_solid_cable_messages_on_created_at"
+  end
+
+  create_table "taggings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "tag_id", null: false
+    t.integer "taggable_id", null: false
+    t.string "taggable_type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -131,4 +148,5 @@ ActiveRecord::Schema[8.1].define(version: 2025_02_17_130819) do
   add_foreign_key "ratings", "users"
   add_foreign_key "recipes", "categories"
   add_foreign_key "recipes", "users", column: "author_id"
+  add_foreign_key "taggings", "tags"
 end

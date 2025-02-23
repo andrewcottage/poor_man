@@ -21,7 +21,7 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
       post recipes_url, params: {
         recipe: { 
           slug: SecureRandom.uuid,
-          tags: @recipe.tags,
+          tag_names: @recipe.tag_names,
           title: @recipe.title,  
           blurb: @recipe.blurb,
           instructions: Faker::Lorem.paragraph,

@@ -8,9 +8,6 @@ class SessionsController < ApplicationController
     if user&.authenticate(params[:session][:password])
       session[:user_id] = user.id
 
-      puts session[:return_to]
-      puts "-----------------"
-
       redirect_to redirection_url, notice: 'Logged in!'
     else
       flash.now[:alert] = 'Invalid email/password combination'
