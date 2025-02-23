@@ -16,6 +16,8 @@ module Recipe::ImageGeneration
       image for a the following recipe:
       title: #{title}
       instructions: #{instructions.body.to_plain_text}
+
+      The image can be artistic and animated, it shouldn't be photorealistic.
     """
 
     response = client.images.generate(
