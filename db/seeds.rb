@@ -60,7 +60,8 @@ end
 user = User.create!(
   username: "admin",
   email: "admin@poormanwithapan.com",
-  password: "password"
+  password: "password",
+  admin: true
 )
 
 

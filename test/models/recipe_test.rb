@@ -3,14 +3,25 @@
 # Table name: recipes
 #
 #  id          :integer          not null, primary key
-#  category_id :integer          not null
-#  title       :string
+#  blurb       :text
 #  slug        :string
-#  tags        :string
+#  tag_names   :string
+#  title       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  author_id   :integer
-#  blurb       :text
+#  category_id :integer          not null
+#
+# Indexes
+#
+#  index_recipes_on_author_id    (author_id)
+#  index_recipes_on_category_id  (category_id)
+#  index_recipes_on_slug         (slug) UNIQUE
+#
+# Foreign Keys
+#
+#  author_id    (author_id => users.id)
+#  category_id  (category_id => categories.id)
 #
 require "test_helper"
 

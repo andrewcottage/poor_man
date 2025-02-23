@@ -15,7 +15,7 @@ class RecipesTest < ApplicationSystemTestCase
     click_on "New recipe"
 
     fill_in "Slug", with: @recipe.slug
-    fill_in "Tags", with: @recipe.tags
+    fill_in "Tags", with: @recipe.tag_names
     fill_in "Title", with: @recipe.title
     click_on "Create Recipe"
 
@@ -28,7 +28,7 @@ class RecipesTest < ApplicationSystemTestCase
     click_on "Edit this recipe", match: :first
 
     fill_in "Slug", with: @recipe.slug
-    fill_in "Tags", with: @recipe.tags
+    fill_in "Tags", with: @recipe.tag_names
     fill_in "Title", with: @recipe.title
     click_on "Update Recipe"
 

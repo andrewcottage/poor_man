@@ -3,12 +3,16 @@
 # Table name: categories
 #
 #  id             :integer          not null, primary key
-#  title          :string
-#  slug           :string
 #  description    :text
 #  recipies_count :integer
+#  slug           :string
+#  title          :string
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#
+# Indexes
+#
+#  index_categories_on_slug  (slug) UNIQUE
 #
 
 one:

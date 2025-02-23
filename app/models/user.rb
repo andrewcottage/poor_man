@@ -3,14 +3,23 @@
 # Table name: users
 #
 #  id              :integer          not null, primary key
-#  email           :string           not null
-#  username        :string
-#  password_digest :string
-#  recovery_digest :string
 #  admin           :boolean
+#  api_key         :string
+#  email           :string           not null
+#  name            :string
+#  password_digest :string
+#  provider        :string
+#  recovery_digest :string
+#  uid             :string
+#  username        :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  name            :string
+#
+# Indexes
+#
+#  index_users_on_api_key   (api_key) UNIQUE
+#  index_users_on_email     (email) UNIQUE
+#  index_users_on_username  (username) UNIQUE
 #
 class User < ApplicationRecord
   has_secure_password

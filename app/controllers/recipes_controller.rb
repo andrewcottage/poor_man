@@ -10,7 +10,7 @@ class RecipesController < ApplicationController
   def index
 
     if params[:q]
-      @pagy, @recipes = pagy(Recipe.where("title LIKE ?", "%#{params[:q]}%"), items: ITEMS)
+      @pagy, @recipes = pagy(Recipe.left_joins(:tags).where("recipes.title LIKE :q OR tags.name LIKE :q", q: "%#{params[:q]}%").distinct, items: ITEMS)
     else
       @pagy, @recipes = pagy(Recipe.descending, items: ITEMS)
     end
@@ -78,6 +78,6 @@ class RecipesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def recipe_params
-      params.require(:recipe).permit(:title, :image, :slug, :instructions, :tags, :blurb, :prep_time, :serves, :difficulty, :category_id)
+      params.require(:recipe).permit(:title, :image, :slug, :instructions, :tag_names, :blurb, :prep_time, :serves, :difficulty, :category_id)
     end
 end
