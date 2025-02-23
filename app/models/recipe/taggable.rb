@@ -12,9 +12,6 @@ module Recipe::Taggable
   private
 
   def assign_tags
-    puts ";;;;;;;;;;;;;;;;;;"
-    puts tag_names
-    puts ";;;;;;;;;;;;;;;;;;"
     return unless tag_names.present?
 
     # Convert input to a unique array of tag names
