@@ -12,17 +12,9 @@ module Recipe::ImageGeneration
   def generate_image
     client = OpenAI::Client.new
 
-    prompt = """
-      image for a the following recipe:
-      title: #{title}
-      instructions: #{instructions.body.to_plain_text}
-
-      The image can be artistic and animated, it shouldn't be photorealistic.
-    """
-
     response = client.images.generate(
       parameters: {
-        prompt:,
+        prompt: image_prompt,
       }
     )
 
@@ -31,5 +23,26 @@ module Recipe::ImageGeneration
     download = Down.download(url)
 
     image.attach(io: download, filename: "image.jpg")
+  end
+
+  def image_prompt
+    client = OpenAI::Client.new
+
+    content = """
+    generate an image prompt that I can use for dalle for the following recipe
+    title: #{title}
+    instructions: #{instructions.body.to_plain_text}
+
+    give me the prompt only. Nothing else. I'm going to copy and paste it into dalle.
+    """
+
+    response = client.chat(
+      parameters: {
+        model: "gpt-4o-mini", 
+        messages: [{ role: "user", content: content}]    
+      }
+    )
+
+    response.dig("choices", 0, "message", "content")
   end
 end
