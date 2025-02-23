@@ -20,7 +20,7 @@ class User < ApplicationRecord
 
   normalizes :email, with: -> email { email.downcase } 
 
-  attribute :admin, :boolean, default: true
+  attribute :admin, :boolean, default: false
   attribute :api_key, default: -> { SecureRandom.hex(15) }
 
   has_many :recipes, foreign_key: 'author_id'
