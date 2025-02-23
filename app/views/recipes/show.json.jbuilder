@@ -1,7 +1,7 @@
 json.extract! @recipe, :id, :title, :slug, :tags, :blurb, :created_at, :updated_at
 
 json.image do
-  json.url url_for(@recipe.image)
+  json.url url_for(@recipe.image) if @recipe.image.attached?
 end
 
 json.images @recipe.images do |image|

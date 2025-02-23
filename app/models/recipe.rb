@@ -17,6 +17,7 @@ class Recipe < ApplicationRecord
   include Ratable
   include Stars
   include Editable
+  include ImageGeneration
 
   has_rich_text :instructions
 

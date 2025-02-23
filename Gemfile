@@ -75,3 +75,6 @@ gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
 
+gem "ruby-openai", "~> 7.4"
+
+gem "down", "~> 5.4"
