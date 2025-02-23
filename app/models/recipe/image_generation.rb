@@ -1,9 +1,9 @@
 module Recipe::ImageGeneration
   extend ActiveSupport::Concern
 
-  included do
-    after_create_commit :generate_image, if: -> { image.blank? && author.admin? }
-  end
+  # included do
+  #   after_create_commit :generate_image, if: -> { image.blank? && author.admin? }
+  # end
 
   def generate_image_later
     Recipe::ImageGenerationJob.perform_later(self)
