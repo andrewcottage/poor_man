@@ -51,7 +51,6 @@ end
     title: "Recipe #{i}",
     instructions: Faker::Lorem.paragraph(sentence_count: 4),
     blurb: Faker::Lorem.paragraph(sentence_count: 2),
-    content: Faker::Lorem.paragraph(sentence_count: 4),
     slug: SecureRandom.uuid,
     image: {io: File.open(image), filename: "image.jpg"},
     category: Category.all.sample,

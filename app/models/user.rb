@@ -30,8 +30,6 @@ class User < ApplicationRecord
 
   has_one_attached :avatar
 
-  before_create :set_api_key
-
   def self.default_author
     User.where(admin: true).first
   end
