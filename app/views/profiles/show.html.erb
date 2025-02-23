@@ -4,12 +4,6 @@
     <h2 class="text-2xl font-bold text-gray-900 border-b pb-4">Your Profile</h2>
 
     <div class="space-y-6">
-      <% if Current.user.avatar.attached? %>
-      <div class="flex justify-center">
-        <%= image_tag Current.user.avatar, class: "w-32 h-32 rounded-full ring-4 ring-indigo-50 shadow-md" %>
-      </div>
-      <% end %>
-
       <div class="grid gap-6">
         <div class="bg-gray-50 p-4 rounded-lg">
           <p class="text-sm font-bold text-black-600">Username</p>
@@ -58,6 +52,30 @@
       </div>
     </div>
     <% end %>
+
+    <div class="flex flex-col items-center space-y-4">
+      <% if Current.user.avatar.attached? %>
+      <%= image_tag Current.user.avatar, class: "w-32 h-32 rounded-full ring-4 ring-indigo-50 shadow-md" %>
+      <% else %>
+      <div class="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center">
+        <svg class="h-16 w-16 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      </div>
+      <% end %>
+
+      <%= form_with(scope: :profile, url: profile_path, method: :put, multipart: true, class: "w-full") do |f| %>
+      <div class="flex items-center justify-center">
+        <%= f.file_field :avatar, 
+            class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100",
+            accept: "image/*",
+            direct_upload: true %>
+      </div>
+      <div class="mt-4 flex justify-center">
+        <%= f.submit "Update Avatar", class: "py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+      </div>
+      <% end %>
+    </div>
 
     <%= form_with(scope: :profile, url: profile_path, method: :put) do |f| %>
     <div class="space-y-6">
