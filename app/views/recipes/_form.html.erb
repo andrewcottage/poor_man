@@ -17,8 +17,13 @@
 </div>
 
 <div class="my-5">
-  <%= form.label :image %>
+  <%= form.label "Image*" %>
   <%= form.file_field :image, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+</div>
+
+<div class="my-5">
+  <%= form.label :extra_images %>
+  <%= form.file_field :images, multiple: true, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
 </div>
 
 <div class="my-5">

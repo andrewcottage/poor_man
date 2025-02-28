@@ -63,11 +63,41 @@
       </div>
 
       <!-- Image gallery -->
-      <div class="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0">
+      <div class="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0" data-controller="gallery">
         <h2 class="sr-only">Images</h2>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-3 lg:gap-8">
-          <%= image_tag(recipe.image, class: "rounded-lg lg:col-span-2 lg:row-span-2") if recipe.image.attached? %>
+        <div class="relative">
+          <!-- Main image display -->
+          <div class="overflow-hidden rounded-lg">
+            <%= image_tag(recipe.image, class: "w-full h-auto", data: { "gallery-target": "mainImage" }) if recipe.image.attached? %>
+            <% recipe.images.each do |image| %>
+            <%= image_tag(image, class: "w-full h-auto hidden", data: { "gallery-target": "mainImage" }) %>
+            <% end %>
+          </div>
+
+          <% if recipe.images.any? %>
+          <!-- Navigation buttons -->
+          <button data-action="gallery#previous" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
+            </svg>
+          </button>
+          <button data-action="gallery#next" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+            </svg>
+          </button>
+
+          <!-- Thumbnail navigation -->
+          <div class="flex gap-2 mt-4 overflow-x-auto">
+            <% if recipe.image.attached? %>
+            <%= image_tag(recipe.image, class: "w-20 h-20 object-cover rounded cursor-pointer", data: { "gallery-target": "thumbnail", action: "click->gallery#select", index: 0 }) %>
+            <% end %>
+            <% recipe.images.each_with_index do |image, index| %>
+            <%= image_tag(image, class: "w-20 h-20 object-cover rounded cursor-pointer", data: { "gallery-target": "thumbnail", action: "click->gallery#select", index: index + 1 }) %>
+            <% end %>
+          </div>
+          <% end %>
         </div>
       </div>
 
