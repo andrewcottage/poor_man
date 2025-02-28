@@ -10,8 +10,11 @@
 
   <div class="mx-auto my-4 w-full sm:w-2/3">
     <%= render 'shared/search', label: "Search Recipes", placeholder: "French Toast", path: recipes_path %>
+    <p class="text-center text-gray-500 mt-2">
+      <%= link_to 'Add your own recipe', new_recipe_path, class: "text-xs text-blue-600 hover:text-blue-800 underline" %>
+    </p>
   </div>
-  
+
   <%= render "latest" %>
 
   <%= render "categories" %>
