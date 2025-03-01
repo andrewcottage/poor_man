@@ -1,4 +1,24 @@
-# one:
-#   record: name_of_fixture (ClassOfFixture)
-#   name: content
-#   body: <p>In a <i>million</i> stars!</p>
+pizza_instructions:
+  record: pizza (Recipe)
+  name: instructions
+  body: |
+    1. Mix 2 cups of flour, 1 tsp salt, and 1 tsp yeast in a bowl
+    2. Add 1 cup warm water and 2 tbsp olive oil
+    3. Knead dough for 10 minutes until smooth
+    4. Let rise for 1 hour in warm place
+    5. Preheat oven to 450°F
+    6. Roll dough into circle
+    7. Add sauce, cheese, and toppings
+    8. Bake for 15-20 minutes until crust is golden
+
+bread_instructions:
+  record: bread (Recipe)
+  name: instructions
+  body: |
+    1. Mix 2 cups of rye flour, 1 tsp salt, and 1 tsp yeast in a bowl
+    2. Add 1 cup warm water and 2 tbsp olive oil
+    3. Knead dough for 10 minutes until smooth
+    4. Let rise for 1 hour in warm place
+    5. Preheat oven to 450°F
+    6. Roll dough into circle
+    7. Bake for 15-20 minutes until crust is golden
