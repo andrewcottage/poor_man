@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
+  root to: "home#index"
+
   namespace :profiles do
     resources :favorites, only: %i[index]
     resources :recipes, only: %i[index]
   end
+  
   resources :profiles, only: %i[show edit update]
 
   namespace :recipes do
@@ -13,14 +16,12 @@ Rails.application.routes.draw do
     collection do
       get :privacy
       get :terms
+      get :about
     end
   end
 
-  root to: "home#index"
-
-  get "about" => "home#about"
+  get "/about", to: redirect('/pages/about')
   
-  resources :featured, only: %i[index]
   resources :sessions, only: %i[new create destroy]
   resources :auth, only: [] do
     collection do 

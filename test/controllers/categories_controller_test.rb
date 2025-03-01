@@ -18,10 +18,10 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create category" do
     assert_difference("Category.count") do
-      post categories_url, params: { category: { description: @category.description, title: @category.title, recipies_count: @category.recipies_count, slug: @category.slug } }
+      post categories_url, params: { category: { description: Faker::Lorem.sentence, title: SecureRandom.uuid, image: fixture_file_upload('vaporwave.jpeg', 'image/jpg'), slug: SecureRandom.uuid } }
     end
 
-    assert_redirected_to category_url(Category.last)
+    assert_redirected_to category_url(Category.last.slug)
   end
 
   test "should show category" do
@@ -41,7 +41,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
 
   test "should destroy category" do
     assert_difference("Category.count", -1) do
-      delete category_url(@category)
+      delete category_url(categories(:deleteable))
     end
 
     assert_redirected_to categories_url

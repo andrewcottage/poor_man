@@ -21,10 +21,6 @@
 #  recipe_id  (recipe_id => recipes.id)
 #  user_id    (user_id => users.id)
 #
-one:
-  user: one
-  recipe: one
-
-two:
-  user: two
-  recipe: two
+andrews_favorite_pizza:
+  user: andrew
+  recipe: pizza

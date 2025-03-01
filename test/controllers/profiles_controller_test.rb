@@ -1,13 +1,18 @@
 require "test_helper"
 
 class ProfilesControllerTest < ActionDispatch::IntegrationTest
+  setup do 
+    @user = users(:andrew)
+    login
+  end
+
   test "should get show" do
-    get profiles_show_url
+    get profile_url(@user)
     assert_response :success
   end
 
   test "should get edit" do
-    get profiles_edit_url
+    get edit_profile_url(@user)
     assert_response :success
   end
 end

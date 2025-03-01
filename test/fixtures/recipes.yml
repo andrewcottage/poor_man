@@ -24,16 +24,16 @@
 #  category_id  (category_id => categories.id)
 #
 
-one:
-  title: MyString
+pizza:
+  title: Pizza
   slug: <%= SecureRandom.uuid %>
-  tag_names: MyString
+  tag_names: American, Italian, Fast, Easy
   category: one
-  blurb: MyText
+  blurb: A simple pizza recipe
 
-two:
-  title: MyString
+bread:
+  title: Rye Bread
   slug: <%= SecureRandom.uuid %>
-  tag_names: MyString
-  category: two
-  blurb: MyText
+  tag_names: German, Rye, Bread
+  category: one
+  blurb: A simple rye bread recipe

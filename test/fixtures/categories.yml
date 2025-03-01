@@ -14,14 +14,13 @@
 #
 #  index_categories_on_slug  (slug) UNIQUE
 #
+deleteable:
+  title: A Deleteable Category
+  slug: <%= SecureRandom.uuid %>
+  description: This category is deleteable
+  recipies_count: 0
 
 one:
-  title: MyString
-  slug: <%= SecureRandom.uuid %>
-  description: MyText
-  recipies_count: 1
-
-two:
   title: MyString
   slug: <%= SecureRandom.uuid %>
   description: MyText

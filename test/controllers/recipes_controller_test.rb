@@ -3,7 +3,7 @@ require "test_helper"
 class RecipesControllerTest < ActionDispatch::IntegrationTest
   setup do
     login
-    @recipe = recipes(:one)
+    @recipe = recipes(:pizza)
   end
 
   test "should get index" do
@@ -25,7 +25,6 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
           title: @recipe.title,  
           blurb: @recipe.blurb,
           instructions: Faker::Lorem.paragraph,
-          content: Faker::Lorem.paragraph,
           category_id: categories(:one).id,
           image: fixture_file_upload('vaporwave.jpeg', 'image/jpg'),
         } 

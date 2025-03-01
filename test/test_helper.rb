@@ -13,7 +13,7 @@ module ActiveSupport
     # Add more helper methods to be used by all tests here...
     # 
     def login(user = nil)
-      user ||= users(:one)
+      user ||= users(:andrew)
       post sessions_url, params: {session: { email: user.email, password: 'password' } }
 
       assert_response :redirect

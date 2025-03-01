@@ -14,7 +14,7 @@
 #  index_tags_on_name  (name) UNIQUE
 #
 one:
-  name: MyString
+  name: vegan
 
 two:
-  name: MyString
+  name: high protien
