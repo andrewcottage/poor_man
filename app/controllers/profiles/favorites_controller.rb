@@ -5,9 +5,9 @@ class Profiles::FavoritesController < ApplicationController
   def index
 
     if params[:q]
-      @pagy, @recipes = pagy(Current.user.favorite_recipes.where("title LIKE ?", "%#{params[:q]}%"), items: ITEMS)
+      @pagy, @recipes = pagy(Current.user.favorite_recipes.where("title LIKE ?", "%#{params[:q]}%").descending, items: ITEMS)
     else
-      @pagy, @recipes = pagy(Current.user.favorite_recipes, items: ITEMS)
+      @pagy, @recipes = pagy(Current.user.favorite_recipes.descending, items: ITEMS)
     end
   end
 end

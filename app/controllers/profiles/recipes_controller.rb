@@ -7,7 +7,7 @@ class Profiles::RecipesController < ApplicationController
     if params[:q]
       @pagy, @recipes = pagy(Current.user.recipes.where("title LIKE ?", "%#{params[:q]}%"), items: ITEMS)
     else
-      @pagy, @recipes = pagy(Current.user.recipes, items: ITEMS)
+      @pagy, @recipes = pagy(Current.user.recipes.descending, items: ITEMS)
     end
   end
 end

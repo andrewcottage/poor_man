@@ -10,7 +10,7 @@ class RecipesController < ApplicationController
   def index
 
     if params[:q]
-      @pagy, @recipes = pagy(Recipe.left_joins(:tags).where("recipes.title LIKE :q OR tags.name LIKE :q", q: "%#{params[:q]}%").distinct, items: ITEMS)
+      @pagy, @recipes = pagy(Recipe.left_joins(:tags).where("recipes.title LIKE :q OR tags.name LIKE :q", q: "%#{params[:q]}%").distinct.descending, items: ITEMS)
     else
       @pagy, @recipes = pagy(Recipe.descending, items: ITEMS)
     end
