@@ -39,7 +39,7 @@
               <%= recipe.author&.username %>
             </a>
           </p>
-          <p class="text-gray-600"><%= recipe.author&.username %></p>
+          <p class="text-gray-600"><%= recipe.author&.admin ? 'Founder' : 'Contributor' %></p>
         </div>
       </div>
     </div>
