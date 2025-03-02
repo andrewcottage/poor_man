@@ -51,3 +51,7 @@ en:
     free:
       cta: "No Ads"
       description: "No annoying pop ups or, impossible to find instructions on our recipes."
+  user:
+    type:
+      founder: "Founder"
+      contributor: "Contributor"

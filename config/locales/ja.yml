@@ -22,3 +22,7 @@ ja:
     free:
       cta: "広告なし"
       description: "煩わしいポップアップ広告なしで、レシピを簡単に探せます。"
+  user:
+    type:
+      founder: "創設者"
+      contributor: "投稿者"

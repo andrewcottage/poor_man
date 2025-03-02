@@ -22,3 +22,7 @@ zh:
     free:
       cta: "无广告"
       description: "没有烦人的弹出窗口，也没有难以找到的烹饪步骤。"
+  user:
+    type:
+      founder: "创始人"
+      contributor: "贡献者"
