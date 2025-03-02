@@ -60,7 +60,7 @@
           </div>
         </div>
         <div class="flex">
-          <div class="flex justify-betweenh">
+          <div class="flex justify-between">
             <%= render 'recipes/recipe/cost', recipe: recipe %>
             <%= render 'recipes/recipe/difficulty', difficulty: recipe.difficulty %>
             <%= render 'recipes/recipe/prep_time', recipe: recipe %>
@@ -110,7 +110,7 @@
       </div>
 
       <div class="mt4 lg:col-span-5">
-        <div class="mt-8 border-t border-gray-200 pt-8">
+        <div class="mt-8 border-t border-gray-200 pt-2">
           <div class="prose prose-sm mt-4 text-gray-500">
             <%= recipe.instructions %>
           </div>
