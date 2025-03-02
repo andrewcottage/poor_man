@@ -28,4 +28,10 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  meta_title: "Poor Man With a Pan | Recipes for the Home Cook"
+  title: "Poor Man with a Pan"
+  subtitle: Simple Easy Recipes for the Everyday Living
+  search_placeholder: "French Toast"
+  search_label: "Search Recipes"
+  search_button: "Search"
+  add_recipe_text: "Add your own recipe"

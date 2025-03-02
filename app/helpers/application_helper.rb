@@ -2,7 +2,7 @@ module ApplicationHelper
   include Pagy::Frontend
 
   def opengraph_title
-    title = @opengraph_title || 'Poor Man With a Pan | Recipes for the Home Cook'
+    title = @opengraph_title || I18n.t("meta_title")
 
     content_tag(:meta, nil, property: 'og:title', content: title)
   end

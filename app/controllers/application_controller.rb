@@ -2,8 +2,18 @@ class ApplicationController < ActionController::Base
   include Pagy::Backend
 
   before_action :set_current_user
+  around_action :switch_locale
+
+
 
   private
+
+  def switch_locale(&action)
+    locale = params[:locale] || 
+             request.headers['HTTP_ACCEPT_LANGUAGE']&.scan(/^[a-z]{2}/)&.first ||
+             I18n.default_locale
+    I18n.with_locale(locale, &action)
+  end
 
   def require_admin!
     session[:return_to] = request.fullpath
