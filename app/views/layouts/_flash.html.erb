@@ -1,6 +1,6 @@
 <% flash.each do |name, msg| %>
 <%= content_tag :div, class: "relative top-0 left-0 right-0 z-50 mb-4" do %>
-<div class="pointer-events-auto w-full mx-auto">
+<div class="pointer-events-auto w-full mx-auto flex justify-center">
   <div class="<%= name == 'notice' ? 'bg-green-50' : 'bg-red-50' %> p-4">
     <div class="flex items-center">
       <div class="flex-shrink-0">
