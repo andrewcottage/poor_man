@@ -2,15 +2,19 @@
 #
 # Table name: recipes
 #
-#  id          :integer          not null, primary key
-#  blurb       :text
-#  slug        :string
-#  tag_names   :string
-#  title       :string
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  author_id   :integer
-#  category_id :integer          not null
+#  id            :integer          not null, primary key
+#  blurb         :text
+#  cost_cents    :integer          default(0), not null
+#  cost_currency :string           default("USD"), not null
+#  difficulty    :integer          default(0)
+#  prep_time     :integer          default(0)
+#  slug          :string
+#  tag_names     :string
+#  title         :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  author_id     :integer
+#  category_id   :integer          not null
 #
 # Indexes
 #

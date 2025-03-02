@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_02_23_141343) do
+ActiveRecord::Schema[8.1].define(version: 2025_03_02_133924) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -86,7 +86,11 @@ ActiveRecord::Schema[8.1].define(version: 2025_02_23_141343) do
     t.integer "author_id"
     t.text "blurb"
     t.integer "category_id", null: false
+    t.integer "cost_cents", default: 0, null: false
+    t.string "cost_currency", default: "USD", null: false
     t.datetime "created_at", null: false
+    t.integer "difficulty", default: 0
+    t.integer "prep_time", default: 0
     t.string "slug"
     t.string "tag_names"
     t.string "title"

@@ -16,14 +16,16 @@
   <%= form.text_field :title, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
 </div>
 
-<div class="my-5">
-  <%= form.label "Image*" %>
-  <%= form.file_field :image, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
-</div>
+<div class="grid grid-cols-2 gap-4 my-5">
+  <div>
+    <%= form.label "Image*" %>
+    <%= form.file_field :image, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
 
-<div class="my-5">
-  <%= form.label :extra_images %>
-  <%= form.file_field :images, multiple: true, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+  <div>
+    <%= form.label :extra_images %>
+    <%= form.file_field :images, multiple: true, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
 </div>
 
 <div class="my-5">
@@ -50,6 +52,23 @@
 <div class="my-5">
   <%= form.label :category %>
   <%= form.select :category_id, Category.all.map { |c| [c.title, c.id] }, { include_blank: "Select a category" }, class: "rounded-lg py-3 px-5 bg-gray-100 text-gray-600 w-full" %>
+</div>
+
+<div class="grid grid-cols-3 gap-4 my-5">
+  <div>
+    <%= form.label :cost %>
+    <%= form.text_field :cost, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div>
+    <%= form.label :difficulty %>
+    <%= form.select :difficulty, (1..5).to_a, { include_blank: "Select difficulty (1-5)", selected: recipe.difficulty }, class: "rounded-lg py-3 px-5 bg-gray-100 text-gray-600 w-full" %>
+  </div>
+
+  <div>
+    <%= form.label :prep_time, "Prep Time (minutes)" %>
+    <%= form.number_field :prep_time, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
 </div>
 
 <div class="inline">

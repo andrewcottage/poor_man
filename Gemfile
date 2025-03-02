@@ -78,3 +78,5 @@ gem 'omniauth-rails_csrf_protection'
 gem "ruby-openai", "~> 7.4"
 
 gem "down", "~> 5.4"
+
+gem "money-rails", "~> 1.15"

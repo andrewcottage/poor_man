@@ -55,3 +55,5 @@ en:
     type:
       founder: "Founder"
       contributor: "Contributor"
+  recipes:
+    prep_time_unit: "Minutes"
