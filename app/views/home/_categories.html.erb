@@ -2,7 +2,7 @@
   <div class="px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8 xl:px-0">
     <h2 class="text-2xl font-bold tracking-tight text-gray-900">Browse by Category</h2>
     <%= link_to categories_path, class: "hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block" do %>
-    Browse all categories
+    <%= t("home.browse_all_categories") %>
     <span aria-hidden="true"> &rarr;</span>
     <% end %>
   </div>
@@ -27,7 +27,7 @@
 
   <div class="mt-6 px-4 sm:hidden">
     <%= link_to categories_path, class: "block text-sm font-semibold text-indigo-600 hover:text-indigo-500" do %>
-    Browse all categories
+    <%= t("home.browse_all_categories") %>
     <span aria-hidden="true"> &rarr;</span>
     <% end %>
   </div>

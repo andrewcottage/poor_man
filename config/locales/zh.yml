@@ -1,8 +1,24 @@
 zh:
-  meta_title: "穷人的锅 | 家庭厨师的食谱"
-  title: "穷人的锅"
-  subtitle: "日常生活的简单易做食谱"
-  search_placeholder: "法式吐司"
-  search_label: "搜索食谱"
-  search_button: "搜索"
-  add_recipe_text: "添加您自己的食谱"
+  meta:
+    title: "穷人的锅 | 家庭烹饪食谱"
+    description: "家庭烹饪食谱"
+  home:
+    title: "穷人的锅"
+    subtitle: "简单易做的日常食谱"
+    add_recipe_text: "添加您的食谱"
+    browse_categories_text: "浏览所有类别"
+  search:
+    placeholder: "法式吐司"
+    label: "搜索食谱"
+    button: "搜索"
+  incentives:
+    title: "精心制作的食谱"
+    healthy:
+      cta: "健康食材"
+      description: "我们优先使用健康食材，并避免在食谱中添加垃圾食品。"
+    easy:
+      cta: "简单易做"
+      description: "我们的所有食谱都很容易烹饪，并且可以快速完成。"
+    free:
+      cta: "无广告"
+      description: "没有烦人的弹出窗口，也没有难以找到的烹饪步骤。"

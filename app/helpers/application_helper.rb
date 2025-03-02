@@ -2,13 +2,13 @@ module ApplicationHelper
   include Pagy::Frontend
 
   def opengraph_title
-    title = @opengraph_title || I18n.t("meta_title")
+    title = @opengraph_title || I18n.t("meta.title")
 
     content_tag(:meta, nil, property: 'og:title', content: title)
   end
 
   def opengraph_description
-    description = @opengraph_description || 'Recipes for the Home Cook'
+    description = @opengraph_description || I18n.t("meta.description")
 
     content_tag(:meta, nil, property: 'og:description', content: description)
   end

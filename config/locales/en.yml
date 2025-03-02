@@ -28,10 +28,26 @@
 #       enabled: "ON"
 
 en:
-  meta_title: "Poor Man With a Pan | Recipes for the Home Cook"
-  title: "Poor Man with a Pan"
-  subtitle: Simple Easy Recipes for the Everyday Living
-  search_placeholder: "French Toast"
-  search_label: "Search Recipes"
-  search_button: "Search"
-  add_recipe_text: "Add your own recipe"
+  meta:
+    title: "Poor Man With a Pan | Recipes for the Home Cook"
+    description: "Recipes for the Home Cook"
+  home:
+    title: "Poor Man with a Pan"
+    subtitle: Simple Easy Recipes for the Everyday Living
+    add_recipe_text: "Add your own recipe"
+    browse_categories_text: "Browse all categories"
+  search:
+    placeholder: "French Toast"
+    label: "Search Recipes"
+    button: "Search"
+  incentives:
+    title: "Carefully Hand Crafted Recipes"
+    healthy:
+      cta: "Healthy Ingredients"
+      description: "We prioritize healthy ingredients, and avoid adding junk to our recipes."
+    easy:
+      cta: "Easy to Make"
+      description: "All of our recipes are easy to cook and can be completed in a breeze."
+    free:
+      cta: "No Ads"
+      description: "No annoying pop ups or, impossible to find instructions on our recipes."

@@ -2,8 +2,8 @@
 <html class="h-full">
 
 <head>
-  <title><%= yield(:title) || "Poor Man With a Pan" %></title>
-  <meta name="description" content="<%= yield(:description) || "Simple Easy Recipes for the Everyday Living" %>">
+  <title><%= yield(:title) || I18n.t('meta.title') %></title>
+  <meta name="description" content="<%= yield(:description) || I18n.t('meta.description') %>">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
@@ -19,9 +19,7 @@
 
 <body class="h-full bg-white">
   <%= render 'layouts/flash' %>
-
   <%= render 'layouts/header' %>
-
 
   <main class="mx-auto mt-1 px-5 flex">
     <%= yield %>

@@ -1,8 +1,24 @@
 ja:
-  meta_title: "貧乏人のフライパン | 家庭料理のレシピ"
-  title: "貧乏人のフライパン"
-  subtitle: "日常のための簡単でシンプルなレシピ"
-  search_placeholder: "フレンチトースト"
-  search_label: "レシピ検索"
-  search_button: "検索"
-  add_recipe_text: "自分のレシピを追加"
+  meta:
+    title: "貧乏人のフライパン | 家庭料理のレシピ"
+    description: "家庭料理のレシピ"
+  home:
+    title: "貧乏人のフライパン"
+    subtitle: "日常生活のための簡単でシンプルなレシピ"
+    add_recipe_text: "自分のレシピを追加"
+    browse_categories_text: "すべてのカテゴリを見る"
+  search:
+    placeholder: "フレンチトースト"
+    label: "レシピを検索"
+    button: "検索"
+  incentives:
+    title: "丁寧に作られたレシピ"
+    healthy:
+      cta: "健康的な食材"
+      description: "私たちは健康的な食材を優先し、不必要な添加物を避けます。"
+    easy:
+      cta: "簡単に作れる"
+      description: "私たちのレシピはすべて簡単に作れて、すぐに完成します。"
+    free:
+      cta: "広告なし"
+      description: "煩わしいポップアップ広告なしで、レシピを簡単に探せます。"
