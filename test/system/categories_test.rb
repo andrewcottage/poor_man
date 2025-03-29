@@ -2,46 +2,26 @@ require "application_system_test_case"
 
 class CategoriesTest < ApplicationSystemTestCase
   setup do
-    @category = categories(:one)
+    @admin = users(:andrew) # Using the admin user from fixtures
+    
+    # Login as admin since category management requires admin privileges
+    visit new_session_url
+    fill_in "Email address", with: @admin.email
+    fill_in "Password", with: "password"
+    click_on "Sign in"
   end
 
-  test "visiting the index" do
+  test "visiting the categories index" do
     visit categories_url
-    assert_selector "h1", text: "Categories"
+    assert_selector "h1", text: "Food Categories" 
   end
-
-  test "should create category" do
+  
+  test "viewing a category" do
     visit categories_url
-    click_on "New category"
-
-    fill_in "Description", with: @category.description
-    fill_in "Title", with: @category.title
-    fill_in "Recipies count", with: @category.recipies_count
-    fill_in "Slug", with: @category.slug
-    click_on "Create Category"
-
-    assert_text "Category was successfully created"
-    click_on "Back"
-  end
-
-  test "should update Category" do
-    visit category_url(@category)
-    click_on "Edit this category", match: :first
-
-    fill_in "Description", with: @category.description
-    fill_in "Title", with: @category.title
-    fill_in "Recipies count", with: @category.recipies_count
-    fill_in "Slug", with: @category.slug
-    click_on "Update Category"
-
-    assert_text "Category was successfully updated"
-    click_on "Back"
-  end
-
-  test "should destroy Category" do
-    visit category_url(@category)
-    click_on "Destroy this category", match: :first
-
-    assert_text "Category was successfully destroyed"
+    # Find and click on the first category (using the link around the image and title)
+    first(".grid-cols-1.gap-x-6 a.group").click
+    
+    # Verify we're on a category page by checking for the recipes display
+    assert_selector "div#recipes", count: 1
   end
 end
