@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+
+<body>
+  <h1>Hi <%= @user.username %>,</h1>
+  <p>Here's your monthly recipe recap for <%= @start_date.strftime('%B %Y') %>!</p>
+
+  <h2>Your Recipe Stats</h2>
+  <ul>
+    <li>Your recipes received <%= @favorite_count %> new favorites!</li>
+    <li>Users left <%= @comments_count %> comments on your recipes</li>
+    <li>Average rating: <%= @average_rating %> stars</li>
+  </ul>
+
+  <h2>Recent Recipes on the Site</h2>
+  <ul>
+    <% @recent_recipes.each do |recipe| %>
+    <li>
+      <%= recipe.title %> by <%= recipe.author&.username %>
+      <%= link_to "View Recipe", recipe_url(recipe) %>
+    </li>
+    <% end %>
+  </ul>
+
+  <p>Keep cooking and sharing your amazing recipes!</p>
+</body>
+
+</html>
