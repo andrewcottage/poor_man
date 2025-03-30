@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.3.1"
+ruby "3.4.2"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", github: "rails/rails", branch: "main"
@@ -74,9 +74,8 @@ gem "solid_cable", "~> 3.0"
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
-
 gem "ruby-openai", "~> 7.4"
-
 gem "down", "~> 5.4"
-
 gem "money-rails", "~> 1.15"
+
+gem "mocha", "~> 2.7", :group => :test

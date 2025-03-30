@@ -2,12 +2,41 @@ require "application_system_test_case"
 
 class RecipesTest < ApplicationSystemTestCase
   setup do
-    @recipe = recipes(:one)
+    @recipe = recipes(:pizza)
+    @admin = users(:andrew)
+    
+    # Login as admin
+    visit new_session_url
+    fill_in "Email address", with: @admin.email
+    fill_in "Password", with: "password"
+    click_on "Sign in"
   end
 
   test "visiting the index" do
     visit recipes_url
-    assert_selector "h1", text: "Recipes"
+    assert_selector "h1", text: "Browse Recipes"
+  end
+  
+  test "viewing a recipe" do
+    visit recipes_url
+    # Find and click on the first recipe
+    # The recipe card is nested within the grid
+    within "#recipes" do
+      # Click on the first recipe card
+      first(".group.relative").click
+    end
+    
+    # Verify we're on a recipe page by checking for typical recipe elements
+    assert_selector "h1", count: 1 # Should have a heading
+  end
+  
+  test "creating a new recipe" do
+    visit recipes_url
+    # Look for the 'Add your own recipe' link
+    click_on "Add your own recipe"
+    
+    # Verify we're on the new recipe page
+    assert_selector "h1", text: /New Recipe|Create Recipe/i
   end
 
   test "should create recipe" do

@@ -43,11 +43,19 @@ class Recipes::RatingsController < ApplicationController
 
 
   def destroy
-    @recipe.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to recipes_url, notice: "Recipe was successfully destroyed." }
-      format.json { head :no_content }
+    # Find the rating by ID and make sure it belongs to the current user
+    @rating = @recipe.ratings.find(params[:id])
+    if @rating.user == Current.user
+      @rating.destroy
+      respond_to do |format|
+        format.html { redirect_to recipe_url(@recipe.slug), notice: "Rating was successfully deleted." }
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to recipe_url(@recipe.slug), alert: "You cannot delete this rating." }
+        format.json { render json: { error: "Unauthorized" }, status: :unauthorized }
+      end
     end
   end
 

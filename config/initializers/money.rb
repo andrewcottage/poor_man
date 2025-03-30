@@ -2,6 +2,10 @@
 
 MoneyRails.configure do |config|
 
+  config.locale_backend = :i18n
+
+  config.rounding_mode = BigDecimal::ROUND_HALF_UP
+
   # To set the default currency
   #
   config.default_currency = :usd

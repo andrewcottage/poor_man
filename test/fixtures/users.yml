@@ -26,3 +26,9 @@ andrew:
   email: andcott@gmail.com
   password_digest: <%= BCrypt::Password.create('password') %>
   admin: true
+
+victoria:
+  email: victoria@gmail.com
+  password_digest: <%= BCrypt::Password.create('password') %>
+  admin: true
+

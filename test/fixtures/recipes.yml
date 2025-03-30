@@ -34,6 +34,7 @@ pizza:
   tag_names: American, Italian, Fast, Easy
   category: one
   blurb: A simple pizza recipe
+  author: andrew
 
 bread:
   title: Rye Bread
@@ -41,3 +42,4 @@ bread:
   tag_names: German, Rye, Bread
   category: one
   blurb: A simple rye bread recipe
+  author: andrew
