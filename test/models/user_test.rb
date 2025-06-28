@@ -24,7 +24,14 @@
 require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "user should have notify_new_recipes enabled by default" do
+    user = User.new(email: "test@example.com", username: "testuser", password: "password")
+    assert user.notify_new_recipes
+  end
+
+  test "user can opt out of new recipe notifications" do
+    user = users(:one)
+    user.update(notify_new_recipes: false)
+    assert_not user.notify_new_recipes
+  end
 end

@@ -26,9 +26,23 @@ andrew:
   email: andcott@gmail.com
   password_digest: <%= BCrypt::Password.create('password') %>
   admin: true
+  notify_new_recipes: true
 
 victoria:
   email: victoria@gmail.com
   password_digest: <%= BCrypt::Password.create('password') %>
   admin: true
+  notify_new_recipes: true
+
+one:
+  email: one@example.com
+  username: userone
+  password_digest: <%= BCrypt::Password.create('secret') %>
+  notify_new_recipes: true
+
+two:
+  email: two@example.com
+  username: usertwo
+  password_digest: <%= BCrypt::Password.create('secret') %>
+  notify_new_recipes: false
 
