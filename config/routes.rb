@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   namespace :profiles do
     resources :favorites, only: %i[index]
     resources :recipes, only: %i[index]
+    resources :families, only: %i[index]
   end
   
   resources :profiles, only: %i[show edit update]
@@ -35,6 +36,22 @@ Rails.application.routes.draw do
   end
   resources :categories, param: :slug
   resources :registrations, only: %i[new create]
+  
+  # Family routes
+  resources :families, param: :slug do
+    namespace :families do
+      resources :memberships, only: %i[index create destroy]
+    end
+    resources :cookbooks, param: :slug do
+      namespace :cookbooks do
+        resources :recipes, param: :slug
+      end
+    end
+  end
+  
+  # Family invitation routes
+  get '/family_invitations/:token/accept', to: 'families/memberships#accept', as: :accept_family_invitation
+  get '/family_invitations/:token/decline', to: 'families/memberships#decline', as: :decline_family_invitation
   
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

@@ -1,0 +1,18 @@
+one:
+  family: one
+  user: one
+  status: 1  # accepted
+  accepted_at: <%= 1.week.ago %>
+
+two:
+  family: one
+  user: two
+  status: 0  # pending
+  invitation_token: "sample_token_123"
+  invited_at: <%= 1.day.ago %>
+
+three:
+  family: two
+  user: two
+  status: 1  # accepted
+  accepted_at: <%= 2.weeks.ago %>

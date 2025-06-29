@@ -1,0 +1,124 @@
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mb-8">
+    <div class="flex items-center mb-4">
+      <%= link_to family_path(@family), class: "text-blue-600 hover:text-blue-800 mr-4" do %>
+        <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to <%= @family.name %>
+      <% end %>
+    </div>
+    
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">Manage Family Members</h1>
+    <p class="text-gray-600">Invite new members and manage existing ones</p>
+  </div>
+
+  <!-- Invite New Member -->
+  <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Invite New Member</h2>
+    
+    <%= form_with url: family_families_memberships_path(@family), method: :post, local: true, class: "flex gap-4 items-end" do |form| %>
+      <div class="flex-1">
+        <%= form.label :email, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= form.email_field :email, required: true, class: "w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500", placeholder: "member@example.com" %>
+      </div>
+      <%= form.submit "Send Invitation", class: "btn btn-primary" %>
+    <% end %>
+    
+    <p class="text-sm text-gray-500 mt-2">
+      The user must have an account on this platform to receive the invitation.
+    </p>
+  </div>
+
+  <!-- Active Members -->
+  <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">
+      Active Members (<%= @active_memberships.count %>)
+    </h2>
+    
+    <% if @active_memberships.any? %>
+      <div class="space-y-4">
+        <% @active_memberships.each do |membership| %>
+          <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+            <div class="flex items-center">
+              <% if membership.user.avatar.present? %>
+                <%= image_tag membership.user.avatar, class: "w-10 h-10 rounded-full mr-3" %>
+              <% else %>
+                <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mr-3">
+                  <span class="text-gray-600 font-medium text-sm">
+                    <%= (membership.user.name || membership.user.username).first.upcase %>
+                  </span>
+                </div>
+              <% end %>
+              
+              <div>
+                <div class="font-medium text-gray-900">
+                  <%= membership.user.name || membership.user.username %>
+                  <% if membership.user == @family.creator %>
+                    <span class="ml-2 bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded">Creator</span>
+                  <% end %>
+                </div>
+                <div class="text-sm text-gray-500"><%= membership.user.email %></div>
+                <div class="text-xs text-gray-400">
+                  Joined <%= membership.accepted_at.strftime("%B %d, %Y") %>
+                </div>
+              </div>
+            </div>
+            
+            <% unless membership.user == @family.creator %>
+              <%= link_to "Remove", 
+                  family_families_membership_path(@family, membership), 
+                  method: :delete,
+                  data: { confirm: "Are you sure you want to remove #{membership.user.name || membership.user.username} from this family?" },
+                  class: "btn btn-sm btn-danger" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-gray-500">No active members yet.</p>
+    <% end %>
+  </div>
+
+  <!-- Pending Invitations -->
+  <% if @pending_memberships.any? %>
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">
+        Pending Invitations (<%= @pending_memberships.count %>)
+      </h2>
+      
+      <div class="space-y-4">
+        <% @pending_memberships.each do |membership| %>
+          <div class="flex items-center justify-between p-4 border border-yellow-200 bg-yellow-50 rounded-lg">
+            <div class="flex items-center">
+              <div class="w-10 h-10 bg-yellow-300 rounded-full flex items-center justify-center mr-3">
+                <span class="text-yellow-800 font-medium text-sm">
+                  <%= (membership.user.name || membership.user.username).first.upcase %>
+                </span>
+              </div>
+              
+              <div>
+                <div class="font-medium text-gray-900">
+                  <%= membership.user.name || membership.user.username %>
+                </div>
+                <div class="text-sm text-gray-500"><%= membership.user.email %></div>
+                <div class="text-xs text-gray-400">
+                  Invited <%= membership.invited_at.strftime("%B %d, %Y") %>
+                  <% if membership.expired? %>
+                    <span class="text-red-500 font-medium">(Expired)</span>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+            
+            <%= link_to "Cancel Invitation", 
+                family_families_membership_path(@family, membership), 
+                method: :delete,
+                data: { confirm: "Are you sure you want to cancel this invitation?" },
+                class: "btn btn-sm btn-secondary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
