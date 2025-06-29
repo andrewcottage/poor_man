@@ -42,6 +42,7 @@ class Recipe < ApplicationRecord
 
   belongs_to :category
   belongs_to :author, class_name: 'User', foreign_key: 'author_id', optional: true
+  belongs_to :cookbook, optional: true
 
   validates :image, attached: true
   validates :title, :slug, :instructions, :blurb, presence: true

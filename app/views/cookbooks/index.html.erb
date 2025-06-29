@@ -1,0 +1,64 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex items-center mb-4">
+    <%= link_to family_path(@family), class: "text-blue-600 hover:text-blue-800 mr-4" do %>
+      <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+      Back to <%= @family.name %>
+    <% end %>
+  </div>
+
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= @family.name %> Cookbooks</h1>
+      <p class="text-gray-600">Browse and manage family cookbooks</p>
+    </div>
+    
+    <% if @family.can_manage?(Current.user) %>
+      <%= link_to "New Cookbook", new_family_cookbook_path(@family), class: "btn btn-primary" %>
+    <% end %>
+  </div>
+
+  <% if @cookbooks.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @cookbooks.each do |cookbook| %>
+        <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+          <div class="flex items-start justify-between mb-4">
+            <h3 class="text-xl font-semibold text-gray-900">
+              <%= link_to cookbook.name, family_cookbook_path(@family, cookbook), class: "text-blue-600 hover:text-blue-800" %>
+            </h3>
+            <% if cookbook.is_default? %>
+              <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded">Default</span>
+            <% end %>
+          </div>
+          
+          <% if cookbook.description.present? %>
+            <p class="text-gray-600 mb-4"><%= truncate(cookbook.description, length: 120) %></p>
+          <% end %>
+          
+          <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+            <span><%= pluralize(cookbook.recipes.count, 'recipe') %></span>
+            <span>Updated <%= cookbook.updated_at.strftime("%m/%d/%Y") %></span>
+          </div>
+          
+          <div class="flex space-x-2">
+            <%= link_to "View Recipes", family_cookbook_path(@family, cookbook), class: "btn btn-sm btn-primary" %>
+            <% if @family.can_manage?(Current.user) && !cookbook.is_default? %>
+              <%= link_to "Edit", edit_family_cookbook_path(@family, cookbook), class: "btn btn-sm btn-secondary" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-12">
+      <div class="max-w-md mx-auto">
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No cookbooks yet</h3>
+        <p class="text-gray-600 mb-6">Start by creating your first cookbook to organize your family recipes.</p>
+        <% if @family.can_manage?(Current.user) %>
+          <%= link_to "Create First Cookbook", new_family_cookbook_path(@family), class: "btn btn-primary" %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

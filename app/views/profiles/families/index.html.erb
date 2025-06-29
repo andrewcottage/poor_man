@@ -1,0 +1,121 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">My Families</h1>
+    <%= link_to "Create New Family", new_family_path, class: "btn btn-primary" %>
+  </div>
+
+  <!-- Pending Invitations -->
+  <% if @pending_invitations.any? %>
+    <div class="mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Pending Invitations</h2>
+      <div class="space-y-4">
+        <% @pending_invitations.each do |membership| %>
+          <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="font-medium text-gray-900">
+                  Invitation to join "<%= membership.family.name %>"
+                </h3>
+                <p class="text-sm text-gray-600 mt-1">
+                  From <%= membership.family.creator.name || membership.family.creator.username %>
+                </p>
+                <% if membership.family.description.present? %>
+                  <p class="text-sm text-gray-500 mt-1"><%= membership.family.description %></p>
+                <% end %>
+                <p class="text-xs text-gray-400 mt-2">
+                  Invited <%= membership.invited_at.strftime("%B %d, %Y") %>
+                </p>
+              </div>
+              <div class="flex space-x-2">
+                <%= link_to "Accept", 
+                    accept_family_invitation_path(token: membership.invitation_token), 
+                    class: "btn btn-sm btn-primary" %>
+                <%= link_to "Decline", 
+                    decline_family_invitation_path(token: membership.invitation_token), 
+                    class: "btn btn-sm btn-secondary" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Families I Created -->
+  <% if @created_families.any? %>
+    <div class="mb-8">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Families I Created</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% @created_families.each do |family| %>
+          <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow border-l-4 border-blue-500">
+            <div class="flex items-start justify-between mb-2">
+              <h3 class="text-lg font-semibold text-gray-900">
+                <%= link_to family.name, family_path(family), class: "text-blue-600 hover:text-blue-800" %>
+              </h3>
+              <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded">Creator</span>
+            </div>
+            
+            <% if family.description.present? %>
+              <p class="text-gray-600 text-sm mb-3"><%= truncate(family.description, length: 80) %></p>
+            <% end %>
+            
+            <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+              <span><%= pluralize(family.active_members.count, 'member') %></span>
+              <span><%= pluralize(family.cookbooks.count, 'cookbook') %></span>
+            </div>
+            
+            <div class="flex space-x-2">
+              <%= link_to "View", family_path(family), class: "btn btn-sm btn-primary" %>
+              <%= link_to "Manage", edit_family_path(family), class: "btn btn-sm btn-secondary" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Families I'm Part Of -->
+  <div>
+    <h2 class="text-xl font-semibold text-gray-900 mb-4">Families I'm Part Of</h2>
+    
+    <% member_families = @active_families - @created_families %>
+    <% if member_families.any? %>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% member_families.each do |family| %>
+          <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+              <%= link_to family.name, family_path(family), class: "text-blue-600 hover:text-blue-800" %>
+            </h3>
+            
+            <% if family.description.present? %>
+              <p class="text-gray-600 text-sm mb-3"><%= truncate(family.description, length: 80) %></p>
+            <% end %>
+            
+            <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+              <span><%= pluralize(family.active_members.count, 'member') %></span>
+              <span><%= pluralize(family.cookbooks.count, 'cookbook') %></span>
+            </div>
+            
+            <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+              <span>Created by <%= family.creator.name || family.creator.username %></span>
+            </div>
+            
+            <%= link_to "View Family", family_path(family), class: "btn btn-sm btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <% if @created_families.empty? %>
+        <div class="text-center py-12">
+          <div class="max-w-md mx-auto">
+            <h3 class="text-lg font-medium text-gray-900 mb-2">No families yet</h3>
+            <p class="text-gray-600 mb-6">Create your first family or wait for an invitation to join one.</p>
+            <%= link_to "Create Your First Family", new_family_path, class: "btn btn-primary" %>
+          </div>
+        </div>
+      <% else %>
+        <p class="text-gray-500">You're not a member of any other families yet.</p>
+      <% end %>
+    <% end %>
+  </div>
+</div>

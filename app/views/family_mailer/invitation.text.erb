@@ -1,0 +1,24 @@
+You've Been Invited to Join a Family!
+
+Hi <%= @user.name || @user.username %>,
+
+<%= @inviter.name || @inviter.username %> has invited you to join their family "<%= @family.name %>" on our recipe sharing platform.
+
+<% if @family.description.present? %>
+<%= @family.description %>
+<% end %>
+
+As a family member, you'll be able to:
+- Access shared family cookbooks
+- Add your own recipes to the family collection
+- Browse and cook from family recipes
+- Collaborate on meal planning
+
+Would you like to join this family?
+
+Accept Invitation: <%= @accept_url %>
+Decline: <%= @decline_url %>
+
+This invitation will expire in 30 days. If you're not interested, you can simply ignore this email.
+
+If you have any questions, please contact <%= @inviter.email %>.

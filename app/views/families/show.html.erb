@@ -1,0 +1,75 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex justify-between items-start mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= @family.name %></h1>
+      <% if @family.description.present? %>
+        <p class="text-gray-600 text-lg"><%= @family.description %></p>
+      <% end %>
+      <p class="text-sm text-gray-500 mt-2">
+        Created by <%= @family.creator.name || @family.creator.username %> • 
+        <%= pluralize(@family.active_members.count, 'member') %>
+      </p>
+    </div>
+    
+    <div class="flex space-x-2">
+      <% if @family.can_manage?(Current.user) %>
+        <%= link_to "Manage Members", family_families_memberships_path(@family), class: "btn btn-secondary" %>
+        <%= link_to "Edit Family", edit_family_path(@family), class: "btn btn-secondary" %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Cookbooks Section -->
+  <div class="mb-8">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-semibold text-gray-900">Cookbooks</h2>
+      <% if @family.can_manage?(Current.user) %>
+        <%= link_to "New Cookbook", new_family_cookbook_path(@family), class: "btn btn-primary" %>
+      <% end %>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @family.cookbooks.each do |cookbook| %>
+        <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+          <div class="flex items-start justify-between mb-2">
+            <h3 class="text-lg font-semibold text-gray-900">
+              <%= link_to cookbook.name, family_cookbook_path(@family, cookbook), class: "text-blue-600 hover:text-blue-800" %>
+            </h3>
+            <% if cookbook.is_default? %>
+              <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py1 rounded">Default</span>
+            <% end %>
+          </div>
+          
+          <% if cookbook.description.present? %>
+            <p class="text-gray-600 text-sm mb-3"><%= truncate(cookbook.description, length: 80) %></p>
+          <% end %>
+          
+          <div class="flex items-center justify-between text-sm text-gray-500">
+            <span><%= pluralize(cookbook.recipes.count, 'recipe') %></span>
+            <% if @family.can_manage?(Current.user) && !cookbook.is_default? %>
+              <%= link_to "Edit", edit_family_cookbook_path(@family, cookbook), class: "text-blue-600 hover:text-blue-800" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Recent Recipes -->
+  <div>
+    <h2 class="text-2xl font-semibold text-gray-900 mb-4">Recent Family Recipes</h2>
+    <% recent_recipes = Recipe.joins(:cookbook).where(cookbook: { family: @family }).includes(:author, :category, image_attachment: :blob).limit(6) %>
+    
+    <% if recent_recipes.any? %>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% recent_recipes.each do |recipe| %>
+          <%= render 'recipes/card', recipe: recipe %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-8">
+        <p class="text-gray-600">No recipes yet. Start adding recipes to your family cookbooks!</p>
+      </div>
+    <% end %>
+  </div>
+</div>
