@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .header {
+        background-color: #f8f9fa;
+        padding: 20px;
+        text-align: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .recipe-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+        background-color: #fff;
+      }
+      .recipe-title {
+        color: #2c3e50;
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+      .recipe-blurb {
+        color: #7f8c8d;
+        font-style: italic;
+        margin-bottom: 15px;
+      }
+      .btn {
+        display: inline-block;
+        background-color: #3498db;
+        color: white;
+        padding: 12px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+      .btn:hover {
+        background-color: #2980b9;
+      }
+      .footer {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        font-size: 12px;
+        color: #999;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>🍽️ New Recipe Alert!</h1>
+    </div>
+
+    <p>Hi <%= @user.name || @user.username %>,</p>
+
+    <p>We're excited to share a delicious new recipe that was just added to Poor Man's cookbook!</p>
+
+    <div class="recipe-card">
+      <h2 class="recipe-title"><%= @recipe.title %></h2>
+      
+      <% if @recipe.blurb.present? %>
+        <p class="recipe-blurb"><%= @recipe.blurb %></p>
+      <% end %>
+
+      <p><strong>Category:</strong> <%= @recipe.category.name %></p>
+      
+      <% if @recipe.difficulty > 0 %>
+        <p><strong>Difficulty:</strong> <%= '⭐' * @recipe.difficulty %> (<%= @recipe.difficulty %>/5)</p>
+      <% end %>
+
+      <% if @recipe.prep_time > 0 %>
+        <p><strong>Prep Time:</strong> <%= @recipe.prep_time %> minutes</p>
+      <% end %>
+
+      <% if @recipe.cost.present? && @recipe.cost > 0 %>
+        <p><strong>Estimated Cost:</strong> <%= @recipe.cost %></p>
+      <% end %>
+
+      <p><strong>By:</strong> <%= @recipe.author&.name || @recipe.author&.username || 'Chef' %></p>
+
+      <p>
+        <a href="<%= @recipe_url %>" class="btn">View Recipe</a>
+      </p>
+    </div>
+
+    <p>Happy cooking!</p>
+    <p>The Poor Man's Cookbook Team</p>
+
+    <div class="footer">
+      <p>
+        Don't want to receive these notifications? 
+        <%= link_to "Update your preferences", edit_profile_url %>
+      </p>
+    </div>
+  </body>
+</html>

@@ -31,6 +31,7 @@ class User < ApplicationRecord
 
   attribute :admin, :boolean, default: false
   attribute :api_key, default: -> { SecureRandom.hex(15) }
+  attribute :notify_new_recipes, :boolean, default: true
 
   has_many :recipes, foreign_key: 'author_id'
   has_many :ratings

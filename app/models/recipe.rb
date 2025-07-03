@@ -37,6 +37,8 @@ class Recipe < ApplicationRecord
   
   has_rich_text :instructions
 
+  after_create :send_new_recipe_notifications
+
   has_one_attached :image
   has_many_attached :images
 
@@ -51,4 +53,10 @@ class Recipe < ApplicationRecord
   attribute :author, default: -> { Current.user || User.default_author } 
 
   monetize :cost_cents
+
+  private
+
+  def send_new_recipe_notifications
+    NewRecipeNotificationJob.perform_later(id)
+  end
 end

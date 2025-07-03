@@ -1,0 +1,35 @@
+🍽️ New Recipe Alert!
+
+Hi <%= @user.name || @user.username %>,
+
+We're excited to share a delicious new recipe that was just added to Poor Man's cookbook!
+
+Recipe: <%= @recipe.title %>
+
+<% if @recipe.blurb.present? %>
+Description: <%= @recipe.blurb %>
+<% end %>
+
+Category: <%= @recipe.category.name %>
+
+<% if @recipe.difficulty > 0 %>
+Difficulty: <%= '⭐' * @recipe.difficulty %> (<%= @recipe.difficulty %>/5)
+<% end %>
+
+<% if @recipe.prep_time > 0 %>
+Prep Time: <%= @recipe.prep_time %> minutes
+<% end %>
+
+<% if @recipe.cost.present? && @recipe.cost > 0 %>
+Estimated Cost: <%= @recipe.cost %>
+<% end %>
+
+By: <%= @recipe.author&.name || @recipe.author&.username || 'Chef' %>
+
+View Recipe: <%= @recipe_url %>
+
+Happy cooking!
+The Poor Man's Cookbook Team
+
+---
+Don't want to receive these notifications? Update your preferences: <%= edit_profile_url %>
