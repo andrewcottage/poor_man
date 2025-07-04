@@ -9,3 +9,7 @@ eagerLoadControllersFrom("controllers", application);
 // Lazy load controllers as they appear in the DOM (remember not to preload controllers in import map!)
 // import { lazyLoadControllersFrom } from "@hotwired/stimulus-loading"
 // lazyLoadControllersFrom("controllers", application)
+
+// Manually register the AI recipe generator controller
+import AiRecipeGeneratorController from "./ai_recipe_generator_controller"
+application.register("ai-recipe-generator", AiRecipeGeneratorController)

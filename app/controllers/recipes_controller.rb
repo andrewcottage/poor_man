@@ -2,7 +2,7 @@ class RecipesController < ApplicationController
   ITEMS = 12
 
   before_action :set_recipe, only: %i[ show edit update destroy ]
-  before_action :require_admin!, only: %i[ new create edit update destroy ]
+  before_action :require_admin!, only: %i[ new create edit update destroy generate_with_ai ]
   
   skip_forgery_protection only: [:create]
 
@@ -30,6 +30,23 @@ class RecipesController < ApplicationController
 
   # GET /recipes/1/edit
   def edit
+  end
+
+  # POST /recipes/generate_with_ai
+  def generate_with_ai
+    prompt = params[:prompt]
+    
+    if prompt.blank?
+      render json: { error: "Prompt is required" }, status: :bad_request
+      return
+    end
+
+    begin
+      generated_data = Recipe.generate_from_prompt(prompt)
+      render json: generated_data, status: :ok
+    rescue StandardError => e
+      render json: { error: "Failed to generate recipe: #{e.message}" }, status: :internal_server_error
+    end
   end
 
   # POST /recipes or /recipes.json

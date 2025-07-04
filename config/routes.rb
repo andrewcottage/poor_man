@@ -1,42 +1,43 @@
 Rails.application.routes.draw do
-  root to: "home#index"
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  namespace :profiles do
-    resources :favorites, only: %i[index]
-    resources :recipes, only: %i[index]
-  end
-  
-  resources :profiles, only: %i[show edit update]
-
-  namespace :recipes do
-    get "favorites/create"
-  end
-
-  resources :pages, only: [] do
-    collection do
-      get :privacy
-      get :terms
-      get :about
-    end
-  end
-
-  get "/about", to: redirect('/pages/about')
-  
-  resources :sessions, only: %i[new create destroy]
-  resources :auth, only: [] do
-    collection do 
-      get "/:provider/callback" => "auth#callback"
-    end
-  end
-  
-  resources :recipes, param: :slug do 
-    resources :ratings, controller: "recipes/ratings"
-    resources :favorites, controller: "recipes/favorites", only: %i[create destroy]
-  end
-  resources :categories, param: :slug
-  resources :registrations, only: %i[new create]
-  
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Can be used by uptime monitors like upstack.com/uptime-monitoring
   get "up" => "rails/health#show", as: :rails_health_check
+
+  # Render dynamic PWA files from app/views/pwa/*
+  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+
+  # Defines the root path route ("/")
+  root "home#index"
+
+  get "/about", to: "pages#about"
+  get "/privacy", to: "pages#privacy"
+  get "/terms", to: "pages#terms"
+
+  resources :categories, param: :slug do
+    collection do
+      get :suggest
+    end
+  end
+
+  resources :recipes, param: :slug do
+    collection do
+      post :generate_with_ai
+    end
+    
+    resources :ratings, except: [:index, :show]
+    resources :favorites, only: [:create, :destroy]
+  end
+
+  resources :profiles, only: [:show, :edit, :update] do
+    resources :recipes, only: [:index], module: :profiles
+    resources :favorites, only: [:index], module: :profiles
+  end
+
+  resources :registrations, only: [:new, :create]
+  resources :sessions, only: [:new, :create, :destroy]
+
+  get "/auth/:provider/callback", to: "auth#omniauth"
 end
