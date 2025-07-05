@@ -21,7 +21,7 @@ class FavoriteFlowTest < ActionDispatch::IntegrationTest
     end
     
     # Verify the recipe is now in favorites
-    get profiles_favorites_path
+    get profile_favorites_path(@user)
     assert_response :success
     
     # The recipe card doesn't have a specific class, but we can look for the recipe title
@@ -43,7 +43,7 @@ class FavoriteFlowTest < ActionDispatch::IntegrationTest
     end
     
     # Verify the recipe is no longer in favorites
-    get profiles_favorites_path
+    get profile_favorites_path(@user)
     assert_response :success
     assert_select "div.group.relative h3", text: /#{@recipe.title}/, count: 0
   end

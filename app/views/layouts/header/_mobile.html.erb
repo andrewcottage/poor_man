@@ -24,8 +24,8 @@
         <div class="py-6">
           <% if Current.user %>
           <%= link_to "Profile", profile_path(Current.user), class: "-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>
-          <%= link_to "Favorites", profiles_favorites_path(), class: "-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>
-          <%= link_to "My Recipes", profiles_recipes_path, class: "-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>
+          <%= link_to "Favorites", profile_favorites_path(Current.user), class: "-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>
+          <%= link_to "My Recipes", profiles_recipes_path(Current.user), class: "-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>
           <%= button_to "Sign Out", session_path(Current.user), method: :delete, class: "-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>
           <% else %>
           <%= link_to "Log In", new_session_path, class: "-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>

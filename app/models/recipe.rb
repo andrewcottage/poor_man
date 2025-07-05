@@ -34,6 +34,7 @@ class Recipe < ApplicationRecord
   include Editable
   include ImageGeneration
   include Taggable
+  include AiGeneration
   
   has_rich_text :instructions
 
