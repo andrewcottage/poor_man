@@ -1,4 +1,87 @@
-<%= form_with(model: recipe, data: { controller: "slug" }) do |form| %>
+<div data-controller="ai-recipe-generator" data-ai-recipe-generator-generate-url-value="<%= generate_ai_recipe_recipes_path %>">
+  <div class="mb-4">
+    <button type="button" 
+            data-action="click->ai-recipe-generator#showModal"
+            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+      </svg>
+      Generate Recipe with AI
+    </button>
+    <p class="text-sm text-gray-500 mt-1">Let AI help you create a complete recipe from a simple prompt!</p>
+  </div>
+
+  <!-- AI Generation Modal -->
+  <div data-ai-recipe-generator-target="modal" class="fixed inset-0 z-50 hidden">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" data-action="click->ai-recipe-generator#hideModal"></div>
+    
+    <!-- Modal content -->
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+      <div class="flex min-h-full items-center justify-center p-4">
+        <div class="relative transform overflow-hidden rounded-lg bg-white shadow-xl transition-all w-full max-w-lg mx-auto text-left">
+          <div class="bg-white px-6 py-6">
+            <div class="flex items-start">
+              <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-purple-100">
+                <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+              </div>
+              <div class="ml-4 w-full">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Generate Recipe with AI</h3>
+                <div class="mt-2">
+                  <p class="text-sm text-gray-500">
+                    Describe what kind of recipe you want to create, and AI will generate a complete recipe for you.
+                  </p>
+                </div>
+                
+                <div data-ai-recipe-generator-target="form" class="mt-4">
+                  <form data-action="submit->ai-recipe-generator#generateRecipe">
+                    <div class="mb-4">
+                      <label for="ai-prompt" class="block text-sm font-medium text-gray-700">Recipe Prompt</label>
+                      <textarea data-ai-recipe-generator-target="prompt" 
+                                id="ai-prompt" 
+                                rows="3" 
+                                placeholder="e.g., A healthy vegetarian pasta dish with fresh herbs, or A decadent chocolate cake for special occasions"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm"></textarea>
+                    </div>
+                    
+                    <div data-ai-recipe-generator-target="error" class="hidden bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mb-4"></div>
+                    
+                    <div class="flex justify-end space-x-3">
+                      <button type="button" 
+                              data-action="click->ai-recipe-generator#hideModal"
+                              class="inline-flex justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                        Cancel
+                      </button>
+                      <button type="submit" 
+                              class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-purple-600 border border-transparent rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                        Generate Recipe
+                      </button>
+                    </div>
+                  </form>
+                </div>
+                
+                <div data-ai-recipe-generator-target="loading" class="hidden mt-4 text-center">
+                  <div class="inline-flex items-center">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span class="text-sm text-gray-600">Generating your recipe and image...</span>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= form_with(model: recipe, data: { controller: "slug" }, html: { id: "recipe-form" }) do |form| %>
 <% if recipe.errors.any? %>
 <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
   <h2><%= pluralize(recipe.errors.count, "error") %> prohibited this recipe from being saved:</h2>

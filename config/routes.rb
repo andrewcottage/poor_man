@@ -32,6 +32,14 @@ Rails.application.routes.draw do
   resources :recipes, param: :slug do 
     resources :ratings, controller: "recipes/ratings"
     resources :favorites, controller: "recipes/favorites", only: %i[create destroy]
+    
+    collection do
+      post :generate_ai_recipe
+    end
+    
+    member do
+      patch :generate_ai_image
+    end
   end
   resources :categories, param: :slug
   resources :registrations, only: %i[new create]

@@ -15,6 +15,7 @@
 #  updated_at    :datetime         not null
 #  author_id     :integer
 #  category_id   :integer          not null
+#  ref_id        :string
 #
 # Indexes
 #
@@ -34,6 +35,7 @@ class Recipe < ApplicationRecord
   include Editable
   include ImageGeneration
   include Taggable
+  include AiGeneration
   
   has_rich_text :instructions
 

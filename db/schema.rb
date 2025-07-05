@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_03_02_133924) do
+ActiveRecord::Schema[8.1].define(version: 2025_07_05_142550) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -91,6 +91,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_03_02_133924) do
     t.datetime "created_at", null: false
     t.integer "difficulty", default: 0
     t.integer "prep_time", default: 0
+    t.string "ref_id"
     t.string "slug"
     t.string "tag_names"
     t.string "title"
@@ -125,6 +126,12 @@ ActiveRecord::Schema[8.1].define(version: 2025_03_02_133924) do
     t.string "name"
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
+  create_table "temp_images", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "ref_id"
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

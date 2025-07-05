@@ -3,6 +3,7 @@ class RecipesController < ApplicationController
 
   before_action :set_recipe, only: %i[ show edit update destroy ]
   before_action :require_admin!, only: %i[ new create edit update destroy ]
+  before_action :require_user!, only: %i[ generate_ai_recipe ]
   
   skip_forgery_protection only: [:create]
 
@@ -70,7 +71,32 @@ class RecipesController < ApplicationController
     end
   end
 
-  private
+  def generate_ai_recipe
+    prompt = params[:prompt]
+    
+    if prompt.blank?
+      render json: { error: "Prompt is required" }, status: :unprocessable_entity
+      return
+    end
+
+    recipe, temp_image = Recipe.generate_from_prompt(prompt, Current.user)
+    
+    render json: {
+      title: recipe.title,
+      blurb: recipe.blurb,
+      instructions: recipe.instructions.to_s,
+      tag_names: recipe.tag_names,
+      difficulty: recipe.difficulty,
+      prep_time: recipe.prep_time,
+      cost: recipe.cost.to_s,
+      category_id: recipe.category_id,
+      image_url: temp_image&.image&.attached? ? url_for(temp_image.image) : nil
+    }
+
+   end
+
+
+   private
     # Use callbacks to share common setup or constraints between actions.
     def set_recipe
       @recipe = Recipe.find_by(slug: params[:slug]) || Recipe.find_by(id: params[:slug]) 

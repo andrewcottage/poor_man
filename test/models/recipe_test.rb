@@ -15,6 +15,7 @@
 #  updated_at    :datetime         not null
 #  author_id     :integer
 #  category_id   :integer          not null
+#  ref_id        :string
 #
 # Indexes
 #
