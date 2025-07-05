@@ -11,10 +11,13 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "home#index"
-
-  get "/about", to: "pages#about"
-  get "/privacy", to: "pages#privacy"
-  get "/terms", to: "pages#terms"
+  resources :pages, only: [] do
+    collection do
+      get :privacy
+      get :terms
+      get :about
+    end
+  end
 
   resources :categories, param: :slug do
     collection do
@@ -31,9 +34,9 @@ Rails.application.routes.draw do
     resources :favorites, only: [:create, :destroy]
   end
 
-  resources :profiles, only: [:show, :edit, :update] do
-    resources :recipes, only: [:index], module: :profiles
-    resources :favorites, only: [:index], module: :profiles
+  resources :recipes, param: :slug do 
+    resources :ratings, controller: "recipes/ratings"
+    resources :favorites, controller: "recipes/favorites", only: %i[create destroy]
   end
 
   resources :registrations, only: [:new, :create]
