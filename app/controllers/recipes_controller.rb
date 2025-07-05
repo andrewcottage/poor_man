@@ -1,8 +1,9 @@
 class RecipesController < ApplicationController
   ITEMS = 12
 
-  before_action :set_recipe, only: %i[ show edit update destroy ]
-  before_action :require_admin!, only: %i[ new create edit update destroy ]
+  before_action :set_recipe, only: %i[ show edit update destroy generate_ai_image ]
+  before_action :require_admin!, only: %i[ new create edit update destroy generate_ai_image ]
+  before_action :require_user!, only: %i[ generate_ai_recipe ]
   
   skip_forgery_protection only: [:create]
 
@@ -70,7 +71,44 @@ class RecipesController < ApplicationController
     end
   end
 
-  private
+  def generate_ai_recipe
+    prompt = params[:prompt]
+    
+    if prompt.blank?
+      render json: { error: "Prompt is required" }, status: :unprocessable_entity
+      return
+    end
+
+         begin
+       recipe = Recipe.generate_from_prompt(prompt, Current.user)
+       
+       render json: {
+         title: recipe.title,
+         blurb: recipe.blurb,
+         instructions: recipe.instructions.try(:to_s) || recipe.instructions,
+         tag_names: recipe.tag_names,
+         difficulty: recipe.difficulty,
+         prep_time: recipe.prep_time,
+         cost: recipe.cost.to_s,
+         category_id: recipe.category_id
+       }
+    rescue JSON::ParserError => e
+      render json: { error: "Failed to parse AI response. Please try again." }, status: :unprocessable_entity
+    rescue StandardError => e
+      render json: { error: "Failed to generate recipe. Please try again." }, status: :unprocessable_entity
+         end
+   end
+
+   def generate_ai_image
+     begin
+       @recipe.generate_image_from_ai
+       redirect_to edit_recipe_path(@recipe), notice: "AI image generated successfully!"
+     rescue StandardError => e
+       redirect_to edit_recipe_path(@recipe), alert: "Failed to generate AI image. Please try again."
+     end
+   end
+
+   private
     # Use callbacks to share common setup or constraints between actions.
     def set_recipe
       @recipe = Recipe.find_by(slug: params[:slug]) || Recipe.find_by(id: params[:slug]) 
