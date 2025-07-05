@@ -1,8 +1,8 @@
 class RecipesController < ApplicationController
   ITEMS = 12
 
-  before_action :set_recipe, only: %i[ show edit update destroy generate_ai_image ]
-  before_action :require_admin!, only: %i[ new create edit update destroy generate_ai_image ]
+  before_action :set_recipe, only: %i[ show edit update destroy ]
+  before_action :require_admin!, only: %i[ new create edit update destroy ]
   before_action :require_user!, only: %i[ generate_ai_recipe ]
   
   skip_forgery_protection only: [:create]
@@ -79,34 +79,22 @@ class RecipesController < ApplicationController
       return
     end
 
-         begin
-       recipe = Recipe.generate_from_prompt(prompt, Current.user)
-       
-       render json: {
-         title: recipe.title,
-         blurb: recipe.blurb,
-         instructions: recipe.instructions.try(:to_s) || recipe.instructions,
-         tag_names: recipe.tag_names,
-         difficulty: recipe.difficulty,
-         prep_time: recipe.prep_time,
-         cost: recipe.cost.to_s,
-         category_id: recipe.category_id
-       }
-    rescue JSON::ParserError => e
-      render json: { error: "Failed to parse AI response. Please try again." }, status: :unprocessable_entity
-    rescue StandardError => e
-      render json: { error: "Failed to generate recipe. Please try again." }, status: :unprocessable_entity
-         end
+    recipe, temp_image = Recipe.generate_from_prompt(prompt, Current.user)
+    
+    render json: {
+      title: recipe.title,
+      blurb: recipe.blurb,
+      instructions: recipe.instructions.to_s,
+      tag_names: recipe.tag_names,
+      difficulty: recipe.difficulty,
+      prep_time: recipe.prep_time,
+      cost: recipe.cost.to_s,
+      category_id: recipe.category_id,
+      image_url: temp_image&.image&.attached? ? url_for(temp_image.image) : nil
+    }
+
    end
 
-   def generate_ai_image
-     begin
-       @recipe.generate_image_from_ai
-       redirect_to edit_recipe_path(@recipe), notice: "AI image generated successfully!"
-     rescue StandardError => e
-       redirect_to edit_recipe_path(@recipe), alert: "Failed to generate AI image. Please try again."
-     end
-   end
 
    private
     # Use callbacks to share common setup or constraints between actions.

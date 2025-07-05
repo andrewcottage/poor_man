@@ -9,33 +9,39 @@ module Recipe::AiGeneration
       
       response = client.chat(
         parameters: {
-          model: "gpt-4o-mini",
+          model: "gpt-4.1",
           messages: [{ role: "user", content: content }]
         }
       )
       
       recipe_data = JSON.parse(response.dig("choices", 0, "message", "content"))
+
+      Rails.logger.info("Recipe data: #{recipe_data}")
       
       recipe = Recipe.new(
         title: recipe_data["title"],
         blurb: recipe_data["blurb"],
-        instructions: recipe_data["instructions"],
         tag_names: recipe_data["tags"]&.join(", "),
         difficulty: recipe_data["difficulty"],
         prep_time: recipe_data["prep_time"],
         cost: recipe_data["cost"],
-        author: user || Current.user
+        author: user || Current.user,
+        ref_id: SecureRandom.uuid
       )
       
       recipe.category = find_or_create_category(recipe_data["category"])
       
-      recipe
+      recipe.instructions = recipe_data["instructions"]
+
+      image = recipe.generate_image(recipe.ref_id)
+      
+      [recipe, image]
     end
 
     private
 
     def generate_recipe_prompt(prompt)
-      """
+      <<~PROMPT
       Generate a complete recipe based on this prompt: "#{prompt}"
       
       Please respond with ONLY a valid JSON object with the following structure:
@@ -54,15 +60,15 @@ module Recipe::AiGeneration
       - difficulty should be 1-5 (1 = very easy, 5 = very hard)
       - prep_time should be in minutes
       - cost should be estimated ingredient cost in USD
-      - instructions should be detailed, step-by-step in HTML format
+      - instructions A combined section that includes both the list of ingredients and step-by-step guidance on how to make the dish, written in an SEO-friendly manner.
       - tags should be relevant cooking/ingredient tags
       - category should be a broad category like "Breakfast", "Dinner", "Dessert", etc.
       
       Return ONLY the JSON object, no additional text.
-      """
+      PROMPT
     end
 
-         def find_or_create_category(category_name)
+    def find_or_create_category(category_name)
        return Category.first if category_name.blank?
        
        existing_category = Category.find_by(title: category_name)
@@ -78,9 +84,7 @@ module Recipe::AiGeneration
      end
   end
 
-  def generate_image_from_ai
-    return unless persisted?
-    
+  def generate_image(ref_id)
     client = OpenAI::Client.new
     
     prompt = generate_image_prompt_from_recipe
@@ -94,9 +98,17 @@ module Recipe::AiGeneration
     )
     
     url = response.dig("data", 0, "url")
+
+    # Download the image and attach it properly to Active Storage
+    downloaded_file = Down.download(url)
     
-    download = Down.download(url)
-    image.attach(io: download, filename: "ai_generated_image.jpg")
+    temp_image = TempImage.create!(ref_id: ref_id, image: {
+      io: downloaded_file,
+      filename: "ai_generated_#{ref_id}.jpg",
+      content_type: "image/jpeg"
+    })
+
+    temp_image
   end
 
   private
