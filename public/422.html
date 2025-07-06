@@ -1,67 +1,149 @@
 <!DOCTYPE html>
-<html>
+<html class="h-full">
 <head>
-  <title>The change you wanted was rejected (422)</title>
+  <title>Unprocessable Entity (422) - Poor Man With a Pan</title>
+  <meta name="description" content="The request couldn't be processed. Please check your information and try again.">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-  .rails-default-error-page {
-    background-color: #EFEFEF;
-    color: #2E2F30;
-    text-align: center;
-    font-family: arial, sans-serif;
-    margin: 0;
-  }
-
-  .rails-default-error-page div.dialog {
-    width: 95%;
-    max-width: 33em;
-    margin: 4em auto 0;
-  }
-
-  .rails-default-error-page div.dialog > div {
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #BBB;
-    border-top: #B00100 solid 4px;
-    border-top-left-radius: 9px;
-    border-top-right-radius: 9px;
-    background-color: white;
-    padding: 7px 12% 0;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-  }
-
-  .rails-default-error-page h1 {
-    font-size: 100%;
-    color: #730E15;
-    line-height: 1.5em;
-  }
-
-  .rails-default-error-page div.dialog > p {
-    margin: 0 0 1em;
-    padding: 1em;
-    background-color: #F7F7F7;
-    border: 1px solid #CCC;
-    border-right-color: #999;
-    border-left-color: #999;
-    border-bottom-color: #999;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-top-color: #DADADA;
-    color: #666;
-    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-  }
+    .inter-font {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
   </style>
 </head>
 
-<body class="rails-default-error-page">
-  <!-- This file lives in public/422.html -->
-  <div class="dialog">
-    <div>
-      <h1>The change you wanted was rejected.</h1>
-      <p>Maybe you tried to change something you didn't have access to.</p>
+<body class="h-full bg-white inter-font">
+  <!-- Header -->
+  <header class="inset-x-0 top-0 z-50">
+    <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+      <div class="flex lg:flex-1">
+        <a href="/" class="-m-1.5 p-1.5">
+          <span class="sr-only">Poor Man With a Pan</span>
+          <img class="h-16 w-auto" src="/logo.webp" alt="Poor Man With a Pan">
+        </a>
+      </div>
+      <div class="hidden lg:flex lg:gap-x-12">
+        <a href="/recipes" class="text-sm font-semibold leading-6 text-gray-900">Recipes</a>
+        <a href="/categories" class="text-sm font-semibold leading-6 text-gray-900">Categories</a>
+        <a href="/pages/about" class="text-sm font-semibold leading-6 text-gray-900">About</a>
+      </div>
+      <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+        <a href="/" class="text-sm font-semibold leading-6 text-gray-900">Home</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="mx-auto mt-1 px-5 flex">
+    <div class="mx-auto max-w-7xl">
+      <div class="mx-auto max-w-2xl text-center py-24">
+        <!-- Error Code -->
+        <p class="text-base font-semibold text-orange-600">422</p>
+        
+        <!-- Main Heading -->
+        <h1 class="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+          Recipe Rejected
+        </h1>
+        
+        <!-- Description -->
+        <p class="mt-6 text-lg leading-8 text-gray-600">
+          We couldn't process your request. Something in your submission doesn't quite add up - like adding salt to a dessert!
+        </p>
+        
+        <!-- Helpful suggestions -->
+        <div class="mt-8 space-y-3">
+          <p class="text-base text-gray-500">This usually happens when:</p>
+          <ul class="text-left text-sm text-gray-500 space-y-1 max-w-md mx-auto">
+            <li>• Required fields are missing</li>
+            <li>• The form data is invalid</li>
+            <li>• Security checks failed</li>
+            <li>• The request timed out</li>
+          </ul>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="mt-10 flex items-center justify-center gap-x-6">
+          <button onclick="window.history.back()" class="rounded-md bg-orange-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
+            Go Back
+          </button>
+          <a href="/" class="text-sm font-semibold text-gray-900">
+            Start Over <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+        
+        <!-- Fun cooking emoji -->
+        <div class="mt-12 text-6xl">
+          🥄
+        </div>
+        
+        <!-- Technical note -->
+        <div class="mt-8 text-xs text-gray-400">
+          Error ID: 422 - Unprocessable Entity
+        </div>
+      </div>
     </div>
-    <p>If you are the application owner check the logs for more information.</p>
+  </main>
+
+  <!-- Footer -->
+  <div class="mx-auto mt-12 max-w-7xl px-6 lg:px-8">
+    <footer aria-labelledby="footer-heading" class="relative border-t border-gray-900/10 py-24 sm:mt-20 sm:py-32">
+      <h2 id="footer-heading" class="sr-only">Footer</h2>
+      <div class="xl:grid xl:grid-cols-3 xl:gap-8">
+        <img class="w-14" src="/logo.webp" alt="Poor Man With a Pan">
+        <div class="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
+          <div class="md:grid md:grid-cols-2 md:gap-8">
+            <div>
+              <h3 class="text-sm font-semibold leading-6 text-gray-900">Solutions</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li>
+                  <a href="#" class="text-sm leading-6 text-gray-600 hover:text-gray-900">API</a>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-10 md:mt-0">
+              <h3 class="text-sm font-semibold leading-6 text-gray-900">Support</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li>
+                  <a href="https://commerce.coinbase.com/checkout/8c355aea-4058-4360-8398-898f9b45b49f" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Donate</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="md:grid md:grid-cols-2 md:gap-8">
+            <div>
+              <h3 class="text-sm font-semibold leading-6 text-gray-900">Company</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li>
+                  <a href="/pages/about" class="text-sm leading-6 text-gray-600 hover:text-gray-900">About</a>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-10 md:mt-0">
+              <h3 class="text-sm font-semibold leading-6 text-gray-900">Legal</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li>
+                  <a href="/pages/privacy" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Privacy Policy</a>
+                </li>
+                <li>
+                  <a href="/pages/terms" class="text-sm leading-6 text-gray-600 hover:text-gray-900">Terms of Service</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-8 border-t border-gray-900/10 pt-8 md:flex md:items-center md:justify-between">
+        <p class="text-xs leading-5 text-gray-500">&copy; 2024 Poor Man With a Pan. All rights reserved.</p>
+        <div class="flex space-x-6 md:order-2">
+          <a href="https://github.com/andrewhwanpark/poor-man-with-a-pan" class="text-gray-400 hover:text-gray-500">
+            <span class="sr-only">GitHub</span>
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </footer>
   </div>
 </body>
 </html>
