@@ -37,6 +37,7 @@ class Recipe::Generation < ApplicationRecord
   def generate_later
     generate_recipe_later
     generate_images_later
+    generate_image_later
   end
 
   def generate_recipe_later
