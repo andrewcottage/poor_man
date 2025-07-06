@@ -79,3 +79,4 @@ gem "down", "~> 5.4"
 gem "money-rails", "~> 1.15"
 
 gem "mocha", "~> 2.7", :group => :test
+gem "mission_control-jobs"
