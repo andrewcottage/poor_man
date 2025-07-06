@@ -4,7 +4,12 @@ class Recipe::Generation < ApplicationRecord
   has_many_attached :images
 
   validates :prompt, presence: true
-  
+
+  after_create_commit :generate_later
+
+  def complete?
+    data.present? && image.attached? && images.attached?
+  end
   
   def generate_later
     generate_recipe_later

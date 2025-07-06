@@ -3,9 +3,9 @@ class Recipes::GenerationController < ApplicationController
   
   def create
     @recipe_generation = Recipe::Generation.new(recipe_params)
-    
+
     if @recipe_generation.save
-      redirect_to @recipe_generation, notice: "Recipe Generation was is in progress."
+      redirect_to @recipe_generation, notice: "Recipe Generation is in progress."
     else
       render :new
     end
@@ -14,6 +14,6 @@ class Recipes::GenerationController < ApplicationController
   private
 
   def recipe_params
-    params.require(:recipe).permit(:title, :image, :slug, :instructions, :tag_names, :blurb, :difficulty, :prep_time, :category_id, :cost, images: [])
+    params.require(:recipe_generation).permit(:prompt)
   end
 end
