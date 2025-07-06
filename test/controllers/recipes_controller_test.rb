@@ -112,7 +112,8 @@ class RecipesControllerTest < ActionDispatch::IntegrationTest
           category_id: categories(:one).id,
           difficulty: generation.data['difficulty'],
           prep_time: generation.data['prep_time'],
-          cost: generation.data['cost']
+          cost: generation.data['cost'],
+          image: fixture_file_upload('vaporwave.jpeg', 'image/jpg')
         }
       }
     end

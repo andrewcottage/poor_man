@@ -73,6 +73,29 @@ class Recipe < ApplicationRecord
     recipe
   end
 
+  def use_generated_images(generation_id)
+    generation = Recipe::Generation.find_by(id: generation_id)
+    return unless generation
+    
+    # Copy main image if it exists
+    if generation.image.attached?
+      image.attach(
+        io: StringIO.new(generation.image.blob.download),
+        filename: generation.image.blob.filename,
+        content_type: generation.image.blob.content_type
+      )
+    end
+    
+    # Copy additional images
+    generation.images.each do |gen_image|
+      images.attach(
+        io: StringIO.new(gen_image.blob.download),
+        filename: gen_image.blob.filename,
+        content_type: gen_image.blob.content_type
+      )
+    end
+  end
+
   private
 
   def self.find_category_by_name(category_name)

@@ -43,10 +43,7 @@ class RecipesController < ApplicationController
     
     # Handle image copying from generation if generation_id is present
     if params[:recipe][:generation_id].present?
-      @generation = Recipe::Generation.find_by(id: params[:recipe][:generation_id])
-      if @generation&.data&.present?
-        copy_images_from_generation(@generation, @recipe)
-      end
+      @recipe.use_generated_images(params[:recipe][:generation_id])
     end
   
     respond_to do |format|
@@ -97,42 +94,5 @@ class RecipesController < ApplicationController
     def recipe_params
       params.require(:recipe).permit(:title, :image, :slug, :instructions, :tag_names, :blurb, :difficulty, :prep_time, :category_id, :cost, :generation_id, images: [])
     end
-
-
-
-    def copy_images_from_generation(generation, recipe)
-      # Copy main image if it exists
-      if generation.image.attached?
-        recipe.image.attach(
-          io: StringIO.new(generation.image.blob.download),
-          filename: generation.image.blob.filename,
-          content_type: generation.image.blob.content_type
-        )
-      else
-        # Create a placeholder image to satisfy validation if no generated image exists
-        create_placeholder_image(recipe)
-      end
-      
-      # Copy additional images
-      generation.images.each do |image|
-        recipe.images.attach(
-          io: StringIO.new(image.blob.download),
-          filename: image.blob.filename,
-          content_type: image.blob.content_type
-        )
-      end
-    end
-
-    def create_placeholder_image(recipe)
-      # Create a simple 1x1 pixel PNG placeholder
-      placeholder_data = "\x89PNG\r\n\x1A\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1F\x15\xC4\x89\x00\x00\x00\rIDATx\x9Cc\xF8\x0F\x00\x00\x01\x00\x01\x00\x18\xDD\x8D\xB4\x00\x00\x00\x00IEND\xAEB`\x82"
-      
-      recipe.image.attach(
-        io: StringIO.new(placeholder_data),
-        filename: "placeholder.png",
-        content_type: "image/png"
-      )
-    end
-
 
 end

@@ -120,4 +120,23 @@ class RecipeTest < ActiveSupport::TestCase
     recipe = Recipe.from_generation(processing_generation.id)
     assert_nil recipe
   end
+
+  test "use_generated_images should handle generation without images gracefully" do
+    generation = recipe_generations(:one)
+    recipe = Recipe.new(title: "Test", slug: "test", blurb: "Test", category: @category)
+    
+    # Should not raise an error even if generation has no images
+    assert_nothing_raised do
+      recipe.use_generated_images(generation.id)
+    end
+  end
+
+  test "use_generated_images should handle invalid generation_id gracefully" do
+    recipe = Recipe.new(title: "Test", slug: "test", blurb: "Test", category: @category)
+    
+    # Should not raise an error for invalid generation_id
+    assert_nothing_raised do
+      recipe.use_generated_images(999999)
+    end
+  end
 end
