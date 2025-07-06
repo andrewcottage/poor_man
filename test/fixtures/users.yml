@@ -32,3 +32,13 @@ victoria:
   password_digest: <%= BCrypt::Password.create('password') %>
   admin: true
 
+admin:
+  email: admin@example.com
+  password_digest: <%= BCrypt::Password.create('password') %>
+  admin: true
+
+user:
+  email: user@example.com
+  password_digest: <%= BCrypt::Password.create('password') %>
+  admin: false
+

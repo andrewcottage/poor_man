@@ -1,0 +1,54 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# == Schema Information
+#
+# Table name: recipe_generations
+#
+#  id         :integer          not null, primary key
+#  data       :text
+#  prompt     :text
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  user_id    :integer          not null
+#
+# Indexes
+#
+#  index_recipe_generations_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  user_id  (user_id => users.id)
+#
+one:
+  user: andrew
+  prompt: "A delicious pasta dish with tomatoes and basil"
+  data: |
+    {
+      "title": "Pasta with Tomatoes and Basil",
+      "blurb": "A simple and delicious pasta dish featuring fresh tomatoes and basil.",
+      "instructions": "<p>Cook pasta according to package directions. Heat olive oil in a large skillet and sauté garlic. Add tomatoes and cook until soft. Toss with cooked pasta and fresh basil.</p>",
+      "tags": ["pasta", "tomatoes", "basil", "italian"],
+      "difficulty": 2,
+      "prep_time": 25,
+      "cost": 8.99,
+      "category": "Dinner"
+    }
+
+two:
+  user: andrew
+  prompt: "Chocolate chip cookies that are chewy"
+  data: |
+    {
+      "title": "Chewy Chocolate Chip Cookies",
+      "blurb": "Soft and chewy chocolate chip cookies with the perfect texture.",
+      "instructions": "<p>Cream butter and sugars together. Add eggs and vanilla. Mix in flour, baking soda, and salt. Fold in chocolate chips. Drop onto baking sheets and bake at 375°F for 9-11 minutes.</p>",
+      "tags": ["cookies", "chocolate", "dessert", "baking"],
+      "difficulty": 1,
+      "prep_time": 15,
+      "cost": 6.50,
+      "category": "Dessert"
+    }
+
+processing:
+  user: andrew
+  prompt: "A healthy smoothie bowl with fresh fruits"

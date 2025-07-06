@@ -9,6 +9,10 @@ servers:
   web: # Use a named role, so it can be used as entrypoint by Traefik
     hosts:
       - 167.71.99.38
+  queue:
+    hosts:
+      - 167.71.99.38
+    cmd: bin/jobs start
 
 proxy:
   host: "poormanwithapan.com"

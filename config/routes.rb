@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   namespace :recipes do
     get "favorites/create"
+    resources :generations
   end
 
   resources :pages, only: [] do

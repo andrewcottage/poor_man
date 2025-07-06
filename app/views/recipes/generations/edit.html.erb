@@ -1,0 +1,27 @@
+<div class="w-full">
+  <% content_for :title, "Edit Recipe Generation" %>
+
+  <div class="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
+    <div class="bg-white shadow rounded-lg">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h1 class="text-2xl font-bold text-gray-900">Edit Recipe Generation</h1>
+        <p class="mt-1 text-sm text-gray-600">
+          Modify the prompt for this recipe generation.
+        </p>
+      </div>
+
+      <div class="px-6 py-6">
+        <%= render 'form', generation: @generation %>
+      </div>
+
+      <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+        <div class="flex justify-between">
+          <%= link_to "Back to Generation", recipes_generation_path(@generation), class: "inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+          <%= link_to "Delete Generation", recipes_generation_path(@generation), method: :delete, 
+                      data: { confirm: "Are you sure? This will delete the generation and all its data." }, 
+                      class: "inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
