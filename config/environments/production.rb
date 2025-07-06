@@ -72,7 +72,8 @@ Rails.application.configure do
   config.session_store :cookie_store, key: '_poor_man_session', expires_after: 1.month
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
-  config.active_job.queue_adapter = :async
+  config.active_job.queue_adapter = :solid_queue
+  config.solid_queue.connects_to = { database: { writing: :queue } }
   # config.active_job.queue_name_prefix = "poor_man_production"
 
   config.action_mailer.perform_caching = false

@@ -1,4 +1,4 @@
-class Recipes::GenerationController < ApplicationController
+class Recipes::GenerationsController < ApplicationController
   ITEMS = 12
 
   before_action :set_generation, only: %i[show edit update destroy]

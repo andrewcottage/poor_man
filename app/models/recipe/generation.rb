@@ -1,4 +1,25 @@
+# == Schema Information
+#
+# Table name: recipe_generations
+#
+#  id         :integer          not null, primary key
+#  data       :text
+#  prompt     :text
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  user_id    :integer          not null
+#
+# Indexes
+#
+#  index_recipe_generations_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  user_id  (user_id => users.id)
+#
 class Recipe::Generation < ApplicationRecord
+
+  serialize :data, coder: JSON, default: {}
 
   has_one_attached :image
   has_many_attached :images
@@ -7,13 +28,14 @@ class Recipe::Generation < ApplicationRecord
 
   after_create_commit :generate_later
 
+  belongs_to :user
+
   def complete?
     data.present? && image.attached? && images.attached?
   end
   
   def generate_later
     generate_recipe_later
-    generate_image_later
     generate_images_later
   end
 
@@ -56,7 +78,28 @@ class Recipe::Generation < ApplicationRecord
     # Download the image and attach it properly to Active Storage
     downloaded_file = Down.download(url)
 
-    image.attach(io: downloaded_file, filename: "ai_generated_#{ref_id}.jpg", content_type: "image/jpeg")
+    image.attach(io: downloaded_file, filename: "ai_generated_#{id}.jpg", content_type: "image/jpeg")
+  end
+
+  def generate_images
+    formatted_images_prompts.each_with_index do |prompt, index|
+      client = OpenAI::Client.new
+
+      response = client.images.generate(
+        parameters: {
+          prompt: prompt,
+          model: "dall-e-3",
+          size: "1024x1024"
+        }
+      )
+
+      url = response.dig("data", 0, "url")
+
+      # Download the image and attach it properly to Active Storage
+      downloaded_file = Down.download(url)
+
+      images.attach(io: downloaded_file, filename: "ai_generated_#{id}_#{index}.jpg", content_type: "image/jpeg")
+    end
   end
 
   private

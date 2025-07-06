@@ -1,0 +1,61 @@
+<div class="bg-white shadow rounded-lg p-6 hover:shadow-md transition-shadow">
+  <div class="flex justify-between items-start mb-4">
+    <div class="flex-1">
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">
+        <%= link_to generation.prompt, recipes_generation_path(generation), class: "hover:text-blue-600" %>
+      </h3>
+      <p class="text-sm text-gray-500 mb-3">
+        Generated <%= time_ago_in_words(generation.created_at) %> ago
+      </p>
+    </div>
+    <div class="flex items-center space-x-2">
+      <%= generation_status_badge(generation) %>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <p class="text-sm text-gray-600 mb-2">Progress:</p>
+    <%= generation_progress_bar(generation) %>
+  </div>
+
+  <% if generation.data.present? %>
+  <div class="mb-4">
+    <% if generation.data['title'].present? %>
+    <h4 class="text-md font-medium text-gray-800 mb-1"><%= generation.data['title'] %></h4>
+    <% end %>
+    <% if generation.data['blurb'].present? %>
+    <p class="text-sm text-gray-600 line-clamp-2"><%= generation.data['blurb'] %></p>
+    <% end %>
+  </div>
+  <% end %>
+
+  <div class="flex justify-between items-center">
+    <div class="flex items-center space-x-2">
+      <% if generation.image.attached? %>
+      <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+        </svg>
+        Image
+      </span>
+      <% end %>
+      <% if generation.images.attached? %>
+      <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+        </svg>
+        Gallery
+      </span>
+      <% end %>
+    </div>
+    <div class="flex space-x-2">
+      <%= link_to "View", recipes_generation_path(generation), class: "text-blue-600 hover:text-blue-800 text-sm font-medium" %>
+      <% if Current.user&.admin? %>
+      <%= link_to "Edit", edit_recipes_generation_path(generation), class: "text-gray-600 hover:text-gray-800 text-sm font-medium" %>
+      <%= link_to "Delete", recipes_generation_path(generation), method: :delete, 
+                  data: { confirm: "Are you sure?" }, 
+                  class: "text-red-600 hover:text-red-800 text-sm font-medium" %>
+      <% end %>
+    </div>
+  </div>
+</div> 

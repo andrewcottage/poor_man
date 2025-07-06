@@ -95,4 +95,29 @@ class RecipeTest < ActiveSupport::TestCase
   test "can have ratings" do
     assert_respond_to @recipe, :ratings
   end
+
+  test "Recipe.from_generation should create recipe from generation data" do
+    generation = recipe_generations(:one)
+    recipe = Recipe.from_generation(generation.id)
+    
+    assert_not_nil recipe
+    assert_equal generation.data['title'], recipe.title
+    assert_equal generation.data['blurb'], recipe.blurb
+    assert_equal generation.data['difficulty'], recipe.difficulty
+    assert_equal generation.data['prep_time'], recipe.prep_time
+    assert_equal generation.data['tags'].join(', '), recipe.tag_names
+    assert_not_nil recipe.slug
+    assert_not_nil recipe.category
+  end
+
+  test "Recipe.from_generation should return nil for invalid generation_id" do
+    recipe = Recipe.from_generation(999999)
+    assert_nil recipe
+  end
+
+  test "Recipe.from_generation should return nil for generation without data" do
+    processing_generation = recipe_generations(:processing)
+    recipe = Recipe.from_generation(processing_generation.id)
+    assert_nil recipe
+  end
 end

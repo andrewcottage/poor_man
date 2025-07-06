@@ -25,7 +25,12 @@ class RecipesController < ApplicationController
 
   # GET /recipes/new
   def new
-    @recipe = Recipe.new
+    if params[:generation_id].present?
+      @generation = Recipe::Generation.find_by(id: params[:generation_id])
+      @recipe = Recipe.from_generation(params[:generation_id]) || Recipe.new
+    else
+      @recipe = Recipe.new
+    end
   end
 
   # GET /recipes/1/edit
@@ -34,13 +39,25 @@ class RecipesController < ApplicationController
 
   # POST /recipes or /recipes.json
   def create
-    @recipe = Current.user.recipes.new(recipe_params)
+    @recipe = Current.user.recipes.new(recipe_params.except(:generation_id))
+    
+    # Handle image copying from generation if generation_id is present
+    if params[:recipe][:generation_id].present?
+      @generation = Recipe::Generation.find_by(id: params[:recipe][:generation_id])
+      if @generation&.data&.present?
+        copy_images_from_generation(@generation, @recipe)
+      end
+    end
   
     respond_to do |format|
       if @recipe.save
         format.html { redirect_to recipe_url(@recipe.slug), notice: "Recipe was successfully created." }
         format.json { render :show, status: :created, location: @recipe }
       else
+        # If saving fails and we came from a generation, reload the generation for the form
+        if params[:recipe][:generation_id].present?
+          @generation = Recipe::Generation.find_by(id: params[:recipe][:generation_id])
+        end
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @recipe.errors, status: :unprocessable_entity }
       end
@@ -78,6 +95,44 @@ class RecipesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def recipe_params
-      params.require(:recipe).permit(:title, :image, :slug, :instructions, :tag_names, :blurb, :difficulty, :prep_time, :category_id, :cost, images: [])
+      params.require(:recipe).permit(:title, :image, :slug, :instructions, :tag_names, :blurb, :difficulty, :prep_time, :category_id, :cost, :generation_id, images: [])
     end
+
+
+
+    def copy_images_from_generation(generation, recipe)
+      # Copy main image if it exists
+      if generation.image.attached?
+        recipe.image.attach(
+          io: StringIO.new(generation.image.blob.download),
+          filename: generation.image.blob.filename,
+          content_type: generation.image.blob.content_type
+        )
+      else
+        # Create a placeholder image to satisfy validation if no generated image exists
+        create_placeholder_image(recipe)
+      end
+      
+      # Copy additional images
+      generation.images.each do |image|
+        recipe.images.attach(
+          io: StringIO.new(image.blob.download),
+          filename: image.blob.filename,
+          content_type: image.blob.content_type
+        )
+      end
+    end
+
+    def create_placeholder_image(recipe)
+      # Create a simple 1x1 pixel PNG placeholder
+      placeholder_data = "\x89PNG\r\n\x1A\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1F\x15\xC4\x89\x00\x00\x00\rIDATx\x9Cc\xF8\x0F\x00\x00\x01\x00\x01\x00\x18\xDD\x8D\xB4\x00\x00\x00\x00IEND\xAEB`\x82"
+      
+      recipe.image.attach(
+        io: StringIO.new(placeholder_data),
+        filename: "placeholder.png",
+        content_type: "image/png"
+      )
+    end
+
+
 end

@@ -1,0 +1,24 @@
+<div class="w-full">
+  <% content_for :title, "Generate New Recipe" %>
+
+  <div class="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
+    <div class="bg-white shadow rounded-lg">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h1 class="text-2xl font-bold text-gray-900">Generate New Recipe</h1>
+        <p class="mt-1 text-sm text-gray-600">
+          Describe what kind of recipe you'd like to generate and AI will create it for you.
+        </p>
+      </div>
+
+      <div class="px-6 py-6">
+        <%= render 'form', generation: @generation %>
+      </div>
+
+      <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+        <div class="flex justify-between">
+          <%= link_to "Back to Generations", recipes_generations_path, class: "inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

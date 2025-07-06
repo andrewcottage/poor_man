@@ -16,6 +16,9 @@
   <div class="hidden lg:flex lg:gap-x-12">
     <%= link_to "Recipes", recipes_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
     <%= link_to "Categories", categories_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
+    <% if Current.user %>
+      <%= link_to "AI Generator", recipes_generations_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
+    <% end %>
     <%= link_to "About", about_pages_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
   </div>
 

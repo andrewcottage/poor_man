@@ -51,4 +51,48 @@ class Recipe < ApplicationRecord
   attribute :author, default: -> { Current.user || User.default_author } 
 
   monetize :cost_cents
+
+  def self.from_generation(generation_id)
+    generation = Recipe::Generation.find_by(id: generation_id)
+    return nil unless generation&.data&.present?
+    
+    data = generation.data
+    
+    recipe = new(
+      title: data['title'],
+      blurb: data['blurb'],
+      instructions: data['instructions'],
+      difficulty: data['difficulty'] || 1,
+      prep_time: data['prep_time'] || 30,
+      cost: data['cost'] || 0,
+      tag_names: data['tags']&.join(', '),
+      category: find_category_by_name(data['category']),
+      slug: generate_unique_slug(data['title'])
+    )
+    
+    recipe
+  end
+
+  private
+
+  def self.find_category_by_name(category_name)
+    return Category.first if category_name.blank?
+    
+    # Try to find existing category by title (case insensitive)
+    category = Category.find_by('LOWER(title) = ?', category_name.downcase)
+    category || Category.first
+  end
+
+  def self.generate_unique_slug(title)
+    base_slug = title.parameterize
+    slug = base_slug
+    counter = 1
+    
+    while exists?(slug: slug)
+      slug = "#{base_slug}-#{counter}"
+      counter += 1
+    end
+    
+    slug
+  end
 end
