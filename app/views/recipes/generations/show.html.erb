@@ -28,6 +28,9 @@
             <%= link_to "Back to Generations", recipes_generations_path, class: "inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
             <% if Current.user&.admin? %>
             <%= link_to "Edit", edit_recipes_generation_path(@generation), class: "inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+            <%= button_to "Delete", recipes_generation_path(@generation), method: :delete, 
+                data: { turbo_confirm: "Are you sure you want to delete this recipe generation? This cannot be undone." }, 
+                class: "inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" %>
             <% end %>
           </div>
         </div>

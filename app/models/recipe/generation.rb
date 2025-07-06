@@ -59,8 +59,8 @@ class Recipe::Generation < ApplicationRecord
     update(data: JSON.parse(response.dig("choices", 0, "message", "content")))
   end
 
-  def generate_images_later
-    Recipe::Generation::GenerateImagesJob.perform_later(self)
+  def generate_image_later
+    Recipe::Generation::GenerateImageJob.perform_later(self)
   end
 
   def generate_image
@@ -80,6 +80,10 @@ class Recipe::Generation < ApplicationRecord
     downloaded_file = Down.download(url)
 
     image.attach(io: downloaded_file, filename: "ai_generated_#{id}.jpg", content_type: "image/jpeg")
+  end
+
+  def generate_images_later
+    Recipe::Generation::GenerateImagesJob.perform_later(self)
   end
 
   def generate_images
