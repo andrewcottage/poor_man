@@ -37,6 +37,14 @@ class User < ApplicationRecord
   has_many :favorites
   has_many :favorite_recipes, through: :favorites, source: :recipe
 
+  # Family relationships
+  has_many :created_families, class_name: 'Family', foreign_key: 'creator_id'
+  has_many :family_memberships, dependent: :destroy
+  has_many :families, through: :family_memberships
+  has_many :active_family_memberships, -> { where(status: :accepted) }, class_name: 'FamilyMembership'
+  has_many :active_families, through: :active_family_memberships, source: :family
+  has_many :pending_family_memberships, -> { where(status: :pending) }, class_name: 'FamilyMembership'
+
   has_one_attached :avatar
 
   def self.default_author
