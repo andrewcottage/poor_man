@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.4.2"
+ruby "3.4.6"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", github: "rails/rails", branch: "main"
@@ -80,3 +80,4 @@ gem "money-rails", "~> 1.15"
 
 gem "mocha", "~> 2.7", :group => :test
 gem "mission_control-jobs"
+gem "thruster"
