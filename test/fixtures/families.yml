@@ -1,0 +1,11 @@
+one:
+  name: Smith Family
+  description: The Smith family cookbook collection
+  slug: smith-family
+  creator: one
+
+two:
+  name: Johnson Family
+  description: Traditional family recipes from the Johnsons
+  slug: johnson-family
+  creator: two

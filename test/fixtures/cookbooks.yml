@@ -1,0 +1,20 @@
+one:
+  name: Family Recipes
+  description: Our default family cookbook
+  family: one
+  is_default: true
+  slug: family-recipes
+
+two:
+  name: Holiday Specials
+  description: Special recipes for holidays and celebrations
+  family: one
+  is_default: false
+  slug: holiday-specials
+
+three:
+  name: Family Recipes
+  description: Johnson family default cookbook
+  family: two
+  is_default: true
+  slug: family-recipes

@@ -1,0 +1,50 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">My Families</h1>
+    <%= link_to "Create New Family", new_family_path, class: "btn btn-primary" %>
+  </div>
+
+  <% if @families.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @families.each do |family| %>
+        <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            <%= link_to family.name, family_path(family), class: "text-blue-600 hover:text-blue-800" %>
+          </h3>
+          
+          <% if family.description.present? %>
+            <p class="text-gray-600 mb-4"><%= truncate(family.description, length: 100) %></p>
+          <% end %>
+          
+          <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+            <span>
+              <%= pluralize(family.active_members.count, 'member') %>
+            </span>
+            <span>
+              <%= pluralize(family.cookbooks.count, 'cookbook') %>
+            </span>
+          </div>
+          
+          <div class="flex items-center text-sm text-gray-500">
+            <span>Created by <%= family.creator.name || family.creator.username %></span>
+          </div>
+          
+          <div class="mt-4">
+            <%= link_to "View Family", family_path(family), class: "btn btn-sm btn-primary" %>
+            <% if family.can_manage?(Current.user) %>
+              <%= link_to "Manage", edit_family_path(family), class: "btn btn-sm btn-secondary ml-2" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-12">
+      <div class="max-w-md mx-auto">
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No families yet</h3>
+        <p class="text-gray-600 mb-6">Create your first family to start sharing recipes with your loved ones.</p>
+        <%= link_to "Create Your First Family", new_family_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+</div>
