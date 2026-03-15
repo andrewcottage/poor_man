@@ -26,19 +26,22 @@ andrew:
   email: andcott@gmail.com
   password_digest: <%= BCrypt::Password.create('password') %>
   admin: true
+  api_key: andrew-api-key
 
 victoria:
   email: victoria@gmail.com
   password_digest: <%= BCrypt::Password.create('password') %>
   admin: true
+  api_key: victoria-api-key
 
 admin:
   email: admin@example.com
   password_digest: <%= BCrypt::Password.create('password') %>
   admin: true
+  api_key: admin-api-key
 
 user:
   email: user@example.com
   password_digest: <%= BCrypt::Password.create('password') %>
   admin: false
-
+  api_key: user-api-key

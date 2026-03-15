@@ -48,9 +48,11 @@ class RecipeTest < ActiveSupport::TestCase
     assert_not @recipe.valid?
   end
 
-  test "slug should be present" do
+  test "slug should auto-generate from title when blank" do
     @recipe.slug = nil
-    assert_not @recipe.valid?
+
+    assert @recipe.valid?
+    assert_equal "pizza", @recipe.slug
   end
 
   test "blurb should be present" do

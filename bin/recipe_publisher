@@ -1,0 +1,154 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'open3'
+
+API_URL = ENV.fetch('POOR_MAN_API_URL', 'http://localhost:3000').sub(%r{/+\z}, '')
+API_KEY = ENV['POOR_MAN_API_KEY']
+
+def usage
+  <<~USAGE
+    Usage:
+      POOR_MAN_API_KEY=... bin/recipe_publisher categories
+      POOR_MAN_API_KEY=... bin/recipe_publisher create path/to/recipe.json [more.json ...]
+      POOR_MAN_API_KEY=... bin/recipe_publisher update recipe-slug path/to/recipe.json
+
+    Manifest JSON fields:
+      title, blurb, instructions, tag_names, difficulty, prep_time, cost
+      category_slug or category_id
+      slug (optional on create)
+      image (path to a single hero image)
+      images (array of additional image paths)
+  USAGE
+end
+
+def abort_with_usage(message = nil)
+  warn(message) if message
+  warn(usage)
+  exit 1
+end
+
+def ensure_api_key!
+  abort_with_usage('POOR_MAN_API_KEY is required.') if API_KEY.to_s.strip.empty?
+end
+
+def normalize_path(path, base_dir)
+  return if path.nil?
+
+  expanded = File.expand_path(path, base_dir)
+  raise ArgumentError, "File not found: #{expanded}" unless File.exist?(expanded)
+
+  expanded
+end
+
+def load_manifest(path)
+  manifest_path = File.expand_path(path)
+  manifest = JSON.parse(File.read(manifest_path))
+  raise ArgumentError, "Manifest must contain a JSON object: #{manifest_path}" unless manifest.is_a?(Hash)
+
+  base_dir = File.dirname(manifest_path)
+  hero_image = normalize_path(manifest.delete('image'), base_dir)
+  gallery_images = Array(manifest.delete('images')).map { |image| normalize_path(image, base_dir) }
+
+  [ manifest_path, manifest, hero_image, gallery_images ]
+end
+
+def pretty_output(output)
+  JSON.pretty_generate(JSON.parse(output))
+rescue JSON::ParserError
+  output
+end
+
+def curl_request(method:, path:, manifest_path: nil, payload: nil, hero_image: nil, gallery_images: [])
+  command = [
+    'curl',
+    '--fail-with-body',
+    '-sS',
+    '-X', method,
+    "#{API_URL}#{path}",
+    '-H', "Authorization: Bearer #{API_KEY}",
+    '-H', 'Accept: application/json'
+  ]
+
+  payload.each do |key, value|
+    next if value.nil?
+
+    command << '--form-string'
+    command << "recipe[#{key}]=#{value}"
+  end
+
+  if hero_image
+    command << '-F'
+    command << "recipe[image]=@#{hero_image}"
+  end
+
+  gallery_images.each do |image|
+    command << '-F'
+    command << "recipe[images][]=@#{image}"
+  end
+
+  output, status = Open3.capture2e(*command)
+  unless status.success?
+    warn("Request failed#{manifest_path ? " for #{manifest_path}" : ''}:")
+    warn(output)
+    exit status.exitstatus || 1
+  end
+
+  puts(pretty_output(output))
+end
+
+def list_categories
+  output, status = Open3.capture2e(
+    'curl',
+    '--fail-with-body',
+    '-sS',
+    '-H', 'Accept: application/json',
+    "#{API_URL}/categories.json"
+  )
+
+  unless status.success?
+    warn(output)
+    exit status.exitstatus || 1
+  end
+
+  puts(pretty_output(output))
+end
+
+command = ARGV.shift
+
+case command
+when 'categories'
+  list_categories
+when 'create'
+  ensure_api_key!
+  abort_with_usage('Provide at least one manifest path.') if ARGV.empty?
+
+  ARGV.each do |manifest_file|
+    manifest_path, payload, hero_image, gallery_images = load_manifest(manifest_file)
+    curl_request(
+      method: 'POST',
+      path: '/api/recipes',
+      manifest_path: manifest_path,
+      payload: payload,
+      hero_image: hero_image,
+      gallery_images: gallery_images
+    )
+  end
+when 'update'
+  ensure_api_key!
+  slug = ARGV.shift
+  manifest_file = ARGV.shift
+  abort_with_usage('Provide a recipe slug and manifest path.') if slug.to_s.strip.empty? || manifest_file.to_s.strip.empty?
+
+  manifest_path, payload, hero_image, gallery_images = load_manifest(manifest_file)
+  curl_request(
+    method: 'PATCH',
+    path: "/api/recipes/#{slug}",
+    manifest_path: manifest_path,
+    payload: payload,
+    hero_image: hero_image,
+    gallery_images: gallery_images
+  )
+else
+  abort_with_usage
+end

@@ -7,31 +7,44 @@ on:
     branches: [ main ]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Run RuboCop
+        run: bundle exec rubocop
+
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.4.2' # Use the version from your .ruby-version file
-        bundler-cache: true # This will cache installed gems
-        
-    - name: Install dependencies
-      run: |
-        bundle install
-        
-    - name: Setup database
-      env:
-        RAILS_ENV: test
-      run: |
-        bundle exec rails db:create
-        bundle exec rails db:schema:load
-        
-    - name: Run tests
-      env:
-        RAILS_ENV: test
-      run: |
-        bundle exec rails test
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Build Tailwind assets
+        env:
+          RAILS_ENV: test
+        run: bundle exec rails tailwindcss:build
+
+      - name: Setup database
+        env:
+          RAILS_ENV: test
+        run: bundle exec rails db:prepare
+
+      - name: Run tests
+        env:
+          RAILS_ENV: test
+        run: bundle exec rails test

@@ -34,49 +34,51 @@ class Recipe < ApplicationRecord
   include Editable
   include ImageGeneration
   include Taggable
-  
+
   has_rich_text :instructions
 
   has_one_attached :image
   has_many_attached :images
 
   belongs_to :category
-  belongs_to :author, class_name: 'User', foreign_key: 'author_id', optional: true
+  belongs_to :author, class_name: "User", foreign_key: "author_id", optional: true
+
+  before_validation :ensure_slug
 
   validates :image, attached: true
   validates :title, :slug, :instructions, :blurb, presence: true
   validates :slug, presence: true, uniqueness: true
   validates :difficulty, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 5 }
 
-  attribute :author, default: -> { Current.user || User.default_author } 
+  attribute :author, default: -> { Current.user || User.default_author }
 
   monetize :cost_cents
 
   def self.from_generation(generation_id)
     generation = Recipe::Generation.find_by(id: generation_id)
     return nil unless generation&.data&.present?
-    
+
     data = generation.data
-    
+
     recipe = new(
-      title: data['title'],
-      blurb: data['blurb'],
-      instructions: data['instructions'],
-      difficulty: data['difficulty'] || 1,
-      prep_time: data['prep_time'] || 30,
-      cost: data['cost'] || 0,
-      tag_names: data['tags']&.join(', '),
-      category: find_category_by_name(data['category']),
-      slug: generate_unique_slug(data['title'])
+      title: data["title"],
+      blurb: data["blurb"],
+      instructions: data["instructions"],
+      difficulty: data["difficulty"] || 1,
+      prep_time: data["prep_time"] || 30,
+      cost: data["cost"] || 0,
+      tag_names: data["tags"]&.join(", "),
+      category: find_category_by_name(data["category"]),
+      slug: generate_unique_slug(data["title"])
     )
-    
+
     recipe
   end
 
   def use_generated_images(generation_id)
     generation = Recipe::Generation.find_by(id: generation_id)
     return unless generation
-    
+
     # Copy main image if it exists
     if generation.image.attached?
       image.attach(
@@ -85,7 +87,7 @@ class Recipe < ApplicationRecord
         content_type: generation.image.blob.content_type
       )
     end
-    
+
     # Copy additional images
     generation.images.each do |gen_image|
       images.attach(
@@ -98,11 +100,26 @@ class Recipe < ApplicationRecord
 
   private
 
+  def ensure_slug
+    return if slug.present? || title.blank?
+
+    base_slug = title.parameterize.presence || "recipe"
+    candidate_slug = base_slug
+    counter = 2
+
+    while self.class.where.not(id: id).exists?(slug: candidate_slug)
+      candidate_slug = "#{base_slug}-#{counter}"
+      counter += 1
+    end
+
+    self.slug = candidate_slug
+  end
+
   def self.find_category_by_name(category_name)
     return Category.first if category_name.blank?
-    
+
     # Try to find existing category by title (case insensitive)
-    category = Category.find_by('LOWER(title) = ?', category_name.downcase)
+    category = Category.find_by("LOWER(title) = ?", category_name.downcase)
     category || Category.first
   end
 
@@ -110,12 +127,12 @@ class Recipe < ApplicationRecord
     base_slug = title.parameterize
     slug = base_slug
     counter = 1
-    
+
     while exists?(slug: slug)
       slug = "#{base_slug}-#{counter}"
       counter += 1
     end
-    
+
     slug
   end
 end

@@ -41,6 +41,7 @@ gem "image_processing", "~> 1.2"
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
+  gem "rubocop-rails-omakase", require: false
 end
 
 group :development do
@@ -53,7 +54,7 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 
-  gem 'annotaterb'
+  gem "annotaterb"
 
   gem "kamal", "~> 2.4"
 end
@@ -65,19 +66,19 @@ group :test do
 end
 
 gem "tailwindcss-rails", "~> 2.6"
-gem 'pagy'
+gem "pagy"
 gem "active_storage_validations", "~> 1.1"
 gem "faker", "~> 3.4"
 gem "solid_queue", "~> 1.0"
 gem "solid_cache", "~> 1.0"
 gem "solid_cable", "~> 3.0"
-gem 'omniauth'
-gem 'omniauth-google-oauth2'
-gem 'omniauth-rails_csrf_protection'
+gem "omniauth"
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection"
 gem "ruby-openai", "~> 7.4"
 gem "down", "~> 5.4"
 gem "money-rails", "~> 1.15"
 
-gem "mocha", "~> 2.7", :group => :test
+gem "mocha", "~> 2.7", group: :test
 gem "mission_control-jobs"
 gem "thruster"
