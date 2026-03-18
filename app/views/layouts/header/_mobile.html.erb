@@ -1,39 +1,70 @@
+<% recipes_active = controller_path == "recipes" || controller_path == "recipes/ratings" || controller_path == "recipes/favorites" %>
+<% categories_active = controller_path == "categories" %>
+<% pricing_active = controller_path == "pricing" || controller_path == "pro_waitlist_entries" || controller_path.start_with?("billing/") %>
+<% generator_active = controller_path == "recipes/generations" %>
+<% about_active = controller_path == "pages" && action_name == "about" %>
+
 <div class="hidden" role="dialog" aria-modal="true" data-mobile-menu-target="menu">
-  <!-- Background backdrop, show/hide based on slide-over state. -->
-  <div class="fixed inset-0 z-50"></div>
-  <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+  <div class="fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-sm"></div>
+  <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-slate-950 px-6 py-6 text-white sm:max-w-sm sm:ring-1 sm:ring-white/10">
     <div class="flex items-center justify-between">
-      <%= link_to root_path, class: "-m-1.5 p-1.5" do %>
-      <span class="sr-only">Poor Man with a Pan</span>
-      <img class="h-8 w-auto" src="/logo.webp" alt="">
+      <%= link_to root_path, class: "group flex items-center gap-3" do %>
+        <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-slate-950 shadow-sm">
+          <%= image_tag "logo.svg", class: "h-8 w-8 rounded-xl object-contain", alt: "Stovaro" %>
+        </span>
+        <span>
+          <span class="block text-[0.72rem] font-semibold uppercase tracking-[0.35em] text-amber-300">Stovaro</span>
+          <span class="mt-1 block text-xs text-slate-300">Dinner planning without the drift.</span>
+        </span>
       <% end %>
-      <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" data-action="click->mobile-menu#toggle">
+      <button type="button" class="rounded-2xl border border-white/10 bg-white/5 p-3 text-white" data-action="click->mobile-menu#toggle">
         <span class="sr-only">Close menu</span>
         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
     </div>
-    <div class="mt-6 flow-root">
-      <div class="-my-6 divide-y divide-gray-500/10">
-        <div class="space-y-2 py-6">
-          <%= link_to "Recipes", recipes_path, class: "-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>
-          <%= link_to "Categories", categories_path, class: "-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>
+
+    <div class="mt-8 flow-root">
+      <div class="space-y-6">
+        <div class="space-y-2 border-b border-white/10 pb-6">
+          <%= link_to "Recipes", recipes_path, class: stovaro_mobile_nav_link_classes(recipes_active) %>
+          <%= link_to "Categories", categories_path, class: stovaro_mobile_nav_link_classes(categories_active) %>
+          <%= link_to "Pricing", pricing_path, class: stovaro_mobile_nav_link_classes(pricing_active) %>
           <% if Current.user %>
-            <%= link_to "AI Generator", recipes_generations_path, class: "-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>
+            <%= link_to "AI Generator", recipes_generations_path, class: stovaro_mobile_nav_link_classes(generator_active) %>
           <% end %>
-          <%= link_to "About", about_pages_path, class: "-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>
+          <%= link_to "About", about_pages_path, class: stovaro_mobile_nav_link_classes(about_active) %>
         </div>
-        <div class="py-6">
-          <% if Current.user %>
-          <%= link_to "Profile", profile_path(Current.user), class: "-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>
-          <%= link_to "Favorites", profiles_favorites_path(), class: "-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>
-          <%= link_to "My Recipes", profiles_recipes_path, class: "-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>
-          <%= button_to "Sign Out", session_path(Current.user), method: :delete, class: "-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>
-          <% else %>
-          <%= link_to "Log In", new_session_path, class: "-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" %>
-          <% end %>
-        </div>
+
+        <% if Current.user %>
+          <div class="rounded-3xl bg-white/5 p-4 ring-1 ring-white/10">
+            <p class="text-sm font-semibold text-white"><%= Current.user.email %></p>
+            <p class="mt-1 text-xs uppercase tracking-[0.25em] text-emerald-300"><%= Current.user.plan_label %></p>
+          </div>
+
+          <div class="space-y-2">
+            <%= link_to "Profile", profile_path(Current.user), class: stovaro_mobile_nav_link_classes(controller_path == "profiles") %>
+            <% if Current.user.pro? %>
+              <%= link_to "Meal Plan", profiles_meal_plan_path, class: stovaro_mobile_nav_link_classes(controller_path.start_with?("profiles/meal_plans") || controller_path.start_with?("profiles/planned_meals") || controller_path.start_with?("profiles/grocery_lists")) %>
+            <% end %>
+            <%= link_to "Favorites", profiles_favorites_path, class: stovaro_mobile_nav_link_classes(controller_path == "profiles/favorites") %>
+            <%= link_to "My Recipes", profiles_recipes_path, class: stovaro_mobile_nav_link_classes(controller_path == "profiles/recipes") %>
+            <%= link_to "Collections", profiles_collections_path, class: stovaro_mobile_nav_link_classes(controller_path == "profiles/collections" || controller_path == "profiles/collection_recipes") %>
+            <% if Current.user.admin? %>
+              <%= link_to "Moderation", admin_recipe_submissions_path, class: stovaro_mobile_nav_link_classes(controller_path == "admin/recipe_submissions") %>
+            <% end %>
+          </div>
+
+          <div class="pt-2">
+            <%= button_to "Sign out", session_path(Current.user), method: :delete, class: "w-full rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-left text-base font-semibold text-red-200 transition hover:bg-red-500/20" %>
+          </div>
+        <% else %>
+          <div class="space-y-3 pt-2">
+            <%= link_to "Sign in", new_session_path, class: "stovaro-btn-secondary flex w-full justify-center" %>
+            <%= link_to "Get started", new_registration_path, class: "stovaro-btn-accent flex w-full justify-center" %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>

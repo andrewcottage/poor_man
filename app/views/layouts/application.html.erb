@@ -5,8 +5,12 @@
   <title><%= yield(:title) || I18n.t('meta.title') %></title>
   <meta name="description" content="<%= yield(:description) || I18n.t('meta.description') %>">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0f172a">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
+  <%= favicon_link_tag "favicon.svg", rel: "icon", type: "image/svg+xml" %>
+  <%= favicon_link_tag "favicon.ico", rel: "alternate icon", type: "image/x-icon" %>
+  <%= favicon_link_tag "apple-touch-icon.png", rel: "apple-touch-icon" %>
   <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
 
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
@@ -17,11 +21,11 @@
   <%= opengraph_image %>
 </head>
 
-<body class="h-full bg-white">
+<body class="h-full bg-stone-50">
   <%= render 'layouts/flash' %>
   <%= render 'layouts/header' %>
 
-  <main class="mx-auto mt-1 px-5 flex">
+  <main class="mx-auto mt-1 flex w-full px-5">
     <%= yield %>
   </main>
 

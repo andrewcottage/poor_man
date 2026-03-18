@@ -15,7 +15,8 @@ class CategoriesController < ApplicationController
 
   # GET /categories/1 or /categories/1.json
   def show
-    @pagy, @recipes = pagy(@category.recipes)
+    scoped_recipes = Recipe::DiscoveryQuery.new(scope: @category.recipes.approved, params: params).call
+    @pagy, @recipes = pagy(scoped_recipes, items: ITEMS)
   end
 
   # GET /categories/new

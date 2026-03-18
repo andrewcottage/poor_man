@@ -57,16 +57,21 @@ bin/recipe_publisher categories
 Create one or many recipes:
 
 ```bash
-POOR_MAN_API_KEY=your_api_key_here \
+STOVARO_API_KEY=your_api_key_here \
 bin/recipe_publisher create tmp/vegan-recipes/chickpea-pasta.json tmp/vegan-recipes/tofu-curry.json
 ```
 
 Update an existing recipe:
 
 ```bash
-POOR_MAN_API_KEY=your_api_key_here \
+STOVARO_API_KEY=your_api_key_here \
 bin/recipe_publisher update creamy-lemon-chickpea-pasta tmp/vegan-recipes/chickpea-pasta.json
 ```
+
+Compatibility:
+
+- `POOR_MAN_API_KEY` and `POOR_MAN_API_URL` still work for older local scripts.
+- Prefer `STOVARO_API_KEY` and `STOVARO_API_URL` going forward.
 
 ## Suggested agent workflow
 

@@ -25,6 +25,14 @@ class ApplicationController < ActionController::Base
     redirect_to new_session_path, alert: "You must be logged in to access this page" if Current.user.nil?
   end
 
+  def require_pro_plan!
+    require_user!
+    return if performed?
+    return if Current.user&.pro?
+
+    redirect_to pricing_path, alert: "#{Billing::PlanCatalog::PRO_DISPLAY_NAME} is required for meal planning and grocery lists."
+  end
+
   def set_current_user
     Current.user = User.find_by(id: session[:user_id])
     Current.user ||= User.find_by(api_key: api_key_from_request) if api_key_from_request.present?

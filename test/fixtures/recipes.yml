@@ -2,30 +2,45 @@
 #
 # Table name: recipes
 #
-#  id            :integer          not null, primary key
-#  blurb         :text
-#  cost_cents    :integer          default(0), not null
-#  cost_currency :string           default("USD"), not null
-#  difficulty    :integer          default(0)
-#  prep_time     :integer          default(0)
-#  slug          :string
-#  tag_names     :string
-#  title         :string
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  author_id     :integer
-#  category_id   :integer          not null
+#  id                                  :integer          not null, primary key
+#  blurb                               :text
+#  cost_cents                          :integer          default(0), not null
+#  cost_currency                       :string           default("USD"), not null
+#  difficulty                          :integer          default(0)
+#  moderation_status                   :integer          default("pending"), not null
+#  nutrition_calories                  :integer
+#  nutrition_carbs_grams               :decimal(8, 2)
+#  nutrition_computed_at               :datetime
+#  nutrition_fat_grams                 :decimal(8, 2)
+#  nutrition_match_count               :integer          default(0), not null
+#  nutrition_missing_ingredients_count :integer          default(0), not null
+#  nutrition_protein_grams             :decimal(8, 2)
+#  prep_time                           :integer          default(0)
+#  rejection_reason                    :text
+#  reviewed_at                         :datetime
+#  servings                            :integer          default(4), not null
+#  slug                                :string
+#  tag_names                           :string
+#  title                               :string
+#  created_at                          :datetime         not null
+#  updated_at                          :datetime         not null
+#  author_id                           :integer
+#  category_id                         :integer          not null
+#  reviewed_by_id                      :integer
 #
 # Indexes
 #
-#  index_recipes_on_author_id    (author_id)
-#  index_recipes_on_category_id  (category_id)
-#  index_recipes_on_slug         (slug) UNIQUE
+#  index_recipes_on_author_id          (author_id)
+#  index_recipes_on_category_id        (category_id)
+#  index_recipes_on_moderation_status  (moderation_status)
+#  index_recipes_on_reviewed_by_id     (reviewed_by_id)
+#  index_recipes_on_slug               (slug) UNIQUE
 #
 # Foreign Keys
 #
-#  author_id    (author_id => users.id)
-#  category_id  (category_id => categories.id)
+#  author_id       (author_id => users.id)
+#  category_id     (category_id => categories.id)
+#  reviewed_by_id  (reviewed_by_id => users.id)
 #
 
 pizza:
@@ -35,6 +50,7 @@ pizza:
   category: one
   blurb: A simple pizza recipe
   author: andrew
+  moderation_status: approved
 
 bread:
   title: Rye Bread
@@ -43,3 +59,23 @@ bread:
   category: one
   blurb: A simple rye bread recipe
   author: andrew
+  moderation_status: approved
+
+pending_recipe:
+  title: Pending Soup
+  slug: pending-soup
+  tag_names: Soup, Cozy
+  category: one
+  blurb: Waiting for review
+  author: user
+  moderation_status: pending
+
+rejected_recipe:
+  title: Rejected Stew
+  slug: rejected-stew
+  tag_names: Stew, Test
+  category: one
+  blurb: Needs changes
+  author: user
+  moderation_status: rejected
+  rejection_reason: Add clearer instructions

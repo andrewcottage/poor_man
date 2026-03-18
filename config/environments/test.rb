@@ -25,6 +25,7 @@ Rails.application.configure do
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local = true
+  config.secret_key_base = ENV.fetch("SECRET_KEY_BASE", "test-secret-key-base")
   config.action_controller.perform_caching = false
   config.cache_store = :null_store
 
@@ -36,6 +37,10 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system in a temporary directory.
   config.active_storage.service = :test
+
+  config.mission_control.jobs.http_basic_auth_enabled = false
+  config.mission_control.jobs.http_basic_auth_user = ""
+  config.mission_control.jobs.http_basic_auth_password = ""
 
   config.action_mailer.perform_caching = false
 

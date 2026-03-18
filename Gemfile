@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.4.6"
+ruby "4.0.1"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", github: "rails/rails", branch: "main"
@@ -62,6 +62,7 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
+  gem "minitest", "~> 5.25"
   gem "selenium-webdriver"
 end
 
@@ -78,6 +79,7 @@ gem "omniauth-rails_csrf_protection"
 gem "ruby-openai", "~> 7.4"
 gem "down", "~> 5.4"
 gem "money-rails", "~> 1.15"
+gem "net-imap", ">= 0.5.11"
 
 gem "mocha", "~> 2.7", group: :test
 gem "mission_control-jobs"

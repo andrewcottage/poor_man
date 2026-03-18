@@ -31,6 +31,10 @@ class Api::RecipesControllerTest < ActionDispatch::IntegrationTest
           title: "Vegan Chili",
           blurb: "A smoky weeknight chili.",
           instructions: "<p>Simmer everything until thick.</p>",
+          ingredients: [
+            { quantity: "2", unit: "cups", name: "beans" },
+            { quantity: "1", unit: "tbsp", name: "smoked paprika" }
+          ],
           tag_names: "Vegan, Chili, Dinner",
           difficulty: 2,
           prep_time: 35,
@@ -52,10 +56,14 @@ class Api::RecipesControllerTest < ActionDispatch::IntegrationTest
     assert_equal @category, recipe.category
     assert_equal "vegan-chili", recipe.slug
     assert_equal 2, recipe.images.count
+    assert recipe.pending?
+    assert_equal 2, recipe.recipe_ingredients.count
 
     json = JSON.parse(response.body)
     assert_equal recipe.slug, json["slug"]
     assert_equal @user.email, json.dig("author", "email")
+    assert_equal "pending", json["moderation_status"]
+    assert_equal "beans", json["ingredients"].first["name"]
   end
 
   test "should update own recipe with x api key auth" do
@@ -64,6 +72,9 @@ class Api::RecipesControllerTest < ActionDispatch::IntegrationTest
         title: "Updated Owned Recipe",
         blurb: "An updated blurb.",
         instructions: "<p>Updated instructions.</p>",
+        ingredients: [
+          { quantity: "1", unit: "cup", name: "lentils" }
+        ],
         tag_names: "Vegan, Updated",
         difficulty: 3,
         prep_time: 25,
@@ -76,6 +87,8 @@ class Api::RecipesControllerTest < ActionDispatch::IntegrationTest
     @owned_recipe.reload
     assert_equal "Updated Owned Recipe", @owned_recipe.title
     assert_equal "owned-recipe", @owned_recipe.slug
+    assert @owned_recipe.pending?
+    assert_equal "lentils", @owned_recipe.recipe_ingredients.ordered.first.name
   end
 
   test "should reject create without api auth" do

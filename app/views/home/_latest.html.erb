@@ -34,10 +34,10 @@
         <% end %>
         <div class="text-sm leading-6">
           <p class="font-semibold text-gray-900">
-            <a href="#">
+            <%= link_to cook_path(recipe.author&.username || recipe.author_id) do %>
               <span class="absolute inset-0"></span>
               <%= recipe.author&.username %>
-            </a>
+            <% end %>
           </p>
           <p class="text-gray-600"><%= recipe.author&.admin ? t('user.type.founder') : t('user.type.contributor') %></p>
         </div>

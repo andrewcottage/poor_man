@@ -1,41 +1,114 @@
-<div class="mt-10 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="mx-auto mt-10 grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-2">
   <!-- Left column: User Info -->
-  <div class="bg-white p-8 rounded-lg shadow-sm space-y-8">
-    <h2 class="text-2xl font-bold text-gray-900 border-b pb-4">Your Profile</h2>
+  <div class="space-y-8 rounded-3xl border border-stone-200 bg-white p-8 shadow-sm">
+    <h2 class="border-b border-stone-200 pb-4 text-2xl font-bold text-slate-900">Your Profile</h2>
 
     <div class="space-y-6">
       <div class="grid gap-6">
-        <div class="bg-gray-50 p-4 rounded-lg">
+        <div class="rounded-2xl bg-stone-100 p-4">
           <p class="text-sm font-bold text-black-600">Username</p>
-          <p class="text-lg text-gray-900 mt-1"><%= Current.user.username %></p>
+          <p class="mt-1 text-lg text-slate-900"><%= Current.user.username %></p>
         </div>
 
-        <div class="bg-gray-50 p-4 rounded-lg">
+        <div class="rounded-2xl bg-stone-100 p-4">
           <p class="text-sm font-bold text-black-600">Email</p>
-          <p class="text-lg text-gray-900 mt-1"><%= Current.user.email %></p>
+          <p class="mt-1 text-lg text-slate-900"><%= Current.user.email %></p>
         </div>
 
-        <div class="bg-gray-50 p-4 rounded-lg">
+        <div class="rounded-2xl bg-stone-100 p-4">
           <p class="text-sm font-bold text-black-600">Member since</p>
-          <p class="text-lg text-gray-900 mt-1"><%= time_ago_in_words(Current.user.created_at) %> ago</p>
+          <p class="mt-1 text-lg text-slate-900"><%= time_ago_in_words(Current.user.created_at) %> ago</p>
         </div>
 
-        <div class="bg-gray-50 p-4 rounded-lg">
+        <div class="rounded-2xl bg-stone-100 p-4">
           <p class="text-sm font-bold text-black-600">API Key</p>
-          <p class="text-lg text-gray-900 mt-1"><%= Current.user.api_key %></p>
+          <p class="mt-1 text-lg text-slate-900"><%= Current.user.api_key %></p>
         </div>
 
-        <div class="bg-gray-50 p-4 rounded-lg">
+        <div class="rounded-2xl bg-stone-100 p-4">
           <p class="text-sm font-bold text-black-600">Recipes</p>
-          <p class="text-lg text-gray-900 mt-1"><%= Current.user.recipes.count %></p>
+          <p class="mt-1 text-lg text-slate-900"><%= Current.user.recipes.count %></p>
         </div>
+
+        <div class="rounded-2xl bg-stone-100 p-4">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-sm font-bold text-black-600">Plan</p>
+              <p class="mt-1 text-lg text-slate-900"><%= Current.user.plan_label %></p>
+              <% if Current.user.pro? && Current.user.plan_expires_at.present? %>
+                <p class="mt-1 text-sm text-slate-500">Renews through <%= l(Current.user.plan_expires_at.to_date, format: :long) %></p>
+              <% end %>
+            </div>
+            <%= link_to(Current.user.pro? ? "Manage pricing" : "Upgrade", pricing_path, class: "stovaro-btn-primary px-4 py-2") %>
+          </div>
+        </div>
+
+        <div class="rounded-2xl bg-stone-100 p-4">
+          <p class="text-sm font-bold text-black-600">AI Generations</p>
+          <p class="mt-1 text-lg text-slate-900"><%= Current.user.remaining_recipe_generations %> remaining</p>
+          <p class="mt-1 text-sm text-slate-500"><%= generation_allowance_summary(Current.user) %></p>
+        </div>
+
+        <div class="rounded-2xl bg-stone-100 p-4">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-sm font-bold text-black-600">Credit Balance</p>
+              <p class="mt-1 text-lg text-slate-900"><%= Current.user.remaining_generation_credits %> extra generations</p>
+              <p class="mt-1 text-sm text-slate-500">Credit packs are spent after your included plan allowance.</p>
+            </div>
+            <%= link_to "Buy credits", pricing_path, class: "stovaro-btn-secondary px-4 py-2" %>
+          </div>
+        </div>
+
+        <div class="rounded-2xl bg-stone-100 p-4">
+          <p class="text-sm font-bold text-black-600">Favorites</p>
+          <p class="mt-1 text-lg text-slate-900"><%= plan_usage_label(used: Current.user.favorites.count, limit: Current.user.favorite_limit) %></p>
+        </div>
+
+        <div class="rounded-2xl bg-stone-100 p-4">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-sm font-bold text-black-600">Collections</p>
+              <p class="mt-1 text-lg text-slate-900"><%= plan_usage_label(used: Current.user.collections.count, limit: Current.user.collection_limit) %></p>
+            </div>
+            <%= link_to "View", profiles_collections_path, class: "stovaro-btn-secondary px-4 py-2" %>
+          </div>
+        </div>
+
+        <div class="rounded-2xl bg-stone-100 p-4">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-sm font-bold text-black-600">Meal Planning</p>
+              <p class="mt-1 text-lg text-slate-900"><%= Current.user.pro? ? "#{Billing::PlanCatalog::PRO_DISPLAY_NAME} active" : "Upgrade required" %></p>
+              <p class="mt-1 text-sm text-slate-500">Weekly planning and grocery lists live in <%= Billing::PlanCatalog::PRO_DISPLAY_NAME %>.</p>
+            </div>
+            <%= link_to(Current.user.pro? ? "Open planner" : "Upgrade", Current.user.pro? ? profiles_meal_plan_path : pricing_path, class: "stovaro-btn-secondary px-4 py-2") %>
+          </div>
+        </div>
+
+        <% if @recent_credit_purchases.any? %>
+          <div class="rounded-2xl bg-stone-100 p-4">
+            <p class="text-sm font-bold text-black-600">Recent Credit Purchases</p>
+            <div class="mt-3 space-y-3">
+              <% @recent_credit_purchases.each do |purchase| %>
+                <div class="flex items-center justify-between gap-3 rounded-xl bg-white px-3 py-3">
+                  <div>
+                    <p class="text-sm font-semibold text-slate-900"><%= purchase.credits %> generations</p>
+                    <p class="text-xs text-slate-500"><%= purchase.pack_id.humanize %> • <%= purchase.status.humanize %></p>
+                  </div>
+                  <p class="text-xs uppercase tracking-[0.2em] text-slate-500"><%= l(purchase.created_at.to_date, format: :long) %></p>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
 
   <!-- Right column: Password Change Form -->
-  <div class="bg-white p-8 rounded-lg shadow-sm space-y-8">
-    <h2 class="text-2xl font-bold text-gray-900 border-b pb-4">Change Your Password</h2>
+  <div class="space-y-8 rounded-3xl border border-stone-200 bg-white p-8 shadow-sm">
+    <h2 class="border-b border-stone-200 pb-4 text-2xl font-bold text-slate-900">Change Your Password</h2>
 
     <% if flash[:error].present? %>
     <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
@@ -55,48 +128,48 @@
 
     <div class="flex flex-col items-center space-y-4">
       <% if Current.user.avatar.attached? %>
-      <%= image_tag Current.user.avatar, class: "w-32 h-32 rounded-full ring-4 ring-indigo-50 shadow-md" %>
+      <%= image_tag Current.user.avatar, class: "h-32 w-32 rounded-full ring-4 ring-emerald-50 shadow-md" %>
       <% else %>
-      <div class="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center">
-        <svg class="h-16 w-16 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+      <div class="flex h-32 w-32 items-center justify-center rounded-full bg-stone-200">
+        <svg class="h-16 w-16 text-stone-400" fill="currentColor" viewBox="0 0 24 24">
           <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
       </div>
       <% end %>
 
-      <%= form_with(scope: :profile, url: profile_path, method: :put, multipart: true, class: "w-full") do |f| %>
+      <%= form_with(scope: :profile, url: profile_path(Current.user), method: :put, multipart: true, class: "w-full") do |f| %>
       <div class="flex items-center justify-center">
         <%= f.file_field :avatar, 
-            class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100",
+            class: "block w-full text-sm text-slate-500 file:mr-4 file:rounded-full file:border-0 file:bg-slate-900 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-slate-800",
             accept: "image/*",
             direct_upload: true %>
       </div>
       <div class="mt-4 flex justify-center">
-        <%= f.submit "Update Avatar", class: "py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
+        <%= f.submit "Update Avatar", class: "stovaro-btn-primary px-4 py-2" %>
       </div>
       <% end %>
     </div>
 
-    <%= form_with(scope: :profile, url: profile_path, method: :put) do |f| %>
+    <%= form_with(scope: :profile, url: profile_path(Current.user), method: :put) do |f| %>
     <div class="space-y-6">
       <div>
-        <%= f.label :password, "New password", class: "block text-sm font-medium text-gray-700" %>
-        <%= f.password_field :password, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+        <%= f.label :password, "New password", class: "stovaro-label" %>
+        <%= f.password_field :password, class: "stovaro-input" %>
         <% if flash[:errors] && flash[:errors][:password] %>
         <p class="mt-2 text-sm text-red-600"><%= flash[:errors][:password].join(', ') %></p>
         <% end %>
       </div>
 
       <div>
-        <%= f.label :password_confirmation, "Confirm new password", class: "block text-sm font-medium text-gray-700" %>
-        <%= f.password_field :password_confirmation, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+        <%= f.label :password_confirmation, "Confirm new password", class: "stovaro-label" %>
+        <%= f.password_field :password_confirmation, class: "stovaro-input" %>
         <% if flash[:errors] && flash[:errors][:password_confirmation] %>
         <p class="mt-2 text-sm text-red-600"><%= flash[:errors][:password_confirmation].join(', ') %></p>
         <% end %>
       </div>
 
       <div>
-        <%= f.submit "Update Password", class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+        <%= f.submit "Update Password", class: "stovaro-btn-primary flex w-full justify-center" %>
       </div>
     </div>
     <% end %>

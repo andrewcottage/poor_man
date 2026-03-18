@@ -3,11 +3,18 @@ class Api::RecipesController < Api::BaseController
   before_action :require_recipe_owner!, only: :update
 
   def create
+    unless Current.user.can_submit_recipe?
+      render json: { error: "Free accounts can submit up to 5 recipes. Upgrade to #{Billing::PlanCatalog::PRO_DISPLAY_NAME} for unlimited submissions." }, status: :forbidden
+      return
+    end
+
     @recipe = Current.user.recipes.new(recipe_attributes)
     assign_category(@recipe)
+    @recipe.mark_pending_review! unless Current.user.admin?
     return render_unprocessable(@recipe) if category_lookup_failed?
 
     if @recipe.save
+      sync_recipe_ingredients(@recipe)
       render :show, status: :created
     else
       render_unprocessable(@recipe)
@@ -17,9 +24,11 @@ class Api::RecipesController < Api::BaseController
   def update
     @recipe.assign_attributes(recipe_attributes)
     assign_category(@recipe) if category_lookup_param.present?
+    @recipe.mark_pending_review! unless Current.user.admin?
     return render_unprocessable(@recipe) if category_lookup_failed?
 
     if @recipe.save
+      sync_recipe_ingredients(@recipe)
       render :show, status: :ok
     else
       render_unprocessable(@recipe)
@@ -33,11 +42,11 @@ class Api::RecipesController < Api::BaseController
   end
 
   def require_recipe_owner!
-    render_forbidden unless @recipe.author == Current.user
+    render_forbidden unless @recipe.author == Current.user || Current.user.admin?
   end
 
   def recipe_attributes
-    recipe_params.except(:category_slug)
+    recipe_params.except(:category_slug, :ingredient_list, :ingredients)
   end
 
   def assign_category(recipe)
@@ -67,6 +76,7 @@ class Api::RecipesController < Api::BaseController
       :image,
       :slug,
       :instructions,
+      :ingredient_list,
       :tag_names,
       :blurb,
       :difficulty,
@@ -74,7 +84,15 @@ class Api::RecipesController < Api::BaseController
       :category_id,
       :category_slug,
       :cost,
-      images: []
+      images: [],
+      ingredients: [ :quantity, :unit, :name, :notes ]
+    )
+  end
+
+  def sync_recipe_ingredients(recipe)
+    recipe.sync_recipe_ingredients!(
+      ingredient_list: recipe_params[:ingredient_list],
+      structured_ingredients: recipe_params[:ingredients]
     )
   end
 end

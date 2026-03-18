@@ -3,15 +3,27 @@
 require 'json'
 require 'open3'
 
-API_URL = ENV.fetch('POOR_MAN_API_URL', 'http://localhost:3000').sub(%r{/+\z}, '')
-API_KEY = ENV['POOR_MAN_API_KEY']
+def first_present_env(*names)
+  names.each do |name|
+    value = ENV[name]
+    return value unless value.nil? || value.strip.empty?
+  end
+
+  nil
+end
+
+API_URL = (first_present_env('STOVARO_API_URL', 'POOR_MAN_API_URL') || 'http://localhost:3000').sub(%r{/+\z}, '')
+API_KEY = first_present_env('STOVARO_API_KEY', 'POOR_MAN_API_KEY')
 
 def usage
   <<~USAGE
     Usage:
-      POOR_MAN_API_KEY=... bin/recipe_publisher categories
-      POOR_MAN_API_KEY=... bin/recipe_publisher create path/to/recipe.json [more.json ...]
-      POOR_MAN_API_KEY=... bin/recipe_publisher update recipe-slug path/to/recipe.json
+      STOVARO_API_KEY=... bin/recipe_publisher categories
+      STOVARO_API_KEY=... bin/recipe_publisher create path/to/recipe.json [more.json ...]
+      STOVARO_API_KEY=... bin/recipe_publisher update recipe-slug path/to/recipe.json
+
+    Compatibility:
+      POOR_MAN_API_KEY and POOR_MAN_API_URL are still supported for existing local scripts.
 
     Manifest JSON fields:
       title, blurb, instructions, tag_names, difficulty, prep_time, cost
@@ -29,7 +41,7 @@ def abort_with_usage(message = nil)
 end
 
 def ensure_api_key!
-  abort_with_usage('POOR_MAN_API_KEY is required.') if API_KEY.to_s.strip.empty?
+  abort_with_usage('STOVARO_API_KEY is required. POOR_MAN_API_KEY is still accepted for compatibility.') if API_KEY.to_s.strip.empty?
 end
 
 def normalize_path(path, base_dir)

@@ -7,6 +7,9 @@
     <h3 class="text-sm font-medium text-gray-900">
       <%= recipe.title %>
     </h3>
+    <div class="mt-2 flex justify-center">
+      <%= recipe_moderation_badge(recipe) %>
+    </div>
     <% end %>
 
     <div class="flex justify-center mt-2">

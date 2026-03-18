@@ -2,46 +2,72 @@
 #
 # Table name: users
 #
-#  id              :integer          not null, primary key
-#  admin           :boolean
-#  api_key         :string
-#  email           :string           not null
-#  name            :string
-#  password_digest :string
-#  provider        :string
-#  recovery_digest :string
-#  uid             :string
-#  username        :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  id                         :integer          not null, primary key
+#  admin                      :boolean
+#  api_key                    :string
+#  email                      :string           not null
+#  free_generation_used_at    :datetime
+#  generation_credits_balance :integer          default(0), not null
+#  generations_count          :integer          default(0), not null
+#  generations_reset_at       :datetime
+#  name                       :string
+#  password_digest            :string
+#  plan                       :string           default("free"), not null
+#  plan_expires_at            :datetime
+#  provider                   :string
+#  recovery_digest            :string
+#  uid                        :string
+#  username                   :string
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  stripe_customer_id         :string
+#  stripe_subscription_id     :string
 #
 # Indexes
 #
-#  index_users_on_api_key   (api_key) UNIQUE
-#  index_users_on_email     (email) UNIQUE
-#  index_users_on_username  (username) UNIQUE
+#  index_users_on_api_key                 (api_key) UNIQUE
+#  index_users_on_email                   (email) UNIQUE
+#  index_users_on_plan                    (plan)
+#  index_users_on_stripe_customer_id      (stripe_customer_id)
+#  index_users_on_stripe_subscription_id  (stripe_subscription_id)
+#  index_users_on_username                (username) UNIQUE
 #
 
 andrew:
   email: andcott@gmail.com
+  username: andrew
   password_digest: <%= BCrypt::Password.create('password') %>
   admin: true
   api_key: andrew-api-key
 
 victoria:
   email: victoria@gmail.com
+  username: victoria
   password_digest: <%= BCrypt::Password.create('password') %>
   admin: true
   api_key: victoria-api-key
 
 admin:
   email: admin@example.com
+  username: admin
   password_digest: <%= BCrypt::Password.create('password') %>
   admin: true
   api_key: admin-api-key
 
 user:
   email: user@example.com
+  username: homecook
   password_digest: <%= BCrypt::Password.create('password') %>
   admin: false
   api_key: user-api-key
+
+pro_user:
+  email: pro@example.com
+  username: prochef
+  password_digest: <%= BCrypt::Password.create('password') %>
+  admin: false
+  api_key: pro-user-api-key
+  plan: pan_pro_monthly
+  plan_expires_at: <%= 2.weeks.from_now %>
+  generations_count: 4
+  generations_reset_at: <%= 2.weeks.from_now %>

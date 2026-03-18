@@ -10,6 +10,7 @@
         <div class="mx-auto w-full sm:w-2/3 my-4">
             <%= render 'shared/search', label: "Search My Recipes", placeholder: "Lemon Drinks", path: profiles_recipes_path(Current.user) %>
         </div>
+        <p class="text-center text-sm text-gray-500">Use the status badge on each card to see whether a recipe is live, pending review, or needs changes.</p>
 
         <div class="my-4 flex items-center justify-end">
             <%= link_to new_recipe_path, class: "flex items-center" do %>

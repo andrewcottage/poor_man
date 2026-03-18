@@ -4,12 +4,19 @@
 #
 # Table name: recipe_generations
 #
-#  id         :integer          not null, primary key
-#  data       :text
-#  prompt     :text
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  user_id    :integer          not null
+#  id                  :integer          not null, primary key
+#  avoid_ingredients   :text
+#  customization_notes :text
+#  data                :text
+#  dietary_preference  :string
+#  ingredient_swaps    :text
+#  prompt              :text
+#  servings            :integer          default(4), not null
+#  skill_level         :string
+#  target_difficulty   :integer
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  user_id             :integer          not null
 #
 # Indexes
 #
@@ -22,10 +29,16 @@
 one:
   user: andrew
   prompt: "A delicious pasta dish with tomatoes and basil"
+  servings: 4
   data: |
     {
       "title": "Pasta with Tomatoes and Basil",
       "blurb": "A simple and delicious pasta dish featuring fresh tomatoes and basil.",
+      "ingredients": [
+        { "quantity": "12", "unit": "oz", "name": "pasta" },
+        { "quantity": "2", "unit": "cups", "name": "tomatoes", "notes": "chopped" },
+        { "quantity": "1/4", "unit": "cup", "name": "basil", "notes": "fresh" }
+      ],
       "instructions": "<p>Cook pasta according to package directions. Heat olive oil in a large skillet and sauté garlic. Add tomatoes and cook until soft. Toss with cooked pasta and fresh basil.</p>",
       "tags": ["pasta", "tomatoes", "basil", "italian"],
       "difficulty": 2,
@@ -37,10 +50,15 @@ one:
 two:
   user: andrew
   prompt: "Chocolate chip cookies that are chewy"
+  servings: 4
   data: |
     {
       "title": "Chewy Chocolate Chip Cookies",
       "blurb": "Soft and chewy chocolate chip cookies with the perfect texture.",
+      "ingredients": [
+        { "quantity": "2 1/4", "unit": "cups", "name": "flour" },
+        { "quantity": "1", "unit": "cup", "name": "chocolate chips" }
+      ],
       "instructions": "<p>Cream butter and sugars together. Add eggs and vanilla. Mix in flour, baking soda, and salt. Fold in chocolate chips. Drop onto baking sheets and bake at 375°F for 9-11 minutes.</p>",
       "tags": ["cookies", "chocolate", "dessert", "baking"],
       "difficulty": 1,
@@ -52,3 +70,29 @@ two:
 processing:
   user: andrew
   prompt: "A healthy smoothie bowl with fresh fruits"
+  servings: 2
+
+user_owned:
+  user: user
+  prompt: "A quick lentil curry for weeknights"
+  dietary_preference: vegan
+  skill_level: beginner
+  servings: 4
+  target_difficulty: 2
+  customization_notes: Make it pantry-friendly and fast.
+  data: |
+    {
+      "title": "Quick Lentil Curry",
+      "blurb": "A fast and cozy lentil curry.",
+      "ingredients": [
+        { "quantity": "1", "unit": "cup", "name": "lentils", "notes": "red or brown" },
+        { "quantity": "2", "unit": "tbsp", "name": "curry paste" },
+        { "quantity": "1", "unit": "can", "name": "coconut milk" }
+      ],
+      "instructions": "<p>Simmer lentils with curry paste and coconut milk.</p>",
+      "tags": ["vegan", "curry"],
+      "difficulty": 2,
+      "prep_time": 20,
+      "cost": 7.50,
+      "category": "Dinner"
+    }

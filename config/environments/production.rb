@@ -1,4 +1,5 @@
 require "active_support/core_ext/integer/time"
+require Rails.root.join("lib/middleware/legacy_session_cookie_bridge")
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -69,14 +70,24 @@ Rails.application.configure do
   config.cache_store = :solid_cache_store
 
   # Use cache store for session storage to persist sessions across deployments
-  config.session_store :cache_store, key: "_poor_man_session", expire_after: 1.month
+  config.middleware.insert_before(
+    ActionDispatch::Session::CacheStore,
+    Middleware::LegacySessionCookieBridge,
+    old_key: "_poor_man_session",
+    new_key: "_stovaro_session"
+  )
+  config.session_store :cache_store, key: "_stovaro_session", expire_after: 1.month
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
-  # config.active_job.queue_name_prefix = "poor_man_production"
+  # config.active_job.queue_name_prefix = "stovaro_production"
 
   config.action_mailer.perform_caching = false
+  config.action_mailer.default_url_options = {
+    host: "stovaro.com",
+    protocol: "https"
+  }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -94,8 +105,11 @@ Rails.application.configure do
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   config.hosts = [
-    "poormanwithapan.com"
-  ] 
+    "stovaro.com",
+    "www.stovaro.com",
+    "poormanwithapan.com",
+    "www.poormanwithapan.com"
+  ]
   
   # Skip DNS rebinding protection for the default health check endpoint.
   config.host_authorization = { exclude: ->(request) { request.path == "/up" } }

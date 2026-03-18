@@ -1,54 +1,84 @@
-<nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
-  <div class="flex lg:flex-1">
-    <%= link_to root_path, class: "-m-1.5 p-1.5" do %>
-    <span class="sr-only">Poor Man With a Pan</span>
-    <img class="h-16 w-auto" src="/logo.webp" alt="">
+<% recipes_active = controller_path == "recipes" || controller_path == "recipes/ratings" || controller_path == "recipes/favorites" %>
+<% categories_active = controller_path == "categories" %>
+<% pricing_active = controller_path == "pricing" || controller_path == "pro_waitlist_entries" || controller_path.start_with?("billing/") %>
+<% generator_active = controller_path == "recipes/generations" %>
+<% about_active = controller_path == "pages" && action_name == "about" %>
+
+<nav class="relative flex items-center justify-between gap-6 px-5 py-4 sm:px-6 lg:px-8" aria-label="Global">
+  <div class="flex min-w-0 flex-1 items-center gap-4">
+    <%= link_to root_path, class: "group flex min-w-0 items-center gap-3" do %>
+      <span class="flex h-14 w-14 flex-none items-center justify-center rounded-2xl bg-slate-900 shadow-lg ring-1 ring-black/5 transition-transform duration-150 group-hover:-translate-y-0.5">
+        <%= image_tag "logo.svg", class: "h-10 w-10 rounded-xl object-contain", alt: "Stovaro" %>
+      </span>
+      <span class="hidden min-w-0 sm:block">
+        <span class="block truncate text-[0.72rem] font-semibold uppercase tracking-[0.35em] text-amber-700">Stovaro</span>
+        <span class="mt-1 block truncate text-sm text-slate-600">Recipes, planning, and groceries that stay in sync.</span>
+      </span>
     <% end %>
   </div>
+
   <div class="flex lg:hidden">
-    <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700" data-action="click->mobile-menu#toggle">
+    <button type="button" class="inline-flex items-center justify-center rounded-2xl border border-stone-200 bg-white/80 p-3 text-slate-700 shadow-sm transition hover:bg-white" data-action="click->mobile-menu#toggle">
       <span class="sr-only">Open main menu</span>
       <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
       </svg>
     </button>
   </div>
-  <div class="hidden lg:flex lg:gap-x-12">
-    <%= link_to "Recipes", recipes_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
-    <%= link_to "Categories", categories_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
-    <% if Current.user %>
-      <%= link_to "AI Generator", recipes_generations_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
-    <% end %>
-    <%= link_to "About", about_pages_path, class: "text-sm font-semibold leading-6 text-gray-900" %>
+
+  <div class="hidden lg:flex lg:items-center">
+    <div class="flex items-center gap-1 rounded-full bg-stone-100/90 p-1.5 ring-1 ring-stone-200">
+      <%= link_to "Recipes", recipes_path, class: stovaro_nav_link_classes(recipes_active) %>
+      <%= link_to "Categories", categories_path, class: stovaro_nav_link_classes(categories_active) %>
+      <%= link_to "Pricing", pricing_path, class: stovaro_nav_link_classes(pricing_active) %>
+      <% if Current.user %>
+        <%= link_to "AI Generator", recipes_generations_path, class: stovaro_nav_link_classes(generator_active) %>
+      <% end %>
+      <%= link_to "About", about_pages_path, class: stovaro_nav_link_classes(about_active) %>
+    </div>
   </div>
 
   <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-    <div data-controller="account-dropdown" class="relative inline-block text-left">
-      <div>
-        <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900" id="menu-button" aria-expanded="true" aria-haspopup="true" data-action="click->account-dropdown#toggle">
-          <%= Current.user&.email || "Account" %>
-          <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+    <% if Current.user %>
+      <div data-controller="account-dropdown" class="relative inline-block text-left">
+        <button type="button" class="inline-flex items-center gap-3 rounded-full bg-slate-900 px-3 py-2 text-left text-white shadow-sm transition hover:bg-slate-800" id="menu-button" aria-expanded="true" aria-haspopup="true" data-action="click->account-dropdown#toggle">
+          <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-xs font-semibold uppercase tracking-[0.2em] text-white"><%= stovaro_account_initials(Current.user) %></span>
+          <span class="hidden xl:block">
+            <span class="block text-sm font-semibold leading-4"><%= stovaro_account_label(Current.user) %></span>
+            <span class="mt-1 block text-[0.65rem] uppercase tracking-[0.25em] text-emerald-200"><%= Current.user.pro? ? Billing::PlanCatalog::PRO_DISPLAY_NAME : "Free Plan" %></span>
+          </span>
+          <svg class="h-5 w-5 text-white/70" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
           </svg>
         </button>
-      </div>
 
-      <!-- Dropdown menu -->
-      <div data-account-dropdown-target="menu" class="hidden absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-        <% if Current.user %>
-        <div class="py-1" role="none">
-          <%= link_to "Profile", profile_path(Current.user), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-0" %>
-          <%= link_to "Favorites", profiles_favorites_path(), class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-1" %>
-          <%= link_to "My Recipes" , profiles_recipes_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-2" %>
-
-          <%= button_to "Sign out", session_path(Current.user), method: :delete, class: "block w-full px-4 py-2 text-left text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-3" %>
+        <div data-account-dropdown-target="menu" class="hidden absolute right-0 z-10 mt-3 w-64 origin-top-right rounded-3xl border border-stone-200 bg-white p-2 shadow-2xl focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+          <div class="rounded-2xl bg-stone-100 px-4 py-3">
+            <p class="text-sm font-semibold text-slate-900"><%= Current.user.email %></p>
+            <p class="mt-1 text-xs uppercase tracking-[0.25em] text-slate-500"><%= Current.user.plan_label %></p>
+          </div>
+          <div class="mt-2 space-y-1 py-1" role="none">
+            <%= link_to "Profile", profile_path(Current.user), class: stovaro_account_menu_link_classes, role: "menuitem", tabindex: "-1", id: "menu-item-0" %>
+            <% if Current.user.pro? %>
+              <%= link_to "Meal Plan", profiles_meal_plan_path, class: stovaro_account_menu_link_classes, role: "menuitem", tabindex: "-1" %>
+            <% end %>
+            <%= link_to "Favorites", profiles_favorites_path, class: stovaro_account_menu_link_classes, role: "menuitem", tabindex: "-1", id: "menu-item-1" %>
+            <%= link_to "My Recipes", profiles_recipes_path, class: stovaro_account_menu_link_classes, role: "menuitem", tabindex: "-1", id: "menu-item-2" %>
+            <%= link_to "Collections", profiles_collections_path, class: stovaro_account_menu_link_classes, role: "menuitem", tabindex: "-1" %>
+            <% if Current.user.admin? %>
+              <%= link_to "Moderation", admin_recipe_submissions_path, class: stovaro_account_menu_link_classes, role: "menuitem", tabindex: "-1" %>
+            <% end %>
+          </div>
+          <div class="mt-2 border-t border-stone-200 pt-2">
+            <%= button_to "Sign out", session_path(Current.user), method: :delete, class: "#{stovaro_account_menu_link_classes(danger: true)} w-full text-left", role: "menuitem", tabindex: "-1", id: "menu-item-3" %>
+          </div>
         </div>
-        <% else %>
-        <div class="py-1" role="none">
-          <%= link_to "Sign in", new_session_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-0" %>
-          <%= link_to "Sign up", new_registration_path, class: "block px-4 py-2 text-sm text-gray-700", role: "menuitem", tabindex: "-1", id: "menu-item-1" %>
-        </div>
-        <% end %>
       </div>
-    </div>
+    <% else %>
+      <div class="flex items-center gap-3">
+        <%= link_to "Sign in", new_session_path, class: "stovaro-btn-secondary px-4 py-2" %>
+        <%= link_to "Get started", new_registration_path, class: "stovaro-btn-accent px-4 py-2" %>
+      </div>
+    <% end %>
+  </div>
 </nav>

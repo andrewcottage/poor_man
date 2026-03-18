@@ -3,11 +3,12 @@ class Profiles::FavoritesController < ApplicationController
   before_action :require_user!
 
   def index
+    scope = Current.user.favorite_recipes.merge(Recipe.visible_to(Current.user))
 
     if params[:q]
-      @pagy, @recipes = pagy(Current.user.favorite_recipes.where("title LIKE ?", "%#{params[:q]}%").descending, items: ITEMS)
+      @pagy, @recipes = pagy(scope.where("title LIKE ?", "%#{params[:q]}%").descending, items: ITEMS)
     else
-      @pagy, @recipes = pagy(Current.user.favorite_recipes.descending, items: ITEMS)
+      @pagy, @recipes = pagy(scope.descending, items: ITEMS)
     end
   end
 end

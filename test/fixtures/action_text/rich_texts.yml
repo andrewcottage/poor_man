@@ -22,3 +22,17 @@ bread_instructions:
     5. Preheat oven to 450°F
     6. Roll dough into circle
     7. Bake for 15-20 minutes until crust is golden
+
+pending_recipe_instructions:
+  record: pending_recipe (Recipe)
+  name: instructions
+  body: |
+    1. Simmer the vegetables
+    2. Blend until smooth
+
+rejected_recipe_instructions:
+  record: rejected_recipe (Recipe)
+  name: instructions
+  body: |
+    1. Brown the aromatics
+    2. Cook until thick

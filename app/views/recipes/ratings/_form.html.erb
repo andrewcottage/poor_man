@@ -1,4 +1,4 @@
-<%= form_for(rating, url: url, class: "contents") do |form| %>
+<%= form_for(rating, url: url, html: { multipart: true }, class: "contents") do |form| %>
 <% if rating.errors.any? %>
 <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
     <h2><%= pluralize(rating.errors.count, "error") %> prohibited this rating from being saved:</h2>
@@ -13,20 +13,25 @@
 
 <div class="my-5">
     <%= form.label :title %>
-    <%= form.text_field :title, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full", required: true %>
+    <%= form.text_field :title, class: "stovaro-input", required: true %>
 </div>
 
 <div class="my-5">
     <%= form.label :value %>
-    <%= form.number_field :value, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full", min: 1, max: 5, required: true %>
+    <%= form.number_field :value, class: "stovaro-input", min: 1, max: 5, required: true %>
 </div>
 
 <div class="my-5">
     <%= form.label :comment %>
-    <%= form.text_area :comment, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.text_area :comment, class: "stovaro-input" %>
+</div>
+
+<div class="my-5">
+    <%= form.label :photos, "Review photos" %>
+    <%= form.file_field :photos, multiple: true, direct_upload: true, accept: "image/*", class: "mt-2 block w-full text-sm text-slate-500 file:mr-4 file:rounded-full file:border-0 file:bg-slate-900 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-slate-800" %>
 </div>
 
 <div class="inline">
-    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+    <%= form.submit class: "stovaro-btn-primary cursor-pointer" %>
 </div>
 <% end %>

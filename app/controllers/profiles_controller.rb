@@ -2,6 +2,8 @@ class ProfilesController < ApplicationController
   before_action :require_user!
 
   def show
+    @recent_subscription = Current.user.subscriptions.recent_first.first
+    @recent_credit_purchases = Current.user.credit_purchases.recent_first.limit(5)
   end
 
   def edit
@@ -9,8 +11,8 @@ class ProfilesController < ApplicationController
 
   def update
     if Current.user.update(profile_params)
-      redirect_to profile_path, notice: "Profile updated!"
-    else  
+      redirect_to profile_path(Current.user), notice: "Profile updated!"
+    else
       render :show
     end
   end

@@ -7,7 +7,10 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "#create" do
-    post registrations_url, params: { registration: { email: Faker::Internet.email, password: 'password', password_confirmation: 'password' } }
-    assert_response :success
+    assert_difference("User.count", 1) do
+      post registrations_url, params: { registration: { email: Faker::Internet.email, password: "password", password_confirmation: "password" } }
+    end
+
+    assert_redirected_to root_path
   end
 end

@@ -19,7 +19,7 @@
             <div class="mt-4 flex items-center justify-between text-base font-medium text-gray-900">
               <h3><%= category.title %></h3>
             </div>
-            <p class="mt-1 text-sm italic text-gray-500"><%= number_with_delimiter category.recipes.count %> recipies to choose from</p>
+            <p class="mt-1 text-sm italic text-gray-500"><%= number_with_delimiter category.recipes.approved.count %> recipies to choose from</p>
           <% end %>
         <% end %>
       </div>

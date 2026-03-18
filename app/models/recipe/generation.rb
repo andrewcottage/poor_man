@@ -2,12 +2,19 @@
 #
 # Table name: recipe_generations
 #
-#  id         :integer          not null, primary key
-#  data       :text
-#  prompt     :text
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  user_id    :integer          not null
+#  id                  :integer          not null, primary key
+#  avoid_ingredients   :text
+#  customization_notes :text
+#  data                :text
+#  dietary_preference  :string
+#  ingredient_swaps    :text
+#  prompt              :text
+#  servings            :integer          default(4), not null
+#  skill_level         :string
+#  target_difficulty   :integer
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  user_id             :integer          not null
 #
 # Indexes
 #
@@ -25,6 +32,8 @@ class Recipe::Generation < ApplicationRecord
   has_many_attached :images
 
   validates :prompt, presence: true
+  validates :servings, numericality: { only_integer: true, greater_than: 0 }
+  validates :target_difficulty, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 5 }, allow_blank: true
 
   after_create_commit :generate_later
 
@@ -57,6 +66,22 @@ class Recipe::Generation < ApplicationRecord
     )
 
     update(data: JSON.parse(response.dig("choices", 0, "message", "content")))
+  end
+
+  def generate_instructions
+    return if data.blank?
+
+    client = OpenAI::Client.new
+    response = client.chat(
+      parameters: {
+        model: "gpt-4.1",
+        messages: [{ role: "user", content: formatted_instruction_regeneration_prompt }]
+      }
+    )
+
+    updated_data = data.deep_dup
+    updated_data["instructions"] = response.dig("choices", 0, "message", "content").to_s.strip
+    update!(data: updated_data)
   end
 
   def generate_image_later
@@ -107,6 +132,21 @@ class Recipe::Generation < ApplicationRecord
     end
   end
 
+  def regenerate_recipe_data_later
+    generate_recipe_later
+  end
+
+  def regenerate_instructions_later
+    Recipe::Generation::GenerateInstructionsJob.perform_later(self)
+  end
+
+  def regenerate_images_later
+    image.purge_later if image.attached?
+    images.each(&:purge_later)
+    generate_image_later
+    generate_images_later
+  end
+
   private
 
   def formatted_images_prompts
@@ -133,11 +173,15 @@ class Recipe::Generation < ApplicationRecord
     {
       "title": "Recipe Title",
       "blurb": "A short description of the recipe (1-2 sentences)",
-      "instructions": "Complete cooking instructions in HTML format with proper paragraph tags",
+      "ingredients": [
+        { "quantity": "2", "unit": "cups", "name": "flour", "notes": "all-purpose" }
+      ],
+      "instructions": "Step-by-step cooking instructions in HTML format with proper paragraph tags",
       "tags": ["tag1", "tag2", "tag3"],
       "difficulty": 3,
       "prep_time": 30,
       "cost": 15.99,
+      "servings": 4,
       "category": "Category Name"
     }
     
@@ -145,11 +189,40 @@ class Recipe::Generation < ApplicationRecord
     - difficulty should be 1-5 (1 = very easy, 5 = very hard)
     - prep_time should be in minutes
     - cost should be estimated ingredient cost in USD
-    - instructions A combined section that includes both the list of ingredients and step-by-step guidance on how to make the dish, written in an SEO-friendly manner.
+    - servings should be the number of servings the recipe makes
+    - ingredients should include quantity, unit when relevant, ingredient name, and optional notes
+    - instructions should be step-by-step cooking guidance only, written in an SEO-friendly manner
     - tags should be relevant cooking/ingredient tags
     - category should be a broad category like "Breakfast", "Dinner", "Dessert", etc.
+    - respect dietary_preference, skill_level, avoid_ingredients, ingredient_swaps, target_difficulty, servings, and customization_notes when present
+
+    Generation settings:
+    - dietary_preference: #{dietary_preference.presence || "none"}
+    - skill_level: #{skill_level.presence || "standard"}
+    - avoid_ingredients: #{avoid_ingredients.presence || "none"}
+    - ingredient_swaps: #{ingredient_swaps.presence || "none"}
+    - target_difficulty: #{target_difficulty.presence || "best fit"}
+    - servings: #{servings}
+    - customization_notes: #{customization_notes.presence || "none"}
     
     Return ONLY the JSON object, no additional text.
+    PROMPT
+  end
+
+  def formatted_instruction_regeneration_prompt
+    <<~PROMPT
+    Rewrite only the instructions for this recipe and return HTML with paragraph tags. Do not include markdown or JSON.
+
+    Title: #{data["title"]}
+    Blurb: #{data["blurb"]}
+    Ingredients: #{Array(data["ingredients"]).map { |ingredient| ingredient.to_json }.join(", ")}
+    Dietary preference: #{dietary_preference.presence || "none"}
+    Skill level: #{skill_level.presence || "standard"}
+    Avoid ingredients: #{avoid_ingredients.presence || "none"}
+    Ingredient swaps: #{ingredient_swaps.presence || "none"}
+    Target difficulty: #{target_difficulty.presence || data["difficulty"] || "best fit"}
+    Servings: #{servings}
+    Customization notes: #{customization_notes.presence || "none"}
     PROMPT
   end
 end

@@ -2,7 +2,7 @@ module Recipe::Ratable
   extend ActiveSupport::Concern
 
   included do
-    has_many :ratings
+    has_many :ratings, dependent: :destroy
     has_many :reviewers, through: :ratings, source: :user
   end
 

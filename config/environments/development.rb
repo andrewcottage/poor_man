@@ -14,6 +14,8 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = true
 
+  config.secret_key_base = ENV.fetch("SECRET_KEY_BASE", "development-secret-key-base")
+
   # Enable server timing
   config.server_timing = true
 
@@ -58,6 +60,10 @@ Rails.application.configure do
 
   # Highlight code that enqueued background job in logs.
   config.active_job.verbose_enqueue_logs = true
+
+  config.mission_control.jobs.http_basic_auth_enabled = false
+  config.mission_control.jobs.http_basic_auth_user = ""
+  config.mission_control.jobs.http_basic_auth_password = ""
 
   # Suppress logger output for asset requests.
   config.assets.quiet = true

@@ -13,30 +13,87 @@
 
   <div class="space-y-6">
     <div>
-      <%= form.label :prompt, "Recipe Description", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.label :prompt, "Recipe Description", class: "stovaro-label" %>
       <%= form.text_area :prompt, 
           rows: 6,
           placeholder: "Describe the recipe you want to generate (e.g., 'A spicy pasta dish with chicken and vegetables' or 'Chocolate chip cookies that are chewy')",
-          class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" %>
-      <p class="mt-2 text-sm text-gray-500">
+          class: "stovaro-input sm:text-sm" %>
+      <p class="mt-2 text-sm text-slate-500">
         Be as specific as possible. Include cuisine type, ingredients, cooking style, or any special requirements.
       </p>
     </div>
 
-    <div class="bg-blue-50 p-4 rounded-lg">
+    <div class="grid gap-4 md:grid-cols-2">
+      <div>
+        <%= form.label :dietary_preference, class: "stovaro-label" %>
+        <%= form.select :dietary_preference,
+            options_for_select(
+              [["None", ""], ["Vegan", "vegan"], ["Vegetarian", "vegetarian"], ["Gluten-free", "gluten_free"], ["High protein", "high_protein"]],
+              generation.dietary_preference
+            ),
+            {},
+            class: "stovaro-select sm:text-sm" %>
+      </div>
+
+      <div>
+        <%= form.label :skill_level, class: "stovaro-label" %>
+        <%= form.select :skill_level,
+            options_for_select([["Any", ""], ["Beginner", "beginner"], ["Intermediate", "intermediate"], ["Advanced", "advanced"]], generation.skill_level),
+            {},
+            class: "stovaro-select sm:text-sm" %>
+      </div>
+
+      <div>
+        <%= form.label :servings, class: "stovaro-label" %>
+        <%= form.number_field :servings, min: 1, max: 16, class: "stovaro-input sm:text-sm" %>
+      </div>
+
+      <div>
+        <%= form.label :target_difficulty, "Target difficulty", class: "stovaro-label" %>
+        <%= form.select :target_difficulty,
+            options_for_select([["Any", ""], ["Easy", 1], ["Moderate", 2], ["A little ambitious", 3]], generation.target_difficulty),
+            {},
+            class: "stovaro-select sm:text-sm" %>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :avoid_ingredients, "Avoid ingredients", class: "stovaro-label" %>
+      <%= form.text_field :avoid_ingredients,
+          placeholder: "e.g., mushrooms, cilantro, walnuts",
+          class: "stovaro-input sm:text-sm" %>
+    </div>
+
+    <div>
+      <%= form.label :ingredient_swaps, "Preferred ingredient swaps", class: "stovaro-label" %>
+      <%= form.text_field :ingredient_swaps,
+          placeholder: "e.g., tofu for paneer, oat milk for cream",
+          class: "stovaro-input sm:text-sm" %>
+    </div>
+
+    <div>
+      <%= form.label :customization_notes, "Extra instructions", class: "stovaro-label" %>
+      <%= form.text_area :customization_notes,
+          rows: 3,
+          placeholder: "Budget target, prep limits, pantry ingredients to use up, or the exact vibe you want.",
+          class: "stovaro-input sm:text-sm" %>
+    </div>
+
+    <div class="stovaro-info">
       <div class="flex">
         <div class="flex-shrink-0">
-          <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+          <svg class="h-5 w-5 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
           </svg>
         </div>
         <div class="ml-3">
-          <h3 class="text-sm font-medium text-blue-800">What happens next?</h3>
-          <div class="mt-2 text-sm text-blue-700">
+          <h3 class="text-sm font-medium text-emerald-950">What happens next?</h3>
+          <div class="mt-2 text-sm text-emerald-900">
             <ul class="list-disc list-inside">
               <li>AI will generate a complete recipe with ingredients and instructions</li>
               <li>A high-quality food image will be created</li>
               <li>Additional gallery images will be generated</li>
+              <li>Your dietary, servings, and difficulty controls shape the output</li>
               <li>The process takes a few minutes to complete</li>
             </ul>
           </div>
@@ -45,7 +102,12 @@
     </div>
 
     <div class="flex justify-end">
-      <%= form.submit "Generate Recipe", class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+      <%= form.submit "Generate Recipe",
+          disabled: !Current.user.can_generate_recipe?,
+          class: [
+            "inline-flex items-center rounded-xl px-4 py-3 text-sm font-medium shadow-sm",
+            Current.user.can_generate_recipe? ? "bg-slate-900 text-white hover:bg-slate-800" : "cursor-not-allowed bg-stone-200 text-stone-500"
+          ].join(" ") %>
     </div>
   </div>
 <% end %> 

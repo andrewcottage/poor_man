@@ -1,4 +1,11 @@
-  <header class="inset-x-0 top-0 z-50" data-controller="mobile-menu">
-    <%= render "layouts/header/menu" %>
+  <header class="sticky inset-x-0 top-0 z-50 pt-4" data-controller="mobile-menu">
+    <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-28 bg-gradient-to-b from-stone-50 via-stone-50/90 to-transparent"></div>
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="relative overflow-hidden rounded-[2rem] border border-stone-200/80 bg-white/90 shadow-sm backdrop-blur">
+        <div class="pointer-events-none absolute -left-10 top-0 h-24 w-24 rounded-full bg-amber-200/50 blur-3xl"></div>
+        <div class="pointer-events-none absolute right-0 top-0 h-28 w-28 rounded-full bg-emerald-200/40 blur-3xl"></div>
+        <%= render "layouts/header/menu" %>
+      </div>
+    </div>
     <%= render "layouts/header/mobile" %>
   </header>

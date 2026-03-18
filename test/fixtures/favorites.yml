@@ -24,3 +24,7 @@
 andrews_favorite_pizza:
   user: andrew
   recipe: pizza
+
+pro_user_favorite_pizza:
+  user: pro_user
+  recipe: pizza

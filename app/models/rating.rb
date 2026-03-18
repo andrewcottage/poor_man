@@ -25,6 +25,7 @@
 class Rating < ApplicationRecord
   belongs_to :recipe
   belongs_to :user
+  has_many_attached :photos
 
   attribute :user, default: -> { Current.user }
 

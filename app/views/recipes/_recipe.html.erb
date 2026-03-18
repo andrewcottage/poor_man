@@ -1,4 +1,7 @@
 <div class="mx-auto mt-8 pb-16 pt-6 sm:pb-24">
+  <% selected_servings = @selected_servings || recipe.servings %>
+  <% displayed_ingredients = @scaled_ingredients.presence || recipe.scaled_ingredients(selected_servings) %>
+
   <%= render 'shared/breadcrumbs', links: [
     { text: 'Recipies', url: recipes_path },
     { text: recipe.category.title, url: category_path(recipe.category.slug) },
@@ -10,10 +13,22 @@
       <div class="lg:col-span-5 lg:col-start-8">
         <div class="flex justify-between">
           <div>
-            <h1 class="text-xl font-medium text-gray-900"><%= recipe.title %></h1>
+            <div class="flex flex-wrap items-center gap-3">
+              <h1 class="text-xl font-medium text-gray-900"><%= recipe.title %></h1>
+              <% if Current.user&.admin? || recipe.author == Current.user %>
+                <%= recipe_moderation_badge(recipe) %>
+              <% end %>
+            </div>
+            <% if recipe.author.present? %>
+              <p class="mt-2 text-sm text-gray-500">
+                By <%= link_to recipe.author.username, cook_path(recipe.author.username), class: "font-semibold text-gray-700 underline" %>
+              </p>
+            <% end %>
           </div>
 
           <div class="flex justify-end">
+            <%= link_to "Cook Mode", cook_recipe_path(recipe.slug, servings: selected_servings), class: "mr-4 rounded-full border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50" %>
+            <%= link_to "Print", print_recipe_path(recipe.slug, servings: selected_servings), class: "mr-4 rounded-full border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50" %>
             <% if recipe.current_user_editable?  %>
             <%= link_to edit_recipe_path(recipe.slug), class: 'mr-4' do %>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -51,7 +66,7 @@
             <% end %>
             <% end %>
             <div data-controller="clipboard">
-              <%= link_to recipe_path(recipe), class: 'copy-link mr-4', "data-clipboard-target" => "link", "data-action" => "click->clipboard#share" do %>
+              <%= link_to recipe_path(recipe.slug), class: 'copy-link mr-4', "data-clipboard-target" => "link", "data-action" => "click->clipboard#share" do %>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
               </svg>
@@ -67,6 +82,22 @@
           </div>
         </div>
         <%= render 'recipes/recipe/ratings', recipe: recipe %>
+
+        <% if Current.user&.admin? || recipe.author == Current.user %>
+        <div class="mt-4 rounded-2xl <%= recipe.rejected? ? 'bg-red-50 text-red-800' : recipe.pending? ? 'bg-yellow-50 text-yellow-800' : 'bg-green-50 text-green-800' %> p-4 text-sm">
+          <% if recipe.rejected? %>
+            <p class="font-semibold">This recipe was sent back for changes.</p>
+            <% if recipe.rejection_reason.present? %>
+              <p class="mt-2"><%= recipe.rejection_reason %></p>
+            <% end %>
+          <% elsif recipe.pending? %>
+            <p class="font-semibold">This recipe is waiting for moderator approval.</p>
+            <p class="mt-2">It stays private to you and admins until it is approved.</p>
+          <% else %>
+            <p class="font-semibold">This recipe is publicly visible.</p>
+          <% end %>
+        </div>
+        <% end %>
 
       </div>
 
@@ -110,7 +141,78 @@
       </div>
 
       <div class="mt4 lg:col-span-5">
+        <% if displayed_ingredients.any? %>
+        <div class="mt-8 border-t border-gray-200 pt-4">
+          <div class="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-900">Ingredients</h2>
+              <p class="mt-1 text-sm text-gray-500">
+                <%= pluralize(selected_servings, "serving") %>
+                <% if selected_servings != recipe.servings %>
+                  from an original <%= pluralize(recipe.servings, "serving") %> recipe
+                <% end %>
+              </p>
+            </div>
+            <div class="flex gap-2">
+              <% [ [selected_servings - 1, "-1"], [selected_servings + 1, "+1"] ].each do |target_servings, label| %>
+                <% next if target_servings < 1 %>
+                <%= link_to label, recipe_path(recipe.slug, servings: target_servings), class: "rounded-full border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50" %>
+              <% end %>
+            </div>
+          </div>
+          <ul class="mt-4 space-y-2 text-sm text-gray-700">
+            <% displayed_ingredients.each do |ingredient| %>
+            <li class="flex gap-3">
+              <span class="mt-1 h-2 w-2 rounded-full bg-gray-300"></span>
+              <span><%= ingredient.display_text %></span>
+            </li>
+            <% end %>
+          </ul>
+        </div>
+        <% end %>
+
+        <div class="mt-8 rounded-3xl bg-gray-50 p-5">
+          <div class="flex items-center justify-between gap-3">
+            <div>
+              <p class="text-sm uppercase tracking-[0.2em] text-gray-500">Nutrition</p>
+              <h2 class="mt-2 text-lg font-semibold text-gray-900">Estimated per serving</h2>
+            </div>
+            <% if recipe.nutrition_available? %>
+              <span class="rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-200"><%= recipe.nutrition_coverage_label %></span>
+            <% end %>
+          </div>
+
+          <% if Current.user&.pro? && recipe.nutrition_available? %>
+            <div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <div class="rounded-2xl bg-white px-4 py-4 text-center">
+                <p class="text-xs uppercase tracking-[0.2em] text-gray-500">Calories</p>
+                <p class="mt-2 text-2xl font-semibold text-gray-900"><%= recipe.nutrition_calories %></p>
+              </div>
+              <div class="rounded-2xl bg-white px-4 py-4 text-center">
+                <p class="text-xs uppercase tracking-[0.2em] text-gray-500">Protein</p>
+                <p class="mt-2 text-2xl font-semibold text-gray-900"><%= recipe.nutrition_protein_grams %>g</p>
+              </div>
+              <div class="rounded-2xl bg-white px-4 py-4 text-center">
+                <p class="text-xs uppercase tracking-[0.2em] text-gray-500">Carbs</p>
+                <p class="mt-2 text-2xl font-semibold text-gray-900"><%= recipe.nutrition_carbs_grams %>g</p>
+              </div>
+              <div class="rounded-2xl bg-white px-4 py-4 text-center">
+                <p class="text-xs uppercase tracking-[0.2em] text-gray-500">Fat</p>
+                <p class="mt-2 text-2xl font-semibold text-gray-900"><%= recipe.nutrition_fat_grams %>g</p>
+              </div>
+            </div>
+          <% elsif recipe.nutrition_available? %>
+            <p class="mt-4 text-sm text-gray-600"><%= Billing::PlanCatalog::PRO_DISPLAY_NAME %> unlocks nutrition estimates and macro breakdowns. <%= link_to "See pricing", pricing_path, class: "font-semibold underline" %>.</p>
+          <% else %>
+            <p class="mt-4 text-sm text-gray-600">Nutrition estimates become available when the ingredient list can be matched reliably.</p>
+          <% end %>
+        </div>
+
         <div class="mt-8 border-t border-gray-200 pt-2">
+          <h2 class="text-lg font-semibold text-gray-900">Instructions</h2>
+          <% if selected_servings != recipe.servings %>
+            <p class="mt-2 text-sm text-gray-500">Instruction text stays written for the original recipe; adjust ingredient amounts above for your target servings.</p>
+          <% end %>
           <div class="prose prose-sm mt-4 text-gray-500">
             <%= recipe.instructions %>
           </div>
@@ -131,5 +233,58 @@
         <% end %>
       </div>
     </div>
+
+    <% if @related_recipes.present? %>
+      <div class="mt-10">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <p class="text-sm uppercase tracking-[0.2em] text-gray-500">Keep browsing</p>
+            <h2 class="mt-2 text-2xl font-semibold text-gray-900">Related recipes</h2>
+          </div>
+          <%= link_to "More like this", recipes_path(q: recipe.category.title), class: "text-sm font-semibold text-emerald-700 hover:text-emerald-600" %>
+        </div>
+
+        <div class="mt-4 grid grid-cols-1 border-l border-gray-200 sm:grid-cols-2 lg:grid-cols-4">
+          <% @related_recipes.each do |related_recipe| %>
+            <%= render "recipes/card", recipe: related_recipe %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if Current.user %>
+    <div class="mt-8 rounded-3xl bg-gray-50 p-5">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p class="text-sm uppercase tracking-[0.2em] text-gray-500">Collections</p>
+          <h2 class="mt-2 text-xl font-semibold text-gray-900">Save this recipe into a cookbook</h2>
+          <% saved_collections = Current.user.collections_for(recipe) %>
+          <% if saved_collections.any? %>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <% saved_collections.each do |collection| %>
+                <span class="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-200"><%= collection.name %></span>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="w-full max-w-md">
+          <% if @user_collections.present? %>
+            <%= form_with url: profiles_collection_recipes_path, class: "space-y-3" do |form| %>
+              <%= hidden_field_tag :recipe_id, recipe.id %>
+              <%= select_tag :collection_id, options_from_collection_for_select(@user_collections, :id, :name), class: "block w-full rounded-xl border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900" %>
+              <%= form.submit "Add to collection", class: "inline-flex justify-center rounded-xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-800" %>
+            <% end %>
+          <% elsif Current.user.can_create_collection? %>
+            <p class="text-sm text-gray-600">You have not created a collection yet.</p>
+            <%= link_to "Create your first collection", profiles_collections_path, class: "mt-3 inline-flex rounded-xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-800" %>
+          <% else %>
+            <p class="text-sm text-gray-600">Free accounts can create 1 collection.</p>
+            <%= link_to "Upgrade to #{Billing::PlanCatalog::PRO_DISPLAY_NAME}", pricing_path, class: "mt-3 inline-flex rounded-xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-800" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <% end %>
   </div>
 </div>

@@ -1,8 +1,8 @@
 # Name of your application. Used to uniquely configure containers.
-service: poor-man
+service: stovaro
 
 # Name of the container image.
-image: njord/poor-man
+image: njord/stovaro
 
 # Deploy to these servers.
 servers:
@@ -11,11 +11,12 @@ servers:
       - 207.180.193.253
 
 proxy:
-  host: "poormanwithapan.com"
+  host: "stovaro.com"
   ssl: true
 
 volumes:
-  - "poor_man_storage:/rails/storage"
+  # Migrate data from `poor_man_storage` before the first deploy using this name.
+  - "stovaro_storage:/rails/storage"
 
 asset_path: /rails/public/assets
 

@@ -11,11 +11,12 @@ class Recipes::RatingsControllerTest < ActionDispatch::IntegrationTest
   
   test "should create rating" do
     assert_difference("Rating.count") do
-      post recipe_ratings_url(@recipe), params: { 
-        rating: { 
+      post recipe_ratings_url(@recipe), params: {
+        rating: {
           value: 4,
           title: "Good recipe",
-          comment: "I enjoyed making this recipe"
+          comment: "I enjoyed making this recipe",
+          photos: [ fixture_file_upload("vaporwave.jpeg", "image/jpg") ]
         } 
       }
     end
@@ -25,6 +26,7 @@ class Recipes::RatingsControllerTest < ActionDispatch::IntegrationTest
     # Check that the rating was created with the correct value
     rating = Rating.find_by(user: @user, recipe: @recipe)
     assert_equal 4, rating.value
+    assert rating.photos.attached?
   end
   
   test "should update rating if already exists" do

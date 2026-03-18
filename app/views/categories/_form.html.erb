@@ -13,26 +13,26 @@
 
   <div class="my-5">
     <%= form.label :title %>
-    <%= form.text_field :title, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.text_field :title, class: "stovaro-input" %>
   </div>
 
   <div class="my-5">
     <%= form.label :slug %>
-    <%= form.text_field :slug, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.text_field :slug, class: "stovaro-input" %>
   </div>
 
   <div class="my-5">
     <%= form.label :image %>
-    <%= form.file_field :image, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.file_field :image, class: "stovaro-input" %>
   </div>
 
   <div class="my-5">
     <%= form.label :description %>
-    <%= form.text_area :description, rows: 4, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.text_area :description, rows: 4, class: "stovaro-input" %>
   </div>
 
 
   <div class="inline">
-    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+    <%= form.submit class: "stovaro-btn-primary cursor-pointer" %>
   </div>
 <% end %>
