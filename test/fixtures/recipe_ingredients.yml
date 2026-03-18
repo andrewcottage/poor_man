@@ -1,0 +1,72 @@
+# == Schema Information
+#
+# Table name: recipe_ingredients
+#
+#  id         :integer          not null, primary key
+#  name       :string           not null
+#  notes      :string
+#  position   :integer          default(1), not null
+#  quantity   :string
+#  raw        :text             not null
+#  unit       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  recipe_id  :integer          not null
+#
+# Indexes
+#
+#  index_recipe_ingredients_on_recipe_id               (recipe_id)
+#  index_recipe_ingredients_on_recipe_id_and_position  (recipe_id,position)
+#
+# Foreign Keys
+#
+#  recipe_id  (recipe_id => recipes.id)
+#
+pizza_flour:
+  recipe: pizza
+  position: 1
+  quantity: "2"
+  unit: cups
+  name: flour
+  raw: 2 cups flour
+
+pizza_yeast:
+  recipe: pizza
+  position: 2
+  quantity: "1"
+  unit: tsp
+  name: yeast
+  raw: 1 tsp yeast
+
+pizza_salt:
+  recipe: pizza
+  position: 3
+  quantity: "1"
+  unit: tsp
+  name: salt
+  raw: 1 tsp salt
+
+bread_rye_flour:
+  recipe: bread
+  position: 1
+  quantity: "1"
+  unit: cups
+  name: flour
+  raw: 1 cups flour
+
+bread_salt:
+  recipe: bread
+  position: 2
+  quantity: "1"
+  unit: tsp
+  name: salt
+  raw: 1 tsp salt
+
+bread_olive_oil:
+  recipe: bread
+  position: 3
+  quantity: "2"
+  unit: tbsp
+  name: olive oil
+  notes: extra virgin
+  raw: 2 tbsp olive oil, extra virgin

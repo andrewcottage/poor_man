@@ -1,0 +1,15 @@
+<section class="py-16">
+  <div class="flex items-center justify-between">
+    <div>
+      <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-700">Trending</p>
+      <h2 class="mt-2 text-2xl font-bold tracking-tight text-gray-900">Popular recipes cooks keep coming back to</h2>
+    </div>
+    <%= link_to "Browse all recipes", recipes_path(sort: "popularity"), class: "text-sm font-semibold text-emerald-700 hover:text-emerald-600" %>
+  </div>
+
+  <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <% @trending.each do |recipe| %>
+      <%= render "recipes/card", recipe: recipe %>
+    <% end %>
+  </div>
+</section>

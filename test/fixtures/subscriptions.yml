@@ -1,0 +1,38 @@
+# == Schema Information
+#
+# Table name: subscriptions
+#
+#  id                         :integer          not null, primary key
+#  canceled_at                :datetime
+#  current_period_end         :datetime
+#  payload                    :text
+#  plan                       :string           not null
+#  status                     :string           default("pending"), not null
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  stripe_checkout_session_id :string
+#  stripe_customer_id         :string
+#  stripe_price_id            :string
+#  stripe_subscription_id     :string
+#  user_id                    :integer          not null
+#
+# Indexes
+#
+#  index_subscriptions_on_plan                        (plan)
+#  index_subscriptions_on_status                      (status)
+#  index_subscriptions_on_stripe_checkout_session_id  (stripe_checkout_session_id) UNIQUE
+#  index_subscriptions_on_stripe_customer_id          (stripe_customer_id)
+#  index_subscriptions_on_stripe_subscription_id      (stripe_subscription_id)
+#  index_subscriptions_on_user_id                     (user_id)
+#
+# Foreign Keys
+#
+#  user_id  (user_id => users.id)
+#
+active_pro:
+  user: pro_user
+  plan: pan_pro_monthly
+  status: active
+  stripe_customer_id: cus_test
+  stripe_subscription_id: sub_test
+  current_period_end: <%= 2.weeks.from_now %>

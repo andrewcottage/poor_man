@@ -1,0 +1,26 @@
+# == Schema Information
+#
+# Table name: analytics_events
+#
+#  id         :integer          not null, primary key
+#  event_name :string           not null
+#  metadata   :text
+#  path       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  user_id    :integer
+#
+# Indexes
+#
+#  index_analytics_events_on_created_at  (created_at)
+#  index_analytics_events_on_event_name  (event_name)
+#  index_analytics_events_on_user_id     (user_id)
+#
+# Foreign Keys
+#
+#  user_id  (user_id => users.id)
+#
+pricing_view:
+  user: user
+  event_name: pricing.viewed
+  path: /pricing

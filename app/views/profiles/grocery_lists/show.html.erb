@@ -1,0 +1,45 @@
+<div class="mx-auto mt-10 max-w-5xl space-y-8 px-4 sm:px-6 lg:px-8">
+  <div class="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-200">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500"><%= Billing::PlanCatalog::PRO_DISPLAY_NAME %> Grocery List</p>
+        <h1 class="mt-2 text-3xl font-semibold text-slate-900"><%= @grocery_list.title %></h1>
+        <p class="mt-3 max-w-2xl text-sm text-slate-600">Generated from <%= link_to @grocery_list.meal_plan.title, profiles_meal_plan_path(week_of: @grocery_list.meal_plan.week_of), class: "font-semibold text-slate-900 underline" %>. Share this link with anyone helping shop.</p>
+      </div>
+      <div class="rounded-2xl bg-slate-100 px-4 py-3 text-sm text-slate-600">
+        <p class="font-semibold text-slate-900">Share URL</p>
+        <p class="mt-1 break-all"><%= grocery_list_url(@grocery_list.share_token) %></p>
+      </div>
+    </div>
+  </div>
+
+  <% if @grocery_list.grocery_list_items.any? %>
+    <div class="space-y-6">
+      <% @grocery_list.grouped_items.each do |aisle, items| %>
+        <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 class="text-xl font-semibold text-slate-900"><%= aisle %></h2>
+          <div class="mt-4 space-y-3">
+            <% items.each do |item| %>
+              <div class="flex flex-col gap-3 rounded-2xl bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p class="text-base font-medium text-slate-900 <%= "line-through text-slate-400" if item.checked? %>"><%= item.display_text %></p>
+                  <% if item.notes.present? %>
+                    <p class="mt-1 text-sm text-slate-500"><%= item.notes %></p>
+                  <% end %>
+                </div>
+                <%= form_with model: [ :profiles, item ], class: "shrink-0" do |form| %>
+                  <%= form.hidden_field :checked, value: (!item.checked?).to_s %>
+                  <%= form.submit(item.checked? ? "Mark active" : "Check off", class: "rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-white") %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </section>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center text-sm text-slate-500">
+      This list is empty because none of the planned recipes have structured ingredients yet.
+    </div>
+  <% end %>
+</div>

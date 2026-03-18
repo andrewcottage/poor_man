@@ -1,0 +1,30 @@
+# == Schema Information
+#
+# Table name: grocery_lists
+#
+#  id           :integer          not null, primary key
+#  generated_at :datetime
+#  share_token  :string           not null
+#  title        :string           not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  meal_plan_id :integer          not null
+#  user_id      :integer          not null
+#
+# Indexes
+#
+#  index_grocery_lists_on_meal_plan_id  (meal_plan_id) UNIQUE
+#  index_grocery_lists_on_share_token   (share_token) UNIQUE
+#  index_grocery_lists_on_user_id       (user_id)
+#
+# Foreign Keys
+#
+#  meal_plan_id  (meal_plan_id => meal_plans.id)
+#  user_id       (user_id => users.id)
+#
+pro_week_list:
+  user: pro_user
+  meal_plan: pro_week
+  title: Week of March 16, 2026 groceries
+  generated_at: <%= 1.hour.ago %>
+  share_token: proweekgroceries

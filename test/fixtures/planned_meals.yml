@@ -1,0 +1,37 @@
+# == Schema Information
+#
+# Table name: planned_meals
+#
+#  id           :integer          not null, primary key
+#  meal_type    :integer          default("dinner"), not null
+#  position     :integer          default(1), not null
+#  scheduled_on :date             not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  meal_plan_id :integer          not null
+#  recipe_id    :integer          not null
+#
+# Indexes
+#
+#  index_planned_meals_on_calendar_slot  (meal_plan_id,scheduled_on,meal_type,position)
+#  index_planned_meals_on_meal_plan_id   (meal_plan_id)
+#  index_planned_meals_on_recipe_id      (recipe_id)
+#
+# Foreign Keys
+#
+#  meal_plan_id  (meal_plan_id => meal_plans.id)
+#  recipe_id     (recipe_id => recipes.id)
+#
+pro_week_pizza:
+  meal_plan: pro_week
+  recipe: pizza
+  scheduled_on: 2026-03-16
+  meal_type: dinner
+  position: 1
+
+pro_week_bread:
+  meal_plan: pro_week
+  recipe: bread
+  scheduled_on: 2026-03-18
+  meal_type: lunch
+  position: 1

@@ -1,0 +1,26 @@
+# == Schema Information
+#
+# Table name: pro_waitlist_entries
+#
+#  id              :integer          not null, primary key
+#  email           :string           not null
+#  plan_preference :string
+#  source          :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  user_id         :integer
+#
+# Indexes
+#
+#  index_pro_waitlist_entries_on_email    (email) UNIQUE
+#  index_pro_waitlist_entries_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  user_id  (user_id => users.id)
+#
+one:
+  user: user
+  email: waitlist@example.com
+  source: pricing_page
+  plan_preference: monthly

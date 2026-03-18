@@ -1,0 +1,17 @@
+<div class="grid gap-4 md:grid-cols-2">
+  <% credit_packs.each do |pack| %>
+    <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-amber-700">Credit Pack</p>
+      <h3 class="mt-2 text-lg font-semibold text-gray-900"><%= pack[:name] %></h3>
+      <p class="mt-2 text-sm text-gray-600"><%= pack[:description] %></p>
+      <p class="mt-4 text-2xl font-semibold text-gray-900"><%= pack[:price] %></p>
+      <p class="mt-1 text-sm text-gray-500"><%= pack[:credits] %> extra AI generations</p>
+
+      <% if Current.user.present? && Billing::Config.credit_pack_configured?(pack[:id]) %>
+        <%= button_to "Buy pack", billing_checkout_sessions_path(credit_pack_id: pack[:id]), method: :post, class: "mt-4 inline-flex w-full justify-center rounded-xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-800" %>
+      <% else %>
+        <p class="mt-4 rounded-xl bg-gray-50 px-4 py-3 text-sm text-gray-600">Credit-pack checkout is not configured yet.</p>
+      <% end %>
+    </article>
+  <% end %>
+</div>

@@ -1,0 +1,65 @@
+<div class="w-full">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col gap-4 py-8 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <h1 class="text-3xl font-semibold text-gray-900">Recipe Moderation</h1>
+        <p class="mt-2 text-sm text-gray-600">Review community submissions before they appear in public search and categories.</p>
+      </div>
+
+      <div class="flex flex-wrap gap-2">
+        <% ["pending", "approved", "rejected", "all"].each do |status| %>
+          <%= link_to status.titleize, admin_recipe_submissions_path(status: status),
+              class: [
+                "rounded-full px-4 py-2 text-sm font-medium",
+                @status == status ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-700"
+              ].join(" ") %>
+        <% end %>
+      </div>
+    </div>
+
+    <% if @recipes.blank? %>
+      <div class="rounded-3xl border border-dashed border-gray-300 px-6 py-12 text-center">
+        <h2 class="text-lg font-semibold text-gray-900">No submissions in this queue</h2>
+        <p class="mt-2 text-sm text-gray-600">New community recipes will appear here for review.</p>
+      </div>
+    <% else %>
+      <div class="space-y-4 pb-12">
+        <% @recipes.each do |recipe| %>
+          <article class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div class="max-w-3xl">
+                <div class="flex items-center gap-3">
+                  <%= recipe_moderation_badge(recipe) %>
+                  <p class="text-xs uppercase tracking-[0.2em] text-gray-500"><%= recipe.category.title %></p>
+                </div>
+                <h2 class="mt-3 text-2xl font-semibold text-gray-900">
+                  <%= link_to recipe.title, recipe_path(recipe.slug), class: "hover:text-gray-600" %>
+                </h2>
+                <p class="mt-2 text-sm text-gray-600"><%= recipe.blurb %></p>
+                <div class="mt-4 flex flex-wrap gap-4 text-sm text-gray-500">
+                  <span>Author: <strong class="text-gray-700"><%= recipe.author&.username || recipe.author&.email || "Unknown" %></strong></span>
+                  <span>Submitted <%= time_ago_in_words(recipe.created_at) %> ago</span>
+                  <% if recipe.reviewed_at.present? %>
+                    <span>Reviewed <%= time_ago_in_words(recipe.reviewed_at) %> ago</span>
+                  <% end %>
+                </div>
+                <% if recipe.rejection_reason.present? %>
+                  <p class="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-700"><strong>Feedback:</strong> <%= recipe.rejection_reason %></p>
+                <% end %>
+              </div>
+
+              <div class="w-full max-w-sm space-y-3">
+                <%= button_to "Approve", approve_admin_recipe_submission_path(recipe), method: :patch, class: "w-full rounded-xl bg-green-600 px-4 py-3 text-sm font-semibold text-white hover:bg-green-700" %>
+
+                <%= form_with url: reject_admin_recipe_submission_path(recipe), method: :patch, local: true, class: "space-y-2" do |form| %>
+                  <%= form.text_field :rejection_reason, name: :rejection_reason, placeholder: "Optional feedback for the author", class: "block w-full rounded-xl border-gray-300 text-sm shadow-sm focus:border-gray-900 focus:ring-gray-900" %>
+                  <%= form.submit "Reject", class: "w-full rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 hover:bg-red-100" %>
+                <% end %>
+              </div>
+            </div>
+          </article>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

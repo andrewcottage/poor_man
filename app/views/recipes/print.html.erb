@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title><%= @recipe.title %> | Print</title>
+    <style>
+      body { font-family: Georgia, serif; margin: 2rem; color: #111827; }
+      .meta, .nutrition, .ingredients, .instructions { margin-top: 1.5rem; }
+      .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .button-bar { margin-top: 1rem; }
+      .button { display: inline-block; padding: 0.75rem 1rem; border: 1px solid #d1d5db; border-radius: 999px; text-decoration: none; color: #111827; margin-right: 0.5rem; }
+      @media print {
+        .button-bar { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <h1><%= @recipe.title %></h1>
+    <p><%= @recipe.blurb %></p>
+
+    <div class="button-bar">
+      <a href="#" class="button" onclick="window.print(); return false;">Print / Save as PDF</a>
+      <%= link_to "Back to recipe", recipe_path(@recipe.slug, servings: @selected_servings), class: "button" %>
+    </div>
+
+    <div class="meta">
+      <strong><%= pluralize(@selected_servings, "serving") %></strong>
+      • Difficulty <%= @recipe.difficulty %>
+      • <%= @recipe.prep_time %> minutes
+      • <%= @recipe.cost.format %>
+    </div>
+
+    <% if @recipe.nutrition_available? %>
+      <div class="nutrition">
+        <h2>Estimated nutrition per serving</h2>
+        <p><%= @recipe.nutrition_calories %> calories • <%= @recipe.nutrition_protein_grams %>g protein • <%= @recipe.nutrition_carbs_grams %>g carbs • <%= @recipe.nutrition_fat_grams %>g fat</p>
+      </div>
+    <% end %>
+
+    <div class="columns">
+      <section class="ingredients">
+        <h2>Ingredients</h2>
+        <ul>
+          <% @scaled_ingredients.each do |ingredient| %>
+            <li><%= ingredient.display_text %></li>
+          <% end %>
+        </ul>
+      </section>
+
+      <section class="instructions">
+        <h2>Instructions</h2>
+        <ol>
+          <% @instruction_steps.each do |step| %>
+            <li><%= step %></li>
+          <% end %>
+        </ol>
+      </section>
+    </div>
+  </body>
+</html>

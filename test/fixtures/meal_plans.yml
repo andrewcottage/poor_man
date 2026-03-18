@@ -1,0 +1,22 @@
+# == Schema Information
+#
+# Table name: meal_plans
+#
+#  id         :integer          not null, primary key
+#  week_of    :date             not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  user_id    :integer          not null
+#
+# Indexes
+#
+#  index_meal_plans_on_user_id              (user_id)
+#  index_meal_plans_on_user_id_and_week_of  (user_id,week_of) UNIQUE
+#
+# Foreign Keys
+#
+#  user_id  (user_id => users.id)
+#
+pro_week:
+  user: pro_user
+  week_of: 2026-03-16

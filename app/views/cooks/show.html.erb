@@ -1,0 +1,61 @@
+<div class="mx-auto mt-10 max-w-7xl space-y-8 px-4 sm:px-6 lg:px-8">
+  <section class="rounded-[2rem] bg-slate-950 px-8 py-8 text-white shadow-xl">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <p class="text-sm uppercase tracking-[0.25em] text-emerald-300">Community Cook</p>
+        <h1 class="mt-3 text-4xl font-semibold"><%= @cook.username %></h1>
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+          <%= contributor_badge(@cook) %>
+          <span class="rounded-full bg-white/10 px-3 py-1 text-sm text-white"><%= @cook.followers.count %> followers</span>
+          <span class="rounded-full bg-white/10 px-3 py-1 text-sm text-white"><%= @cook.following.count %> following</span>
+          <span class="rounded-full bg-white/10 px-3 py-1 text-sm text-white"><%= @cook.recipes.approved.count %> published recipes</span>
+        </div>
+      </div>
+
+      <% if Current.user.present? && Current.user != @cook %>
+        <% if Current.user.follows?(@cook) %>
+          <%= button_to "Unfollow", cook_follow_path(@cook.username), method: :delete, class: "rounded-xl border border-white/20 px-4 py-3 text-sm font-semibold text-white hover:bg-white/10" %>
+        <% else %>
+          <%= button_to "Follow", cook_follow_path(@cook.username), method: :post, class: "rounded-xl bg-emerald-300 px-4 py-3 text-sm font-semibold text-slate-950 hover:bg-emerald-200" %>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="grid gap-8 lg:grid-cols-[1fr,0.9fr]">
+    <div class="space-y-6">
+      <div>
+        <h2 class="text-2xl font-semibold text-gray-900">Published recipes</h2>
+        <div class="mt-4 grid grid-cols-1 border-l border-gray-200 sm:grid-cols-2 xl:grid-cols-4">
+          <% @recipes.each do |recipe| %>
+            <%= render "recipes/card", recipe: recipe %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 class="text-2xl font-semibold text-gray-900">Recent reviews</h2>
+        <div class="mt-4 space-y-4">
+          <% @reviews.each do |review| %>
+            <article class="rounded-2xl bg-gray-50 px-4 py-4">
+              <p class="text-sm font-semibold text-gray-900"><%= review.title %> on <%= link_to review.recipe.title, recipe_path(review.recipe.slug), class: "underline" %></p>
+              <p class="mt-2 text-sm text-gray-600"><%= review.comment %></p>
+            </article>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <aside class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+      <h2 class="text-2xl font-semibold text-gray-900">Recent activity</h2>
+      <div class="mt-4 space-y-4">
+        <% @recent_activity.each do |activity| %>
+          <article class="rounded-2xl bg-gray-50 px-4 py-4">
+            <p class="text-sm font-semibold text-gray-900"><%= community_activity_summary(activity) %></p>
+            <p class="mt-1 text-xs uppercase tracking-[0.2em] text-gray-500"><%= time_ago_in_words(activity.created_at) %> ago</p>
+          </article>
+        <% end %>
+      </div>
+    </aside>
+  </section>
+</div>

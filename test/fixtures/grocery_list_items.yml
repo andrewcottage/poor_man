@@ -1,0 +1,40 @@
+# == Schema Information
+#
+# Table name: grocery_list_items
+#
+#  id              :integer          not null, primary key
+#  aisle           :string           default("Pantry"), not null
+#  checked         :boolean          default(FALSE), not null
+#  name            :string           not null
+#  notes           :string
+#  position        :integer          default(1), not null
+#  quantity        :string
+#  unit            :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  grocery_list_id :integer          not null
+#
+# Indexes
+#
+#  index_grocery_list_items_on_grocery_list_id  (grocery_list_id)
+#  index_grocery_list_items_on_grouping         (grocery_list_id,aisle,position)
+#
+# Foreign Keys
+#
+#  grocery_list_id  (grocery_list_id => grocery_lists.id)
+#
+pro_week_flour:
+  grocery_list: pro_week_list
+  aisle: Pantry
+  position: 1
+  quantity: "3"
+  unit: cups
+  name: flour
+
+pro_week_salt:
+  grocery_list: pro_week_list
+  aisle: Spices
+  position: 2
+  quantity: "2"
+  unit: tsp
+  name: salt

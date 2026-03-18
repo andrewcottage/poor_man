@@ -1,0 +1,44 @@
+<section class="rounded-[2rem] bg-slate-950 px-6 py-10 text-white sm:px-10">
+  <div class="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+    <div>
+      <p class="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-300">Community</p>
+      <h2 class="mt-3 text-3xl font-semibold">See what other cooks are making</h2>
+
+      <div class="mt-6 space-y-4">
+        <% @community_activity.each do |activity| %>
+          <article class="rounded-2xl bg-white/10 px-4 py-4">
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <p class="text-sm font-semibold text-white"><%= community_activity_summary(activity) %></p>
+                <p class="mt-1 text-sm text-slate-300">
+                  <%= link_to activity.user.username, cook_path(activity.user.username), class: "font-semibold underline" %>
+                  <% if activity.recipe.present? %>
+                    on <%= link_to activity.recipe.title, recipe_path(activity.recipe.slug), class: "font-semibold underline" %>
+                  <% end %>
+                </p>
+              </div>
+              <p class="text-xs uppercase tracking-[0.2em] text-slate-300"><%= time_ago_in_words(activity.created_at) %> ago</p>
+            </div>
+          </article>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="rounded-[1.5rem] bg-white/10 p-6">
+      <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-300">Contributors</p>
+      <div class="mt-4 space-y-4">
+        <% @popular_contributors.each do |user| %>
+          <div class="rounded-2xl bg-slate-900/70 px-4 py-4">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <p class="text-base font-semibold text-white"><%= link_to user.username, cook_path(user.username), class: "underline" %></p>
+                <p class="mt-1 text-sm text-slate-300"><%= user.recipes.approved.count %> published recipes • <%= user.followers.count %> followers</p>
+              </div>
+              <%= contributor_badge(user) %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>

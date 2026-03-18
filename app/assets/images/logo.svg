@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+  <title>Stovaro</title>
+  <defs>
+    <linearGradient id="stovaro-bg" x1="192" y1="128" x2="832" y2="896" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="1" stop-color="#0F172A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="224" fill="url(#stovaro-bg)"/>
+  <circle cx="438" cy="512" r="238" fill="#FAFAF9" stroke="#D6D3D1" stroke-width="32"/>
+  <path
+    d="M554 334C520 280 429 257 350 286C297 306 262 349 262 401C262 474 321 510 436 531C523 547 590 571 590 641C590 692 558 734 505 761C421 804 304 784 240 718"
+    stroke="#F59E0B"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="64"
+  />
+  <rect x="658" y="466" width="164" height="92" rx="46" fill="#34D399"/>
+  <rect x="706" y="492" width="60" height="40" rx="20" fill="#0F172A"/>
+</svg>

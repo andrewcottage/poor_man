@@ -1,0 +1,45 @@
+<%= form_with url: path, method: :get, local: true, class: "rounded-3xl border border-gray-200 bg-white p-6 shadow-sm" do %>
+  <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+    <div class="xl:col-span-2">
+      <label for="q" class="block text-sm font-medium text-gray-700">Search</label>
+      <%= text_field_tag :q, params[:q], placeholder: placeholder, class: "mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900" %>
+    </div>
+
+    <div>
+      <label for="sort" class="block text-sm font-medium text-gray-700">Sort</label>
+      <%= select_tag :sort, options_for_select(recipe_sort_options, params[:sort].presence || "newest"), class: "mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900" %>
+    </div>
+
+    <div>
+      <label for="difficulty" class="block text-sm font-medium text-gray-700">Difficulty</label>
+      <%= select_tag :difficulty, options_for_select(recipe_difficulty_options, params[:difficulty]), include_blank: "Any", class: "mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900" %>
+    </div>
+
+    <div>
+      <label for="prep_time" class="block text-sm font-medium text-gray-700">Prep time</label>
+      <%= select_tag :prep_time, options_for_select(recipe_prep_time_options, params[:prep_time]), include_blank: "Any", class: "mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900" %>
+    </div>
+
+    <div>
+      <label for="cost" class="block text-sm font-medium text-gray-700">Cost</label>
+      <%= select_tag :cost, options_for_select(recipe_cost_options, params[:cost]), include_blank: "Any", class: "mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-gray-900 focus:ring-gray-900" %>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <p class="text-sm font-medium text-gray-700">Dietary tags</p>
+    <div class="mt-2 flex flex-wrap gap-3">
+      <% RecipesHelper::DISCOVERY_DIETARY_TAGS.each do |tag| %>
+        <label class="inline-flex items-center gap-2 rounded-full border border-gray-200 px-3 py-2 text-sm text-gray-700">
+          <%= check_box_tag "dietary_tags[]", tag, Array(params[:dietary_tags]).include?(tag), class: "rounded border-gray-300 text-gray-900 focus:ring-gray-900" %>
+          <span><%= tag.humanize %></span>
+        </label>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-5 flex flex-wrap gap-3">
+    <%= submit_tag "Apply filters", class: "inline-flex rounded-xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-800" %>
+    <%= link_to "Reset", path, class: "inline-flex rounded-xl border border-gray-300 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50" %>
+  </div>
+<% end %>
