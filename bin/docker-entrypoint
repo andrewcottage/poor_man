@@ -1,7 +1,14 @@
 #!/bin/bash -e
 
-# If running the rails server then create or migrate existing database
-if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
+# If running the app server, create or migrate the database first.
+# Kamal boots the container through Thruster, so handle both:
+#   ./bin/rails server
+#   ./bin/thrust ./bin/rails server
+if {
+  [ "${1}" = "./bin/rails" ] && [ "${2}" = "server" ];
+} || {
+  [ "${1}" = "./bin/thrust" ] && [ "${2}" = "./bin/rails" ] && [ "${3}" = "server" ];
+}; then
   ./bin/rails db:prepare
 fi
 
