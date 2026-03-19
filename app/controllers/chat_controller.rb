@@ -1,14 +1,18 @@
 class ChatController < ApplicationController
-  before_action :require_user!
-
   def show
-    if Current.user.pro?
+    if Current.user&.pro?
       @conversation = Current.user.chat_conversations.first_or_create!
       @messages = @conversation.messages.visible.chronological
     end
   end
 
   def create_message
+    unless Current.user
+      session[:return_to] = chat_path
+      redirect_to new_session_path, alert: "Sign in to start chatting about recipes."
+      return
+    end
+
     unless Current.user.pro?
       redirect_to pricing_path, alert: "Upgrade to #{Billing::PlanCatalog::PRO_DISPLAY_NAME} to use Recipe Chat."
       return

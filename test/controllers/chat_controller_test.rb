@@ -1,9 +1,20 @@
 require "test_helper"
 
 class ChatControllerTest < ActionDispatch::IntegrationTest
-  test "redirects unauthenticated user to login" do
+  test "anonymous user can view chat page" do
     get chat_url
+    assert_response :success
+    assert_select "[data-controller='chat']"
+  end
+
+  test "anonymous user submitting message is redirected to login" do
+    post create_message_chat_url, params: { content: "What should I cook?" }
     assert_redirected_to new_session_path
+  end
+
+  test "anonymous user gets return_to set to chat path" do
+    post create_message_chat_url, params: { content: "What should I cook?" }
+    assert_equal chat_path, session[:return_to]
   end
 
   test "pro user can access chat" do

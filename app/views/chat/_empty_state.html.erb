@@ -1,0 +1,19 @@
+<div class="flex flex-col items-center justify-center py-16 text-center" data-chat-target="emptyState">
+  <div class="flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-amber-100 to-orange-100 shadow-sm">
+    <svg class="h-8 w-8 text-amber-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+    </svg>
+  </div>
+  <h2 class="mt-5 text-lg font-semibold text-slate-900">What are you in the mood for?</h2>
+  <p class="mt-2 max-w-sm text-sm text-slate-500">I can search recipes, check your favorites, suggest meals based on what you like, or help you plan what to cook.</p>
+  <div class="mt-6 flex flex-wrap justify-center gap-2">
+    <% ["What's trending right now?", "Suggest something based on my favorites", "Easy weeknight dinners"].each do |suggestion| %>
+      <button type="button"
+              class="rounded-full border border-stone-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm transition hover:border-amber-300 hover:bg-amber-50"
+              data-action="click->chat#fillSuggestion"
+              data-suggestion="<%= suggestion %>">
+        <%= suggestion %>
+      </button>
+    <% end %>
+  </div>
+</div>

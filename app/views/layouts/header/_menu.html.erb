@@ -34,8 +34,8 @@
       <%= link_to "Pricing", pricing_path, class: stovaro_nav_link_classes(pricing_active) %>
       <% if Current.user %>
         <%= link_to "AI Generator", recipes_generations_path, class: stovaro_nav_link_classes(generator_active) %>
-        <%= link_to "Chat", chat_path, class: stovaro_nav_link_classes(chat_active) %>
       <% end %>
+      <%= link_to "Chat", chat_path, class: stovaro_nav_link_classes(chat_active) %>
       <%= link_to "About", about_pages_path, class: stovaro_nav_link_classes(about_active) %>
     </div>
   </div>
