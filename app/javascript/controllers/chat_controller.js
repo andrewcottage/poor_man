@@ -9,20 +9,24 @@ export default class extends Controller {
   }
 
   send(event) {
-    event.preventDefault()
-
     const content = this.inputTarget.value.trim()
-    if (!content) return
-
-    this.inputTarget.value = ""
-    this.inputTarget.style.height = "auto"
-    this.submitTarget.disabled = true
-
-    if (this.hasEmptyStateTarget) {
-      this.emptyStateTarget.remove()
+    if (!content) {
+      event.preventDefault()
+      return
     }
 
-    this.formTarget.requestSubmit()
+    // Let Turbo handle the form submission naturally.
+    // Clear UI after a tick so the form data is captured first.
+    this.submitTarget.disabled = true
+
+    setTimeout(() => {
+      this.inputTarget.value = ""
+      this.inputTarget.style.height = "auto"
+
+      if (this.hasEmptyStateTarget) {
+        this.emptyStateTarget.remove()
+      }
+    }, 0)
   }
 
   handleKeydown(event) {
@@ -47,6 +51,8 @@ export default class extends Controller {
   // Private
 
   observeMessages() {
+    if (!this.hasMessagesTarget) return
+
     const observer = new MutationObserver(() => {
       this.scrollToBottom()
       this.enableInput()
@@ -56,6 +62,8 @@ export default class extends Controller {
   }
 
   scrollToBottom() {
+    if (!this.hasMessagesTarget) return
+
     requestAnimationFrame(() => {
       this.messagesTarget.scrollTop = this.messagesTarget.scrollHeight
     })

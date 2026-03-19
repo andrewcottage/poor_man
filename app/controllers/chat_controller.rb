@@ -9,12 +9,12 @@ class ChatController < ApplicationController
   def create_message
     unless Current.user
       session[:return_to] = chat_path
-      redirect_to new_session_path, alert: "Sign in to start chatting about recipes."
+      redirect_to new_session_path, alert: "Sign in to start chatting about recipes.", status: :see_other
       return
     end
 
     unless Current.user.pro?
-      redirect_to pricing_path, alert: "Upgrade to #{Billing::PlanCatalog::PRO_DISPLAY_NAME} to use Recipe Chat."
+      redirect_to pricing_path, alert: "Upgrade to #{Billing::PlanCatalog::PRO_DISPLAY_NAME} to use Recipe Chat.", status: :see_other
       return
     end
 

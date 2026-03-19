@@ -1,15 +1,16 @@
 require "test_helper"
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
-  driven_by :selenium, using: :chrome, screen_size: [1400, 1400]
+  driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
 
   def sign_in_as(user)
     visit new_session_url
+    assert_selector "h2", text: "Sign in to your account"
 
-    within("form[action='#{sessions_path}']") do
-      fill_in "Email address", with: user.email
-      fill_in "Password", with: "password"
-      click_button "Sign in"
-    end
+    fill_in "Email address", with: user.email
+    fill_in "Password", with: "password"
+    click_button "Sign in"
+
+    assert_no_selector "h2", text: "Sign in to your account", wait: 5
   end
 end
