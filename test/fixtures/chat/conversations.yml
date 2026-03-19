@@ -1,0 +1,7 @@
+pro_conversation:
+  user: pro_user
+  title: Recipe suggestions
+
+free_conversation:
+  user: user
+  title: Test conversation

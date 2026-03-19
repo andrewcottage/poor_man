@@ -8,6 +8,8 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   test "should get new" do
     get new_session_url
     assert_response :success
+    assert_select "label[for='session_email']", text: "Email address"
+    assert_select "label[for='session_password']", text: "Password"
   end
 
   test "should login user with valid credentials" do

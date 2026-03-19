@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_15_140200) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_19_010733) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -69,6 +69,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_15_140200) do
     t.string "title"
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_categories_on_slug", unique: true
+  end
+
+  create_table "chat_conversations", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_chat_conversations_on_user_id"
+  end
+
+  create_table "chat_messages", force: :cascade do |t|
+    t.text "content"
+    t.integer "conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.string "role", null: false
+    t.string "tool_call_id"
+    t.text "tool_calls"
+    t.string "tool_name"
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id"], name: "index_chat_messages_on_conversation_id"
   end
 
   create_table "collection_recipes", force: :cascade do |t|
@@ -345,6 +365,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_15_140200) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "analytics_events", "users"
+  add_foreign_key "chat_conversations", "users"
+  add_foreign_key "chat_messages", "chat_conversations", column: "conversation_id"
   add_foreign_key "collection_recipes", "collections"
   add_foreign_key "collection_recipes", "recipes"
   add_foreign_key "collections", "users"

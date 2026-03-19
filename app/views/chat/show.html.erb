@@ -1,0 +1,103 @@
+<% content_for :title, "Recipe Chat" %>
+
+<div class="w-full">
+  <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+    <% if Current.user.pro? %>
+      <div class="flex h-[calc(100vh-7rem)] flex-col" data-controller="chat">
+        <%# Header %>
+        <div class="flex items-center gap-3 border-b border-stone-200 pb-4 pt-2">
+          <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-lg font-semibold text-slate-900">Recipe Chat</h1>
+            <p class="text-xs text-slate-500">Ask about recipes, get suggestions, explore your favorites</p>
+          </div>
+        </div>
+
+        <%# Messages %>
+        <%= turbo_stream_from @conversation %>
+        <div id="chat_messages"
+             class="flex-1 space-y-5 overflow-y-auto py-6 scrollbar-thin"
+             data-chat-target="messages">
+          <% if @messages.empty? %>
+            <div class="flex flex-col items-center justify-center py-16 text-center" data-chat-target="emptyState">
+              <div class="flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-amber-100 to-orange-100 shadow-sm">
+                <svg class="h-8 w-8 text-amber-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                </svg>
+              </div>
+              <h2 class="mt-5 text-lg font-semibold text-slate-900">What are you in the mood for?</h2>
+              <p class="mt-2 max-w-sm text-sm text-slate-500">I can search recipes, check your favorites, suggest meals based on what you like, or help you plan what to cook.</p>
+              <div class="mt-6 flex flex-wrap justify-center gap-2">
+                <% ["What's trending right now?", "Suggest something based on my favorites", "Easy weeknight dinners"].each do |suggestion| %>
+                  <button type="button"
+                          class="rounded-full border border-stone-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm transition hover:border-amber-300 hover:bg-amber-50"
+                          data-action="click->chat#fillSuggestion"
+                          data-suggestion="<%= suggestion %>">
+                    <%= suggestion %>
+                  </button>
+                <% end %>
+              </div>
+            </div>
+          <% else %>
+            <% @messages.each do |message| %>
+              <%= render "chat/message", message: message %>
+            <% end %>
+          <% end %>
+        </div>
+
+        <%# Input %>
+        <div class="border-t border-stone-200 pb-2 pt-4">
+          <%= render "chat/input_form", conversation: @conversation %>
+        </div>
+      </div>
+    <% else %>
+      <%# Free user CTA %>
+      <div class="relative mt-6 overflow-hidden rounded-[2rem] border border-stone-200 bg-white shadow-sm">
+        <%# Blurred mock chat behind the overlay %>
+        <div class="pointer-events-none select-none blur-[2px] opacity-60">
+          <div class="flex flex-col px-6 py-8">
+            <div class="flex items-start gap-3">
+              <div class="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-amber-100 text-amber-700">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
+              </div>
+              <div class="rounded-2xl rounded-tl-md bg-stone-100 px-4 py-3 text-sm text-slate-700">
+                Hey! I found a few recipes you might love based on your favorites. Here are some easy weeknight dinners...
+              </div>
+            </div>
+            <div class="mt-4 flex justify-end">
+              <div class="rounded-2xl rounded-tr-md bg-slate-900 px-4 py-3 text-sm text-white">
+                That sounds great! What about something with chicken?
+              </div>
+            </div>
+            <div class="mt-4 flex items-start gap-3">
+              <div class="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-amber-100 text-amber-700">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
+              </div>
+              <div class="rounded-2xl rounded-tl-md bg-stone-100 px-4 py-3 text-sm text-slate-700">
+                I found 3 great chicken recipes under 30 minutes. Let me pull those up for you...
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%# Overlay CTA %>
+        <div class="absolute inset-0 flex items-center justify-center bg-white/70 backdrop-blur-sm">
+          <div class="mx-4 max-w-md rounded-3xl border border-stone-200 bg-white px-8 py-10 text-center shadow-2xl">
+            <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 shadow-lg">
+              <svg class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+              </svg>
+            </div>
+            <h2 class="mt-5 text-xl font-semibold text-slate-900">Recipe Chat is a Pro feature</h2>
+            <p class="mt-3 text-sm text-slate-600">Get personalized recipe suggestions, search the entire catalog, and explore your taste profile with AI — all in a conversation.</p>
+            <%= link_to "Upgrade to #{Billing::PlanCatalog::PRO_DISPLAY_NAME}", pricing_path, class: "mt-6 inline-flex items-center rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

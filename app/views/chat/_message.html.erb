@@ -1,0 +1,20 @@
+<% if message.user? %>
+  <div class="flex justify-end">
+    <div class="max-w-[80%] rounded-2xl rounded-tr-md bg-slate-900 px-4 py-3 text-sm text-white shadow-sm">
+      <%= simple_format(message.content, {}, wrapper_tag: "span") %>
+    </div>
+  </div>
+<% elsif message.assistant? %>
+  <div class="flex items-start gap-3">
+    <div class="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-amber-100 text-amber-700">
+      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+      </svg>
+    </div>
+    <div class="max-w-[80%] rounded-2xl rounded-tl-md bg-stone-100 px-4 py-3 text-sm text-slate-700 shadow-sm">
+      <div class="prose prose-sm prose-slate prose-a:text-amber-700 prose-a:underline prose-a:decoration-amber-300">
+        <%= sanitize(render_markdown(message.content), tags: %w[p a strong em ul ol li br h3 h4 code pre], attributes: %w[href class]) %>
+      </div>
+    </div>
+  </div>
+<% end %>

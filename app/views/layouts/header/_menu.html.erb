@@ -3,6 +3,7 @@
 <% pricing_active = controller_path == "pricing" || controller_path == "pro_waitlist_entries" || controller_path.start_with?("billing/") %>
 <% generator_active = controller_path == "recipes/generations" %>
 <% about_active = controller_path == "pages" && action_name == "about" %>
+<% chat_active = controller_path == "chat" %>
 
 <nav class="relative flex items-center justify-between gap-6 px-5 py-4 sm:px-6 lg:px-8" aria-label="Global">
   <div class="flex min-w-0 flex-1 items-center gap-4">
@@ -33,6 +34,7 @@
       <%= link_to "Pricing", pricing_path, class: stovaro_nav_link_classes(pricing_active) %>
       <% if Current.user %>
         <%= link_to "AI Generator", recipes_generations_path, class: stovaro_nav_link_classes(generator_active) %>
+        <%= link_to "Chat", chat_path, class: stovaro_nav_link_classes(chat_active) %>
       <% end %>
       <%= link_to "About", about_pages_path, class: stovaro_nav_link_classes(about_active) %>
     </div>
@@ -41,7 +43,7 @@
   <div class="hidden lg:flex lg:flex-1 lg:justify-end">
     <% if Current.user %>
       <div data-controller="account-dropdown" class="relative inline-block text-left">
-        <button type="button" class="inline-flex items-center gap-3 rounded-full bg-slate-900 px-3 py-2 text-left text-white shadow-sm transition hover:bg-slate-800" id="menu-button" aria-expanded="true" aria-haspopup="true" data-action="click->account-dropdown#toggle">
+        <button type="button" class="inline-flex items-center gap-3 rounded-full bg-slate-900 px-3 py-2 text-left text-white shadow-sm transition hover:bg-slate-800" id="menu-button" aria-expanded="false" aria-haspopup="true" data-account-dropdown-target="button" data-action="click->account-dropdown#toggle">
           <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-xs font-semibold uppercase tracking-[0.2em] text-white"><%= stovaro_account_initials(Current.user) %></span>
           <span class="hidden xl:block">
             <span class="block text-sm font-semibold leading-4"><%= stovaro_account_label(Current.user) %></span>
@@ -52,7 +54,7 @@
           </svg>
         </button>
 
-        <div data-account-dropdown-target="menu" class="hidden absolute right-0 z-10 mt-3 w-64 origin-top-right rounded-3xl border border-stone-200 bg-white p-2 shadow-2xl focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+        <div data-account-dropdown-target="menu" class="hidden absolute right-0 z-20 mt-3 w-64 origin-top-right rounded-3xl border border-stone-200 bg-white p-2 shadow-2xl focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
           <div class="rounded-2xl bg-stone-100 px-4 py-3">
             <p class="text-sm font-semibold text-slate-900"><%= Current.user.email %></p>
             <p class="mt-1 text-xs uppercase tracking-[0.25em] text-slate-500"><%= Current.user.plan_label %></p>

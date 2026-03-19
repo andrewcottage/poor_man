@@ -7,14 +7,14 @@
     <div class="stovaro-surface px-6 py-12 sm:px-12">
       <%= form_with(url: sessions_path, scope: :session, method: :post, class: "space-y-6") do |f|%>
         <div>
-          <%= label_tag :email, 'Email address', class: 'stovaro-label leading-6' %>
+          <%= f.label :email, "Email address", class: "stovaro-label leading-6" %>
           <div class="mt-2">
             <%= f.email_field :email, required: true, class: 'block w-full rounded-xl border-0 py-2 text-slate-900 shadow-sm ring-1 ring-inset ring-stone-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6' %>
           </div>
         </div>
 
         <div>
-          <%= label_tag :password, 'Password', class: 'stovaro-label leading-6' %>
+          <%= f.label :password, "Password", class: "stovaro-label leading-6" %>
           <div class="mt-2">
             <%= f.password_field :password, required: true, class: 'block w-full rounded-xl border-0 py-2 text-slate-900 shadow-sm ring-1 ring-inset ring-stone-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6' %>
           </div>
@@ -22,8 +22,8 @@
 
         <div class="flex items-center justify-between">
           <div class="flex items-center">
-            <%= f.check_box :remember_me,  id: 'remember-me', class: 'h-4 w-4 rounded border-stone-300 text-emerald-600 focus:ring-emerald-600' %>
-            <%= label_tag :remember_me, 'Remember me', class: 'ml-3 block text-sm leading-6 text-slate-900' %>
+            <%= f.check_box :remember_me, id: "remember-me", class: "h-4 w-4 rounded border-stone-300 text-emerald-600 focus:ring-emerald-600" %>
+            <%= label_tag "remember-me", "Remember me", class: "ml-3 block text-sm leading-6 text-slate-900" %>
           </div>
 
           <div class="text-sm leading-6">

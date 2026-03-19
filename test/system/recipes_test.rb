@@ -4,12 +4,8 @@ class RecipesTest < ApplicationSystemTestCase
   setup do
     @recipe = recipes(:pizza)
     @admin = users(:andrew)
-    
-    # Login as admin
-    visit new_session_url
-    fill_in "Email address", with: @admin.email
-    fill_in "Password", with: "password"
-    click_on "Sign in"
+
+    sign_in_as(@admin)
   end
 
   test "visiting the index" do

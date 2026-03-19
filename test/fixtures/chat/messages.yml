@@ -1,0 +1,9 @@
+user_message:
+  conversation: pro_conversation
+  role: user
+  content: "What are some easy dinner recipes?"
+
+assistant_message:
+  conversation: pro_conversation
+  role: assistant
+  content: "Here are some great easy dinner options!"

@@ -6,6 +6,10 @@ Rails.application.routes.draw do
   end
 
   resource :pricing, only: :show, controller: :pricing
+
+  resource :chat, only: [:show], controller: :chat do
+    post :create_message
+  end
   resources :pro_waitlist_entries, only: :create
 
   namespace :profiles do
