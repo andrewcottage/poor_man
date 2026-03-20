@@ -24,6 +24,13 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
     assert_select "[data-controller='chat']"
   end
 
+  test "admin user can access chat without pro plan" do
+    login(users(:admin))
+    get chat_url
+    assert_response :success
+    assert_select "h1", "Seed Copilot"
+  end
+
   test "free user sees upgrade CTA" do
     login(users(:user))
     get chat_url
@@ -41,6 +48,18 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     conversation = users(:pro_user).chat_conversations.last
     assert_equal "What should I cook tonight?", conversation.messages.where(role: "user").last.content
+  end
+
+  test "admin user can send a message without pro plan" do
+    login(users(:admin))
+
+    assert_enqueued_with(job: Chat::RespondJob) do
+      post create_message_chat_url, params: { content: "Preview a new vegan dinner recipe" }, as: :turbo_stream
+    end
+
+    assert_response :success
+    conversation = users(:admin).chat_conversations.last
+    assert_equal "Preview a new vegan dinner recipe", conversation.messages.where(role: "user").last.content
   end
 
   test "free user cannot send messages" do

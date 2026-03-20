@@ -78,7 +78,7 @@ class Chat::CompletionService
   private
 
   def build_messages
-    [ { role: "system", content: SYSTEM_PROMPT } ] + @conversation.messages_for_api
+    [ { role: "system", content: system_prompt } ] + @conversation.messages_for_api
   end
 
   def request_completion(messages)
@@ -87,9 +87,26 @@ class Chat::CompletionService
       parameters: {
         model: "gpt-4.1",
         messages: messages,
-        tools: Chat::ToolDefinitions.all
+        tools: Chat::ToolDefinitions.new(user: @user).all
       }
     )
+  end
+
+  def system_prompt
+    return SYSTEM_PROMPT unless @user.admin?
+
+    <<~PROMPT
+      #{SYSTEM_PROMPT}
+
+      You are also Stovaro's admin seed copilot.
+
+      Admin rules:
+      - When the admin wants new site content, use the seed tools instead of describing what you would do.
+      - Prefer creating a preview first unless the admin explicitly asks you to publish immediately.
+      - A preview should summarize the recipe title, category, tags, and available preview links/images.
+      - If a preview already exists and the admin approves it, use the publish tool.
+      - Never claim a recipe or category was created unless a tool confirms it.
+    PROMPT
   end
 
   def broadcast_message(message)

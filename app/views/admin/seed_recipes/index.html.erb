@@ -1,0 +1,143 @@
+<% content_for :title, "Seed Studio" %>
+
+<div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+  <div class="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)]">
+    <section class="stovaro-surface p-6 sm:p-8">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-[0.3em] text-amber-700">Admin Only</p>
+          <h1 class="mt-2 text-3xl font-semibold text-slate-900">Seed Studio</h1>
+          <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
+            Describe the recipe you want, and Stovaro will generate the recipe, build or reuse a category, and
+            publish it with photorealistic gallery images when the run completes.
+          </p>
+        </div>
+      </div>
+
+      <%= form_with model: @generation, url: admin_seed_recipes_path, class: "mt-8 space-y-6" do |form| %>
+        <div>
+          <%= form.label :prompt, "What should Stovaro create?", class: "stovaro-label" %>
+          <%= form.text_area :prompt,
+              rows: 4,
+              placeholder: "Example: Create a vegan sheet-pan dinner with crispy tofu, broccoli, and peanut sauce for busy weeknights.",
+              class: "stovaro-input" %>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div>
+            <%= form.label :dietary_preference, class: "stovaro-label" %>
+            <%= form.select :dietary_preference,
+                options_for_select([["Any", ""], ["Vegan", "vegan"], ["Vegetarian", "vegetarian"], ["Gluten-free", "gluten-free"], ["Dairy-free", "dairy-free"], ["High-protein", "high-protein"]], @generation.dietary_preference),
+                {},
+                class: "stovaro-select" %>
+          </div>
+
+          <div>
+            <%= form.label :skill_level, class: "stovaro-label" %>
+            <%= form.select :skill_level,
+                options_for_select([["Standard", ""], ["Beginner", "beginner"], ["Confident home cook", "intermediate"], ["Advanced", "advanced"]], @generation.skill_level),
+                {},
+                class: "stovaro-select" %>
+          </div>
+
+          <div>
+            <%= form.label :servings, class: "stovaro-label" %>
+            <%= form.number_field :servings, min: 1, max: 16, class: "stovaro-input" %>
+          </div>
+
+          <div>
+            <%= form.label :target_difficulty, "Target difficulty", class: "stovaro-label" %>
+            <%= form.select :target_difficulty,
+                options_for_select([["Best fit", ""], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5]], @generation.target_difficulty),
+                {},
+                class: "stovaro-select" %>
+          </div>
+
+          <div class="md:col-span-2">
+            <%= form.label :ingredient_swaps, class: "stovaro-label" %>
+            <%= form.text_field :ingredient_swaps, placeholder: "Use chickpeas instead of chicken", class: "stovaro-input" %>
+          </div>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2">
+          <div>
+            <%= form.label :avoid_ingredients, class: "stovaro-label" %>
+            <%= form.text_area :avoid_ingredients, rows: 3, placeholder: "No walnuts, cilantro, or shellfish", class: "stovaro-input" %>
+          </div>
+
+          <div>
+            <%= form.label :customization_notes, class: "stovaro-label" %>
+            <%= form.text_area :customization_notes, rows: 3, placeholder: "Keep it weeknight-friendly and include a punchy sauce.", class: "stovaro-input" %>
+          </div>
+        </div>
+
+        <label class="flex items-start gap-3 rounded-2xl border border-stone-200 bg-stone-50 p-4">
+          <%= form.check_box :auto_publish_recipe, class: "mt-1 rounded border-stone-300 text-slate-900 focus:ring-slate-900" %>
+          <span>
+            <span class="block text-sm font-semibold text-slate-900">Auto-publish when ready</span>
+            <span class="mt-1 block text-sm text-slate-600">If checked, the finished recipe will be published automatically and a category will be created if needed.</span>
+          </span>
+        </label>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <%= form.submit "Start seed run", class: "stovaro-btn-accent px-5 py-3" %>
+          <p class="text-sm text-slate-500">Images are generated as photorealistic food photography with a main hero plus gallery shots.</p>
+        </div>
+      <% end %>
+    </section>
+
+    <aside class="space-y-6">
+      <section class="stovaro-surface p-6">
+        <h2 class="text-lg font-semibold text-slate-900">What this publishes</h2>
+        <ul class="mt-4 space-y-3 text-sm leading-6 text-slate-600">
+          <li>Approved recipe owned by the admin who ran it</li>
+          <li>Main image plus gallery images attached to the recipe</li>
+          <li>Structured ingredients, tags, and nutrition recalculation</li>
+          <li>New category with image if the generated category does not exist</li>
+        </ul>
+      </section>
+
+      <section class="stovaro-surface p-6">
+        <div class="flex items-center justify-between gap-3">
+          <h2 class="text-lg font-semibold text-slate-900">Recent seed runs</h2>
+          <% if @seed_generations.any? %>
+            <span class="text-xs uppercase tracking-[0.25em] text-slate-500"><%= @seed_generations.count %> shown</span>
+          <% end %>
+        </div>
+
+        <div class="mt-4 space-y-3">
+          <% if @seed_generations.any? %>
+            <% @seed_generations.each do |generation| %>
+              <% status_label, status_classes = if generation.published_recipe.present?
+                ["Published", "bg-emerald-100 text-emerald-800"]
+              elsif generation.seed_publish_error.present?
+                ["Needs attention", "bg-red-100 text-red-800"]
+              elsif generation.complete?
+                ["Ready", "bg-amber-100 text-amber-800"]
+              else
+                ["Generating", "bg-slate-100 text-slate-700"]
+              end %>
+
+              <%= link_to admin_seed_recipe_path(generation), class: "block rounded-2xl border border-stone-200 p-4 transition hover:border-stone-300 hover:bg-stone-50" do %>
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <p class="text-sm font-semibold text-slate-900"><%= generation.prompt %></p>
+                    <p class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500"><%= generation.created_at.strftime("%b %-d, %Y") %></p>
+                  </div>
+                  <span class="rounded-full px-2.5 py-1 text-xs font-semibold <%= status_classes %>"><%= status_label %></span>
+                </div>
+                <% if generation.published_recipe.present? %>
+                  <p class="mt-3 text-sm text-slate-600">Published as <span class="font-semibold text-slate-900"><%= generation.published_recipe.title %></span>.</p>
+                <% elsif generation.seed_publish_error.present? %>
+                  <p class="mt-3 text-sm text-red-700"><%= generation.seed_publish_error %></p>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% else %>
+            <p class="rounded-2xl border border-dashed border-stone-300 p-4 text-sm text-slate-500">No seed runs yet.</p>
+          <% end %>
+        </div>
+      </section>
+    </aside>
+  </div>
+</div>

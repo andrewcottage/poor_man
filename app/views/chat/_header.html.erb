@@ -5,7 +5,9 @@
     </svg>
   </div>
   <div>
-    <h1 class="text-lg font-semibold text-slate-900">Recipe Chat</h1>
-    <p class="text-xs text-slate-500">Ask about recipes, get suggestions, explore your favorites</p>
+    <h1 class="text-lg font-semibold text-slate-900"><%= Current.user&.admin? ? "Seed Copilot" : "Recipe Chat" %></h1>
+    <p class="text-xs text-slate-500">
+      <%= Current.user&.admin? ? "Preview and publish new recipes, categories, and photorealistic imagery from chat." : "Ask about recipes, get suggestions, explore your favorites" %>
+    </p>
   </div>
 </div>

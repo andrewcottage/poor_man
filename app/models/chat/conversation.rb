@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: chat_conversations
+#
+#  id         :integer          not null, primary key
+#  title      :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  user_id    :integer          not null
+#
+# Indexes
+#
+#  index_chat_conversations_on_user_id  (user_id)
+#
+# Foreign Keys
+#
+#  user_id  (user_id => users.id)
+#
 class Chat::Conversation < ApplicationRecord
   self.table_name = "chat_conversations"
 

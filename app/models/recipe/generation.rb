@@ -3,28 +3,37 @@
 # Table name: recipe_generations
 #
 #  id                  :integer          not null, primary key
+#  auto_publish_recipe :boolean          default(FALSE), not null
 #  avoid_ingredients   :text
 #  customization_notes :text
 #  data                :text
 #  dietary_preference  :string
 #  ingredient_swaps    :text
 #  prompt              :text
+#  published_at        :datetime
+#  seed_publish_error  :text
+#  seed_tool           :boolean          default(FALSE), not null
 #  servings            :integer          default(4), not null
 #  skill_level         :string
 #  target_difficulty   :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  published_recipe_id :integer
 #  user_id             :integer          not null
 #
 # Indexes
 #
-#  index_recipe_generations_on_user_id  (user_id)
+#  index_recipe_generations_on_published_recipe_id  (published_recipe_id)
+#  index_recipe_generations_on_user_id              (user_id)
 #
 # Foreign Keys
 #
-#  user_id  (user_id => users.id)
+#  published_recipe_id  (published_recipe_id => recipes.id)
+#  user_id              (user_id => users.id)
 #
 class Recipe::Generation < ApplicationRecord
+  attr_accessor :skip_background_generation
+
 
   serialize :data, coder: JSON, default: {}
 
@@ -35,9 +44,12 @@ class Recipe::Generation < ApplicationRecord
   validates :servings, numericality: { only_integer: true, greater_than: 0 }
   validates :target_difficulty, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 5 }, allow_blank: true
 
-  after_create_commit :generate_later
+  after_create_commit :generate_later, unless: :skip_background_generation
 
   belongs_to :user
+  belongs_to :published_recipe, class_name: "Recipe", optional: true
+
+  scope :seed_runs, -> { where(seed_tool: true) }
 
   def complete?
     data.present? && image.attached? && images.attached?
@@ -89,22 +101,17 @@ class Recipe::Generation < ApplicationRecord
   end
 
   def generate_image
-    client = OpenAI::Client.new
+    generated_image = OpenAI::ImageGenerator.new(
+      prompt: formatted_image_prompt,
+      size: "1536x1024",
+      basename: "ai_generated_#{id}"
+    ).call
 
-    response = client.images.generate(
-      parameters: {
-        prompt: formatted_image_prompt,
-        model: "dall-e-3",
-        size: "1024x1024"
-      }
+    image.attach(
+      io: generated_image.io,
+      filename: generated_image.filename,
+      content_type: generated_image.content_type
     )
-
-    url = response.dig("data", 0, "url")
-
-    # Download the image and attach it properly to Active Storage
-    downloaded_file = Down.download(url)
-
-    image.attach(io: downloaded_file, filename: "ai_generated_#{id}.jpg", content_type: "image/jpeg")
   end
 
   def generate_images_later
@@ -113,22 +120,17 @@ class Recipe::Generation < ApplicationRecord
 
   def generate_images
     formatted_images_prompts.each_with_index do |prompt, index|
-      client = OpenAI::Client.new
+      generated_image = OpenAI::ImageGenerator.new(
+        prompt: prompt,
+        size: "1536x1024",
+        basename: "ai_generated_#{id}_#{index}"
+      ).call
 
-      response = client.images.generate(
-        parameters: {
-          prompt: prompt,
-          model: "dall-e-3",
-          size: "1024x1024"
-        }
+      images.attach(
+        io: generated_image.io,
+        filename: generated_image.filename,
+        content_type: generated_image.content_type
       )
-
-      url = response.dig("data", 0, "url")
-
-      # Download the image and attach it properly to Active Storage
-      downloaded_file = Down.download(url)
-
-      images.attach(io: downloaded_file, filename: "ai_generated_#{id}_#{index}.jpg", content_type: "image/jpeg")
     end
   end
 
@@ -147,21 +149,34 @@ class Recipe::Generation < ApplicationRecord
     generate_images_later
   end
 
+  def auto_publish_seed_recipe?
+    seed_tool? && auto_publish_recipe?
+  end
+
+  def publish_seed_recipe_if_ready_later
+    return unless auto_publish_seed_recipe?
+    return unless complete?
+    return if published_recipe.present?
+
+    Recipe::Generation::PublishJob.perform_later(self)
+  end
+
   private
 
   def formatted_images_prompts
     [
-      "A beautiful plated #{prompt} served on an elegant plate.",
-      "A close-up of the #{prompt} with the ingredients visible.",
-      "A person eating the #{prompt}.",
+      "Photorealistic editorial food photography of #{prompt}, plated as a finished hero dish in natural light, shallow depth of field, realistic texture, no illustration, no text.",
+      "Tight photorealistic close-up of #{prompt} highlighting texture, steam, sauce, and ingredients with premium magazine-style food photography lighting, no illustration, no text.",
+      "Overhead photorealistic table scene featuring #{prompt} served family-style with realistic props and natural shadows, premium cookbook styling, no illustration, no text."
     ]
   end
 
   def formatted_image_prompt
     """
-    A beautifully plated #{prompt} served on an elegant plate. 
-    The dish should look appetizing and professional, with good lighting and food photography style. 
-    Focus on the food presentation, vibrant colors, and make it look delicious and restaurant-quality.
+    Photorealistic editorial food photography of #{prompt}.
+    The dish should look genuinely cooked and camera-ready, with realistic ingredients, natural light,
+    shallow depth of field, subtle steam when appropriate, premium magazine styling, and no illustration,
+    CGI look, text, watermark, or surreal plating.
     """
   end
 

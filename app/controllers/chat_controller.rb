@@ -1,6 +1,6 @@
 class ChatController < ApplicationController
   def show
-    if Current.user&.pro?
+    if chat_enabled_for?(Current.user)
       @conversation = Current.user.chat_conversations.first_or_create!
       @messages = @conversation.messages.visible.chronological
     end
@@ -13,7 +13,7 @@ class ChatController < ApplicationController
       return
     end
 
-    unless Current.user.pro?
+    unless chat_enabled_for?(Current.user)
       redirect_to pricing_path, alert: "Upgrade to #{Billing::PlanCatalog::PRO_DISPLAY_NAME} to use Recipe Chat.", status: :see_other
       return
     end
@@ -26,5 +26,11 @@ class ChatController < ApplicationController
     respond_to do |format|
       format.turbo_stream
     end
+  end
+
+  private
+
+  def chat_enabled_for?(user)
+    user&.pro? || user&.admin?
   end
 end

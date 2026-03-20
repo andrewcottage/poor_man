@@ -1,0 +1,63 @@
+- title: Breakfast
+  slug: breakfast
+  description: Morning recipes that are practical on weekdays and still feel worth sitting down for.
+  image_path: db/seeds/images/categories/breakfast.jpeg
+  image_prompt: >-
+    A bright, editorial food photograph of a relaxed breakfast spread with fluffy pancakes,
+    warm maple syrup, soft morning light, linen napkins, and a modern ceramic plate.
+
+- title: Lunch
+  slug: lunch
+  description: Midday meals that are quick to assemble, satisfying, and easy to pack or reheat.
+  image_path: db/seeds/images/categories/lunch.jpeg
+  image_prompt: >-
+    A high-end lunch scene with a hearty sandwich and crisp salad on a café table, natural window light,
+    vivid ingredients, and a realistic editorial food photography style.
+
+- title: Dinner
+  slug: dinner
+  description: Weeknight dinners with enough payoff to keep you cooking at home.
+  image_path: db/seeds/images/categories/dinner.jpeg
+  image_prompt: >-
+    A restaurant-quality dinner plate styled for an editorial shoot, rich evening light,
+    layered textures, steam rising from the food, and a polished but approachable look.
+
+- title: Pasta
+  slug: pasta
+  description: Saucy, twirlable, comfort-first pasta recipes for weeknights and slow weekends.
+  image_path: db/seeds/images/categories/pasta.jpeg
+  image_prompt: >-
+    A close-up editorial photograph of glossy pasta twirled in a shallow bowl, vibrant sauce,
+    scattered herbs, grated cheese, and dramatic but natural lighting.
+
+- title: Soup
+  slug: soup
+  description: Simmered soups and stews built for cozy dinners, leftovers, and make-ahead cooking.
+  image_path: db/seeds/images/categories/soup.jpeg
+  image_prompt: >-
+    A cozy overhead food photograph of a Dutch oven filled with hearty soup,
+    rustic serving spoon, steam, warm tones, and realistic magazine-style lighting.
+
+- title: Salad
+  slug: salad
+  description: Fresh salads with enough texture and contrast to feel like a real meal.
+  image_path: db/seeds/images/categories/salad.jpeg
+  image_prompt: >-
+    A vibrant salad photographed in crisp natural daylight with juicy produce,
+    glossy dressing, herbs, and a clean modern tabletop styling.
+
+- title: Dessert
+  slug: dessert
+  description: Sweet bakes and finishes that feel celebratory without requiring bakery-level effort.
+  image_path: db/seeds/images/categories/dessert.jpeg
+  image_prompt: >-
+    A luxe dessert photograph with warm bakery lighting, sugar sparkle,
+    soft shadows, and a close-up focus on texture and finish.
+
+- title: Snack
+  slug: snack
+  description: Shareable bites, sides, and snackable recipes made for parties, movie nights, and cravings.
+  image_path: db/seeds/images/categories/snack.jpeg
+  image_prompt: >-
+    A craveable snack board photographed from a slight overhead angle,
+    crispy textures, dipping sauces, casual entertaining mood, and highly realistic food styling.

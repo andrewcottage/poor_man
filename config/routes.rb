@@ -43,6 +43,12 @@ Rails.application.routes.draw do
         patch :reject
       end
     end
+
+    resources :seed_recipes, only: %i[index show create] do
+      member do
+        post :publish
+      end
+    end
   end
 
   resources :profiles, only: %i[show edit update]

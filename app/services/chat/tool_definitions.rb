@@ -1,5 +1,17 @@
 class Chat::ToolDefinitions
-  def self.all
+  def initialize(user:)
+    @user = user
+  end
+
+  def all
+    base_tools + admin_seed_tools
+  end
+
+  private
+
+  attr_reader :user
+
+  def base_tools
     [
       {
         type: "function",
@@ -78,6 +90,71 @@ class Chat::ToolDefinitions
         function: {
           name: "get_user_ratings",
           description: "Get recipes the current user has rated, with their scores. Useful for understanding preferences.",
+          parameters: { type: "object", properties: {} }
+        }
+      }
+    ]
+  end
+
+  def admin_seed_tools
+    return [] unless user.admin?
+
+    [
+      {
+        type: "function",
+        function: {
+          name: "preview_seed_recipe",
+          description: "Generate a photorealistic admin-only recipe preview with hero and gallery images. Use this before publishing unless the admin explicitly asks to publish immediately.",
+          parameters: {
+            type: "object",
+            properties: {
+              prompt: { type: "string", description: "What recipe to create" },
+              dietary_preference: { type: "string", description: "Optional dietary preference like vegan or gluten-free" },
+              skill_level: { type: "string", description: "Optional skill level like beginner or advanced" },
+              avoid_ingredients: { type: "string", description: "Comma-separated ingredients to avoid" },
+              ingredient_swaps: { type: "string", description: "Optional requested swaps" },
+              customization_notes: { type: "string", description: "Extra editorial notes for the model" },
+              servings: { type: "integer", description: "Desired servings" },
+              target_difficulty: { type: "integer", description: "Target difficulty 1-5" },
+              publish_immediately: { type: "boolean", description: "Set true only when the admin clearly wants the content published right away" }
+            },
+            required: [ "prompt" ]
+          }
+        }
+      },
+      {
+        type: "function",
+        function: {
+          name: "get_seed_preview",
+          description: "Retrieve an existing admin seed preview or published run by generation id.",
+          parameters: {
+            type: "object",
+            properties: {
+              generation_id: { type: "integer", description: "Recipe generation id for the seed run" }
+            },
+            required: [ "generation_id" ]
+          }
+        }
+      },
+      {
+        type: "function",
+        function: {
+          name: "publish_seed_recipe",
+          description: "Publish an existing admin seed preview into a live recipe. This will create the category if needed.",
+          parameters: {
+            type: "object",
+            properties: {
+              generation_id: { type: "integer", description: "Recipe generation id for the seed run" }
+            },
+            required: [ "generation_id" ]
+          }
+        }
+      },
+      {
+        type: "function",
+        function: {
+          name: "list_seed_runs",
+          description: "List recent admin seed runs with their publish state and preview links.",
           parameters: { type: "object", properties: {} }
         }
       }

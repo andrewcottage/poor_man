@@ -3,26 +3,33 @@
 # Table name: recipe_generations
 #
 #  id                  :integer          not null, primary key
+#  auto_publish_recipe :boolean          default(FALSE), not null
 #  avoid_ingredients   :text
 #  customization_notes :text
 #  data                :text
 #  dietary_preference  :string
 #  ingredient_swaps    :text
 #  prompt              :text
+#  published_at        :datetime
+#  seed_publish_error  :text
+#  seed_tool           :boolean          default(FALSE), not null
 #  servings            :integer          default(4), not null
 #  skill_level         :string
 #  target_difficulty   :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+#  published_recipe_id :integer
 #  user_id             :integer          not null
 #
 # Indexes
 #
-#  index_recipe_generations_on_user_id  (user_id)
+#  index_recipe_generations_on_published_recipe_id  (published_recipe_id)
+#  index_recipe_generations_on_user_id              (user_id)
 #
 # Foreign Keys
 #
-#  user_id  (user_id => users.id)
+#  published_recipe_id  (published_recipe_id => recipes.id)
+#  user_id              (user_id => users.id)
 #
 require "test_helper"
 

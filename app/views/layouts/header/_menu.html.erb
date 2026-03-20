@@ -68,6 +68,7 @@
             <%= link_to "My Recipes", profiles_recipes_path, class: stovaro_account_menu_link_classes, role: "menuitem", tabindex: "-1", id: "menu-item-2" %>
             <%= link_to "Collections", profiles_collections_path, class: stovaro_account_menu_link_classes, role: "menuitem", tabindex: "-1" %>
             <% if Current.user.admin? %>
+              <%= link_to "Seed Copilot", chat_path, class: stovaro_account_menu_link_classes, role: "menuitem", tabindex: "-1" %>
               <%= link_to "Moderation", admin_recipe_submissions_path, class: stovaro_account_menu_link_classes, role: "menuitem", tabindex: "-1" %>
             <% end %>
           </div>

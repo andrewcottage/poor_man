@@ -1,0 +1,648 @@
+- title: Blueberry Buttermilk Pancakes
+  slug: blueberry-buttermilk-pancakes
+  category_slug: breakfast
+  blurb: >-
+    Fluffy buttermilk pancakes packed with blueberries and lemon zest, made for slow mornings
+    and stacked high with maple syrup.
+  prep_time: 25
+  difficulty: 1
+  servings: 4
+  cost: 11.5
+  tags:
+    - breakfast
+    - pancakes
+    - blueberries
+    - weekend
+    - vegetarian
+  image_path: db/seeds/images/recipes/blueberry-buttermilk-pancakes.jpeg
+  image_prompt: >-
+    A super high-quality editorial food photo of a tall stack of blueberry buttermilk pancakes
+    with melting butter, glossy maple syrup, fresh blueberries, lemon zest, and soft morning light.
+  ingredients:
+    - quantity: "2"
+      unit: cups
+      name: all-purpose flour
+    - quantity: "2"
+      unit: tablespoons
+      name: granulated sugar
+    - quantity: "2"
+      unit: teaspoons
+      name: baking powder
+    - quantity: "1/2"
+      unit: teaspoon
+      name: baking soda
+    - quantity: "1/2"
+      unit: teaspoon
+      name: kosher salt
+    - quantity: "2"
+      unit: cups
+      name: buttermilk
+    - quantity: "2"
+      unit: ""
+      name: large eggs
+    - quantity: "4"
+      unit: tablespoons
+      name: unsalted butter
+      notes: melted, plus more for the pan
+    - quantity: "1"
+      unit: teaspoon
+      name: vanilla extract
+    - quantity: "1"
+      unit: tablespoon
+      name: lemon zest
+    - quantity: "1"
+      unit: cup
+      name: blueberries
+    - quantity: "1/4"
+      unit: cup
+      name: maple syrup
+      notes: for serving
+  instructions:
+    - In a large bowl, whisk together the flour, sugar, baking powder, baking soda, and salt so the dry mix is evenly combined.
+    - In a second bowl, whisk the buttermilk, eggs, melted butter, vanilla, and lemon zest until smooth.
+    - Pour the wet mixture into the dry ingredients and stir just until no dry streaks remain, then fold in the blueberries without overmixing.
+    - Heat a buttered skillet or griddle over medium heat and cook the batter in 1/3-cup portions until bubbles form, then flip and cook until the pancakes are deeply golden on both sides.
+    - Keep the finished pancakes warm while you cook the rest, then stack and serve with maple syrup and extra blueberries.
+
+- title: Herbed Cheddar Waffles
+  slug: herbed-cheddar-waffles
+  category_slug: breakfast
+  blurb: >-
+    Crisp, savory waffles loaded with sharp cheddar and fresh herbs, balanced with a dollop
+    of sour cream and a shower of chives.
+  prep_time: 30
+  difficulty: 2
+  servings: 4
+  cost: 13.75
+  tags:
+    - breakfast
+    - waffles
+    - savory
+    - cheddar
+    - vegetarian
+  image_path: db/seeds/images/recipes/herbed-cheddar-waffles.jpeg
+  image_prompt: >-
+    A high-end savory waffle photograph with crisp cheddar waffles, scattered chives,
+    a spoonful of sour cream, dramatic natural light, and sharp detail on the golden texture.
+  ingredients:
+    - quantity: "1 3/4"
+      unit: cups
+      name: all-purpose flour
+    - quantity: "1/4"
+      unit: cup
+      name: cornmeal
+    - quantity: "1"
+      unit: tablespoon
+      name: baking powder
+    - quantity: "1/2"
+      unit: teaspoon
+      name: kosher salt
+    - quantity: "1/2"
+      unit: teaspoon
+      name: black pepper
+    - quantity: "2"
+      unit: cups
+      name: whole milk
+    - quantity: "2"
+      unit: ""
+      name: large eggs
+    - quantity: "5"
+      unit: tablespoons
+      name: unsalted butter
+      notes: melted
+    - quantity: "1 1/4"
+      unit: cups
+      name: sharp cheddar
+      notes: shredded
+    - quantity: "3"
+      unit: tablespoons
+      name: chives
+      notes: finely sliced
+    - quantity: "2"
+      unit: tablespoons
+      name: parsley
+      notes: chopped
+    - quantity: "1/2"
+      unit: cup
+      name: sour cream
+      notes: for serving
+  instructions:
+    - Preheat your waffle iron and whisk together the flour, cornmeal, baking powder, salt, and pepper in a large mixing bowl.
+    - In a separate bowl, whisk the milk, eggs, and melted butter until fully blended.
+    - Stir the wet mixture into the dry ingredients, then fold in the cheddar, chives, and parsley until evenly distributed.
+    - Lightly grease the waffle iron and cook the batter in batches until each waffle is deeply golden, crisp at the edges, and cooked through in the center.
+    - Serve the waffles hot with sour cream and extra herbs spooned over the top.
+
+- title: Watermelon Feta Salad
+  slug: watermelon-feta-salad
+  category_slug: salad
+  blurb: >-
+    A cold, juicy salad with watermelon, cucumber, feta, and mint finished with a lime-honey dressing
+    that tastes like peak summer.
+  prep_time: 15
+  difficulty: 1
+  servings: 4
+  cost: 10.25
+  tags:
+    - salad
+    - summer
+    - no-cook
+    - vegetarian
+    - gluten-free
+    - fresh
+  image_path: db/seeds/images/recipes/watermelon-feta-salad.jpeg
+  image_prompt: >-
+    A premium summer salad photograph with ruby watermelon cubes, cucumber, feta, mint,
+    glossy lime dressing, bright daylight, and clean magazine styling.
+  ingredients:
+    - quantity: "6"
+      unit: cups
+      name: watermelon
+      notes: cut into cubes
+    - quantity: "1"
+      unit: ""
+      name: English cucumber
+      notes: sliced into half moons
+    - quantity: "4"
+      unit: ounces
+      name: feta
+      notes: crumbled
+    - quantity: "1/3"
+      unit: cup
+      name: mint leaves
+    - quantity: "2"
+      unit: tablespoons
+      name: olive oil
+    - quantity: "1"
+      unit: tablespoon
+      name: lime juice
+    - quantity: "1"
+      unit: teaspoon
+      name: honey
+    - quantity: "1/4"
+      unit: teaspoon
+      name: kosher salt
+    - quantity: "1/4"
+      unit: teaspoon
+      name: black pepper
+  instructions:
+    - Arrange the watermelon, cucumber, feta, and mint in a large shallow serving bowl.
+    - In a small bowl, whisk the olive oil, lime juice, honey, salt, and pepper until the dressing looks glossy and combined.
+    - Drizzle the dressing over the salad just before serving so the watermelon stays crisp.
+    - Toss gently once or twice to coat the ingredients without breaking up the feta too much.
+    - Finish with extra mint and plenty of black pepper before taking it to the table.
+
+- title: Smoky Skillet Sloppy Joes
+  slug: smoky-skillet-sloppy-joes
+  category_slug: lunch
+  blurb: >-
+    A weeknight sloppy joe with real depth from tomato paste, smoked paprika, and Worcestershire,
+    piled onto toasted buns.
+  prep_time: 30
+  difficulty: 2
+  servings: 4
+  cost: 16.75
+  tags:
+    - lunch
+    - sandwich
+    - skillet
+    - family-friendly
+    - beef
+  image_path: db/seeds/images/recipes/smoky-skillet-sloppy-joes.jpeg
+  image_prompt: >-
+    A craveable sloppy joe sandwich photographed in a modern diner style with glossy beef filling,
+    toasted bun, pickles on the side, and rich natural shadows.
+  ingredients:
+    - quantity: "1"
+      unit: tablespoon
+      name: olive oil
+    - quantity: "1"
+      unit: ""
+      name: yellow onion
+      notes: finely diced
+    - quantity: "3"
+      unit: cloves
+      name: garlic
+      notes: minced
+    - quantity: "1 1/4"
+      unit: pounds
+      name: ground beef
+    - quantity: "2"
+      unit: tablespoons
+      name: tomato paste
+    - quantity: "1"
+      unit: teaspoon
+      name: smoked paprika
+    - quantity: "1"
+      unit: teaspoon
+      name: Dijon mustard
+    - quantity: "1"
+      unit: tablespoon
+      name: Worcestershire sauce
+    - quantity: "3/4"
+      unit: cup
+      name: tomato sauce
+    - quantity: "1"
+      unit: tablespoon
+      name: brown sugar
+    - quantity: "4"
+      unit: ""
+      name: brioche buns
+      notes: toasted
+    - quantity: "1/2"
+      unit: cup
+      name: pickle chips
+      notes: for serving
+  instructions:
+    - Heat the olive oil in a large skillet over medium heat, then cook the onion until softened and lightly golden before stirring in the garlic.
+    - Add the ground beef and cook until browned, breaking it into small pieces as it cooks.
+    - Stir in the tomato paste, smoked paprika, mustard, and Worcestershire, then cook for a minute so the seasonings bloom in the pan.
+    - Add the tomato sauce and brown sugar, reduce the heat, and simmer until the mixture is thick, glossy, and spoonable.
+    - Pile the filling onto toasted buns and serve with pickle chips for crunch.
+
+- title: Crispy Corn Dog Bites
+  slug: crispy-corn-dog-bites
+  category_slug: snack
+  blurb: >-
+    Golden corn dog bites with a tender cornmeal batter and a crisp shell, served hot with a fast honey-mustard dip.
+  prep_time: 35
+  difficulty: 2
+  servings: 6
+  cost: 12.5
+  tags:
+    - snack
+    - party food
+    - corn dogs
+    - fried
+    - shareable
+  image_path: db/seeds/images/recipes/crispy-corn-dog-bites.jpeg
+  image_prompt: >-
+    A super crisp basket of mini corn dog bites with golden batter, visible crunch,
+    dipping sauces, parchment paper, and realistic casual-party food styling.
+  ingredients:
+    - quantity: "8"
+      unit: ""
+      name: hot dogs
+      notes: cut into thirds
+    - quantity: "3/4"
+      unit: cup
+      name: all-purpose flour
+    - quantity: "3/4"
+      unit: cup
+      name: yellow cornmeal
+    - quantity: "2"
+      unit: tablespoons
+      name: granulated sugar
+    - quantity: "2"
+      unit: teaspoons
+      name: baking powder
+    - quantity: "1/2"
+      unit: teaspoon
+      name: kosher salt
+    - quantity: "3/4"
+      unit: cup
+      name: buttermilk
+    - quantity: "1"
+      unit: ""
+      name: large egg
+    - quantity: "4"
+      unit: cups
+      name: neutral oil
+      notes: for frying
+    - quantity: "2"
+      unit: tablespoons
+      name: Dijon mustard
+    - quantity: "2"
+      unit: tablespoons
+      name: honey
+      notes: for dipping
+  instructions:
+    - Pat the hot dog pieces dry and set them aside while you make the batter.
+    - Whisk together the flour, cornmeal, sugar, baking powder, and salt, then stir in the buttermilk and egg until you have a thick, smooth batter.
+    - Heat the oil in a heavy pot to 350 degrees Fahrenheit and line a tray with paper towels.
+    - Drop the hot dog pieces into the batter, coat them well, and fry in small batches until the bites are deeply golden and crisp.
+    - Whisk the mustard and honey together for dipping, then serve the corn dog bites while they are still hot.
+
+- title: Oven Garlic Fries
+  slug: oven-garlic-fries
+  category_slug: snack
+  blurb: >-
+    Crisp oven fries seasoned with garlic, paprika, and parsley, with a quick lemony dip that makes them feel snack-bar worthy.
+  prep_time: 40
+  difficulty: 1
+  servings: 4
+  cost: 8.25
+  tags:
+    - snack
+    - fries
+    - baked
+    - vegan
+    - vegetarian
+    - dairy-free
+    - gluten-free
+    - side
+  image_path: db/seeds/images/recipes/oven-garlic-fries.jpeg
+  image_prompt: >-
+    A high-detail food photograph of crisp golden fries piled high on a tray with flaky salt,
+    chopped parsley, garlic seasoning, and a creamy dipping sauce in soft side lighting.
+  ingredients:
+    - quantity: "2"
+      unit: pounds
+      name: russet potatoes
+      notes: cut into fries
+    - quantity: "2"
+      unit: tablespoons
+      name: olive oil
+    - quantity: "1"
+      unit: teaspoon
+      name: garlic powder
+    - quantity: "1"
+      unit: teaspoon
+      name: smoked paprika
+    - quantity: "1"
+      unit: teaspoon
+      name: kosher salt
+    - quantity: "2"
+      unit: tablespoons
+      name: parsley
+      notes: finely chopped
+    - quantity: "1/3"
+      unit: cup
+      name: vegan mayonnaise
+    - quantity: "1"
+      unit: teaspoon
+      name: lemon juice
+      notes: for the dip
+  instructions:
+    - Heat the oven to 450 degrees Fahrenheit and line a large sheet pan with parchment.
+    - Toss the cut potatoes with the olive oil, garlic powder, paprika, and salt until every piece is coated.
+    - Spread the fries in a single layer and roast, flipping halfway through, until they are browned and crisp on the edges.
+    - Stir the parsley into the hot fries so the herbs cling to the surface.
+    - Mix the mayonnaise and lemon juice together and serve it alongside the fries for dipping.
+
+- title: One-Pot Tomato Basil Spaghetti
+  slug: one-pot-tomato-basil-spaghetti
+  category_slug: pasta
+  blurb: >-
+    A pantry-friendly spaghetti that cooks in one pot with tomatoes, garlic, basil, and a little butter for silkiness.
+  prep_time: 25
+  difficulty: 1
+  servings: 4
+  cost: 13.5
+  tags:
+    - pasta
+    - one-pot
+    - vegetarian
+    - weeknight
+    - pantry
+  image_path: db/seeds/images/recipes/one-pot-tomato-basil-spaghetti.jpeg
+  image_prompt: >-
+    A polished editorial photo of one-pot tomato basil spaghetti twirled in a white bowl,
+    glossy sauce, basil leaves, parmesan, and warm natural light with visible steam.
+  ingredients:
+    - quantity: "2"
+      unit: tablespoons
+      name: olive oil
+    - quantity: "4"
+      unit: cloves
+      name: garlic
+      notes: thinly sliced
+    - quantity: "1/4"
+      unit: teaspoon
+      name: red pepper flakes
+    - quantity: "1"
+      unit: pint
+      name: cherry tomatoes
+      notes: halved
+    - quantity: "1"
+      unit: can
+      name: crushed tomatoes
+      notes: 14-ounce can
+    - quantity: "12"
+      unit: ounces
+      name: spaghetti
+    - quantity: "4"
+      unit: cups
+      name: vegetable broth
+    - quantity: "2"
+      unit: tablespoons
+      name: unsalted butter
+    - quantity: "1/2"
+      unit: cup
+      name: parmesan
+      notes: finely grated, plus more for serving
+    - quantity: "1/2"
+      unit: cup
+      name: basil leaves
+      notes: torn
+  instructions:
+    - Warm the olive oil in a wide pot, then cook the garlic and red pepper flakes for about a minute until fragrant.
+    - Add the cherry tomatoes and crushed tomatoes, stirring until the fresh tomatoes start to soften and release juice.
+    - Add the spaghetti and broth, press the noodles down into the liquid, and simmer while stirring often so the pasta cooks evenly and the sauce thickens around it.
+    - Once the pasta is tender, stir in the butter, parmesan, and most of the basil until the sauce turns glossy.
+    - Serve immediately with more basil and parmesan on top.
+
+- title: Slow-Simmered Beef Stew
+  slug: slow-simmered-beef-stew
+  category_slug: soup
+  blurb: >-
+    A cozy beef stew with carrots, potatoes, herbs, and a deeply savory broth that gets better as it sits.
+  prep_time: 120
+  difficulty: 3
+  servings: 6
+  cost: 24.0
+  tags:
+    - soup
+    - stew
+    - comfort food
+    - make-ahead
+    - beef
+    - dairy-free
+    - high-protein
+  image_path: db/seeds/images/recipes/slow-simmered-beef-stew.jpeg
+  image_prompt: >-
+    A deeply comforting bowl of beef stew with large chunks of beef, carrots, and potatoes in a rich broth,
+    photographed with moody natural light and rustic cookware.
+  ingredients:
+    - quantity: "2"
+      unit: pounds
+      name: beef chuck
+      notes: cut into 1 1/2-inch cubes
+    - quantity: "2"
+      unit: tablespoons
+      name: all-purpose flour
+    - quantity: "1 1/2"
+      unit: teaspoons
+      name: kosher salt
+    - quantity: "1"
+      unit: teaspoon
+      name: black pepper
+    - quantity: "2"
+      unit: tablespoons
+      name: olive oil
+    - quantity: "1"
+      unit: ""
+      name: yellow onion
+      notes: diced
+    - quantity: "3"
+      unit: ""
+      name: carrots
+      notes: cut into chunks
+    - quantity: "3"
+      unit: cloves
+      name: garlic
+      notes: minced
+    - quantity: "2"
+      unit: tablespoons
+      name: tomato paste
+    - quantity: "1/2"
+      unit: cup
+      name: red wine
+    - quantity: "4"
+      unit: cups
+      name: beef broth
+    - quantity: "1"
+      unit: pound
+      name: Yukon Gold potatoes
+      notes: cut into chunks
+    - quantity: "4"
+      unit: sprigs
+      name: thyme
+    - quantity: "1"
+      unit: ""
+      name: bay leaf
+  instructions:
+    - Toss the beef with the flour, salt, and pepper until lightly coated.
+    - Brown the beef in batches in hot olive oil, then transfer it to a plate so you can build flavor without overcrowding the pot.
+    - Cook the onion and carrots until they begin to soften, then stir in the garlic and tomato paste.
+    - Deglaze with the red wine, scraping up the browned bits, then add the beef broth, potatoes, thyme, bay leaf, and browned beef.
+    - Cover and simmer gently until the beef is very tender and the broth is rich, then remove the herb stems before serving.
+
+- title: Caramelized Onion Burger Bowls
+  slug: caramelized-onion-burger-bowls
+  category_slug: dinner
+  blurb: >-
+    Everything you want from a cheeseburger, reworked into a weeknight bowl with rice, pickles, sauce, and sweet caramelized onions.
+  prep_time: 35
+  difficulty: 2
+  servings: 4
+  cost: 18.5
+  tags:
+    - dinner
+    - burger
+    - bowls
+    - beef
+    - high-protein
+  image_path: db/seeds/images/recipes/caramelized-onion-burger-bowls.jpeg
+  image_prompt: >-
+    A modern burger bowl shot with seasoned beef, caramelized onions, rice, pickles, cheddar,
+    and burger sauce arranged in a stylish shallow bowl with studio-quality natural lighting.
+  ingredients:
+    - quantity: "1"
+      unit: cup
+      name: long-grain rice
+      notes: uncooked
+    - quantity: "2"
+      unit: tablespoons
+      name: olive oil
+    - quantity: "2"
+      unit: ""
+      name: yellow onions
+      notes: thinly sliced
+    - quantity: "1 1/4"
+      unit: pounds
+      name: ground beef
+    - quantity: "1"
+      unit: teaspoon
+      name: garlic powder
+    - quantity: "1"
+      unit: tablespoon
+      name: Worcestershire sauce
+    - quantity: "1"
+      unit: cup
+      name: cheddar
+      notes: shredded
+    - quantity: "1"
+      unit: cup
+      name: dill pickles
+      notes: chopped
+    - quantity: "2"
+      unit: cups
+      name: romaine lettuce
+      notes: shredded
+    - quantity: "1/3"
+      unit: cup
+      name: mayonnaise
+    - quantity: "2"
+      unit: tablespoons
+      name: ketchup
+    - quantity: "1"
+      unit: tablespoon
+      name: yellow mustard
+  instructions:
+    - Cook the rice according to the package directions and keep it warm.
+    - Heat one tablespoon of olive oil in a skillet and cook the onions slowly until deeply golden and sweet.
+    - In a second skillet, cook the ground beef with the remaining olive oil, garlic powder, and Worcestershire until browned and savory.
+    - Stir the mayonnaise, ketchup, and mustard together to make a quick burger sauce.
+    - Build the bowls with rice, lettuce, beef, caramelized onions, cheddar, pickles, and a generous spoonful of the sauce.
+
+- title: Cinnamon Sugar Yeast Doughnuts
+  slug: cinnamon-sugar-yeast-doughnuts
+  category_slug: dessert
+  blurb: >-
+    Pillowy homemade doughnuts finished in cinnamon sugar, with a soft interior and a bakery-style edge.
+  prep_time: 150
+  difficulty: 3
+  servings: 8
+  cost: 9.75
+  tags:
+    - dessert
+    - doughnuts
+    - baking
+    - weekend
+    - sweet
+  image_path: db/seeds/images/recipes/cinnamon-sugar-yeast-doughnuts.jpeg
+  image_prompt: >-
+    An ultra-detailed bakery-style photograph of fresh cinnamon sugar doughnuts stacked on parchment,
+    with visible sugar crystals, warm tones, and premium editorial lighting.
+  ingredients:
+    - quantity: "3/4"
+      unit: cup
+      name: whole milk
+      notes: warm
+    - quantity: "2 1/4"
+      unit: teaspoons
+      name: active dry yeast
+    - quantity: "1/4"
+      unit: cup
+      name: granulated sugar
+    - quantity: "2"
+      unit: ""
+      name: large eggs
+    - quantity: "4"
+      unit: tablespoons
+      name: unsalted butter
+      notes: melted
+    - quantity: "3 1/4"
+      unit: cups
+      name: all-purpose flour
+    - quantity: "1/2"
+      unit: teaspoon
+      name: kosher salt
+    - quantity: "4"
+      unit: cups
+      name: neutral oil
+      notes: for frying
+    - quantity: "1/2"
+      unit: cup
+      name: granulated sugar
+      notes: for coating
+    - quantity: "2"
+      unit: teaspoons
+      name: ground cinnamon
+  instructions:
+    - Combine the warm milk, yeast, and sugar in a large bowl and let the mixture stand until foamy.
+    - Whisk in the eggs and melted butter, then stir in the flour and salt until a soft dough forms.
+    - Knead until smooth, let the dough rise until doubled, then roll it out and cut rounds with holes in the center.
+    - Let the shaped doughnuts puff again while the oil heats to 350 degrees Fahrenheit, then fry until golden on both sides.
+    - Toss the warm doughnuts in the cinnamon sugar mixture and serve the same day.

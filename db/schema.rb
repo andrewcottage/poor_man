@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_19_010733) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_20_101500) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -215,6 +215,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_010733) do
   end
 
   create_table "recipe_generations", force: :cascade do |t|
+    t.boolean "auto_publish_recipe", default: false, null: false
     t.text "avoid_ingredients"
     t.datetime "created_at", null: false
     t.text "customization_notes"
@@ -222,11 +223,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_010733) do
     t.string "dietary_preference"
     t.text "ingredient_swaps"
     t.text "prompt"
+    t.datetime "published_at"
+    t.integer "published_recipe_id"
+    t.text "seed_publish_error"
+    t.boolean "seed_tool", default: false, null: false
     t.integer "servings", default: 4, null: false
     t.string "skill_level"
     t.integer "target_difficulty"
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.index ["published_recipe_id"], name: "index_recipe_generations_on_published_recipe_id"
     t.index ["user_id"], name: "index_recipe_generations_on_user_id"
   end
 
@@ -382,6 +388,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_010733) do
   add_foreign_key "pro_waitlist_entries", "users"
   add_foreign_key "ratings", "recipes"
   add_foreign_key "ratings", "users"
+  add_foreign_key "recipe_generations", "recipes", column: "published_recipe_id"
   add_foreign_key "recipe_generations", "users"
   add_foreign_key "recipe_ingredients", "recipes"
   add_foreign_key "recipes", "categories"

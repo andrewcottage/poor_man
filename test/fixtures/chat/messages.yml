@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: chat_messages
+#
+#  id              :integer          not null, primary key
+#  content         :text
+#  role            :string           not null
+#  tool_calls      :text
+#  tool_name       :string
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  conversation_id :integer          not null
+#  tool_call_id    :string
+#
+# Indexes
+#
+#  index_chat_messages_on_conversation_id  (conversation_id)
+#
+# Foreign Keys
+#
+#  conversation_id  (conversation_id => chat_conversations.id)
+#
 user_message:
   conversation: pro_conversation
   role: user
