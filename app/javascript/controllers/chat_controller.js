@@ -8,6 +8,10 @@ export default class extends Controller {
     this.scrollToBottom()
   }
 
+  disconnect() {
+    document.body.classList.remove("overflow-hidden")
+  }
+
   toggleSidebar() {
     if (!this.hasSidebarTarget) return
 
@@ -44,6 +48,7 @@ export default class extends Controller {
       if (this.hasAttachmentPreviewTarget) {
         this.attachmentPreviewTarget.innerHTML = ""
         this.attachmentPreviewTarget.classList.add("hidden")
+        this.attachmentPreviewTarget.classList.remove("flex")
       }
 
       if (this.hasEmptyStateTarget) {
@@ -86,10 +91,12 @@ export default class extends Controller {
 
     if (files.length === 0) {
       this.attachmentPreviewTarget.classList.add("hidden")
+      this.attachmentPreviewTarget.classList.remove("flex")
       return
     }
 
     this.attachmentPreviewTarget.classList.remove("hidden")
+    this.attachmentPreviewTarget.classList.add("flex")
 
     files.slice(0, 3).forEach((file) => {
       const wrapper = document.createElement("div")
