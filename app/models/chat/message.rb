@@ -61,7 +61,7 @@ class Chat::Message < ApplicationRecord
   private
 
   def content_or_images_present
-    return if content.present? || images.attached?
+    return if content.present? || images.attached? || tool_calls.present? || tool_call_id.present?
 
     errors.add(:base, "Message can't be blank")
   end
