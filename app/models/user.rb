@@ -98,7 +98,7 @@ class User < ApplicationRecord
   end
 
   def pro?
-    paid_plan? && (plan_expires_at.blank? || plan_expires_at.future?)
+    admin? || (paid_plan? && (plan_expires_at.blank? || plan_expires_at.future?))
   end
 
   def plan_label

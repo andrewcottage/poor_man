@@ -1,7 +1,6 @@
 <% recipes_active = controller_path == "recipes" || controller_path == "recipes/ratings" || controller_path == "recipes/favorites" %>
 <% categories_active = controller_path == "categories" %>
 <% pricing_active = controller_path == "pricing" || controller_path == "pro_waitlist_entries" || controller_path.start_with?("billing/") %>
-<% generator_active = controller_path == "recipes/generations" %>
 <% about_active = controller_path == "pages" && action_name == "about" %>
 
 <div class="hidden" role="dialog" aria-modal="true" data-mobile-menu-target="menu">
@@ -31,9 +30,6 @@
           <%= link_to "Recipes", recipes_path, class: stovaro_mobile_nav_link_classes(recipes_active) %>
           <%= link_to "Categories", categories_path, class: stovaro_mobile_nav_link_classes(categories_active) %>
           <%= link_to "Pricing", pricing_path, class: stovaro_mobile_nav_link_classes(pricing_active) %>
-          <% if Current.user %>
-            <%= link_to "AI Generator", recipes_generations_path, class: stovaro_mobile_nav_link_classes(generator_active) %>
-          <% end %>
           <%= link_to "About", about_pages_path, class: stovaro_mobile_nav_link_classes(about_active) %>
         </div>
 
@@ -51,6 +47,7 @@
             <%= link_to "Favorites", profiles_favorites_path, class: stovaro_mobile_nav_link_classes(controller_path == "profiles/favorites") %>
             <%= link_to "My Recipes", profiles_recipes_path, class: stovaro_mobile_nav_link_classes(controller_path == "profiles/recipes") %>
             <%= link_to "Collections", profiles_collections_path, class: stovaro_mobile_nav_link_classes(controller_path == "profiles/collections" || controller_path == "profiles/collection_recipes") %>
+            <%= link_to "AI Generator", recipes_generations_path, class: stovaro_mobile_nav_link_classes(controller_path == "recipes/generations") %>
             <% if Current.user.admin? %>
               <%= link_to "Seed Copilot", chat_path, class: stovaro_mobile_nav_link_classes(controller_path == "chat") %>
               <%= link_to "Moderation", admin_recipe_submissions_path, class: stovaro_mobile_nav_link_classes(controller_path == "admin/recipe_submissions") %>
