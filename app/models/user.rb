@@ -70,6 +70,10 @@ class User < ApplicationRecord
   has_many :planned_meals, through: :meal_plans
   has_many :grocery_lists, dependent: :destroy
   has_many :chat_conversations, class_name: "Chat::Conversation", dependent: :destroy
+  has_many :family_memberships, dependent: :destroy
+  has_many :families, through: :family_memberships
+  has_many :created_families, class_name: "Family", foreign_key: :created_by, dependent: :nullify
+
   has_many :active_follows, class_name: "UserFollow", foreign_key: :follower_id, dependent: :destroy
   has_many :passive_follows, class_name: "UserFollow", foreign_key: :followed_id, dependent: :destroy
   has_many :following, through: :active_follows, source: :followed

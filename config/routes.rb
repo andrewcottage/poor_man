@@ -36,6 +36,13 @@ Rails.application.routes.draw do
     post "webhooks/stripe", to: "webhooks#stripe"
   end
 
+  resources :families do
+    resources :memberships, controller: "families/memberships", only: %i[create update destroy]
+    resources :cookbooks, controller: "families/cookbooks", only: %i[show create edit update destroy] do
+      resources :recipes, controller: "families/cookbook_recipes", as: :cookbook_recipes, only: %i[create destroy]
+    end
+  end
+
   resources :cooks, only: :show, param: :username do
     resource :follow, only: %i[create destroy], controller: "cooks/follows"
   end

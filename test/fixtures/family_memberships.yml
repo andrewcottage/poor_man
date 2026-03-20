@@ -1,0 +1,9 @@
+andrew_owner:
+  family: cottages
+  user: andrew
+  role: 2
+
+victoria_member:
+  family: cottages
+  user: victoria
+  role: 0

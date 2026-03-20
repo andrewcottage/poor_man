@@ -47,6 +47,7 @@
             <%= link_to "Favorites", profiles_favorites_path, class: stovaro_mobile_nav_link_classes(controller_path == "profiles/favorites") %>
             <%= link_to "My Recipes", profiles_recipes_path, class: stovaro_mobile_nav_link_classes(controller_path == "profiles/recipes") %>
             <%= link_to "Collections", profiles_collections_path, class: stovaro_mobile_nav_link_classes(controller_path == "profiles/collections" || controller_path == "profiles/collection_recipes") %>
+            <%= link_to "Families", families_path, class: stovaro_mobile_nav_link_classes(controller_path == "families" || controller_path.start_with?("families/")) %>
             <%= link_to "AI Generator", recipes_generations_path, class: stovaro_mobile_nav_link_classes(controller_path == "recipes/generations") %>
             <% if Current.user.admin? %>
               <%= link_to "Seed Copilot", chat_path, class: stovaro_mobile_nav_link_classes(controller_path == "chat") %>
