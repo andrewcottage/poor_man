@@ -6,38 +6,7 @@ class Recipe::SeedRunCreatorTest < ActiveSupport::TestCase
   end
 
   test "creates a completed seed run synchronously" do
-    Recipe::Generation.any_instance.expects(:generate_recipe).once do |generation|
-      generation.update!(
-        data: {
-          "title" => "Charred Broccoli Pasta",
-          "blurb" => "Weeknight pasta with charred broccoli and lemon.",
-          "ingredients" => [
-            { "quantity" => "12", "unit" => "oz", "name" => "pasta" }
-          ],
-          "instructions" => "<p>Cook the pasta.</p>",
-          "tags" => [ "vegetarian" ],
-          "difficulty" => 1,
-          "prep_time" => 20,
-          "cost" => 11,
-          "servings" => 4,
-          "category" => "Dinner"
-        }
-      )
-    end
-    Recipe::Generation.any_instance.expects(:generate_image).once do |generation|
-      generation.image.attach(
-        io: File.open(Rails.root.join("test/fixtures/files/vaporwave.jpeg")),
-        filename: "main.jpeg",
-        content_type: "image/jpeg"
-      )
-    end
-    Recipe::Generation.any_instance.expects(:generate_images).once do |generation|
-      generation.images.attach(
-        io: File.open(Rails.root.join("test/fixtures/files/vaporwave.jpeg")),
-        filename: "gallery.jpeg",
-        content_type: "image/jpeg"
-      )
-    end
+    stub_seed_preview_generation(title: "Charred Broccoli Pasta", category: "Dinner", tags: [ "vegetarian" ])
 
     assert_difference("Recipe::Generation.count", 1) do
       generation = Recipe::SeedRunCreator.new(user: @user).call(
@@ -47,6 +16,9 @@ class Recipe::SeedRunCreatorTest < ActiveSupport::TestCase
 
       assert generation.persisted?
       assert generation.seed_tool?
+      assert_equal "Charred Broccoli Pasta", generation.data["title"]
+      assert generation.image.attached?
+      assert_equal 3, generation.images.count
       assert_not generation.auto_publish_recipe?
     end
   end

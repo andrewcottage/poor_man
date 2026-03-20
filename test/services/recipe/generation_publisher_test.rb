@@ -26,6 +26,8 @@ class Recipe::GenerationPublisherTest < ActiveSupport::TestCase
   end
 
   test "publishes a completed seed run and creates a missing category" do
+    stub_openai_image_generation_sequence(count: 1, prefix: "grain-bowls-category")
+
     assert_difference("Category.count", 1) do
       assert_difference("Recipe.count", 1) do
         recipe = Recipe::GenerationPublisher.new(@generation).call

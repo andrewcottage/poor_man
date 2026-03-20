@@ -119,7 +119,7 @@ class Api::RecipesControllerTest < ActionDispatch::IntegrationTest
       }, headers: bearer_headers(@user)
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
 
     json = JSON.parse(response.body)
     assert_includes json["errors"], "Category must exist"

@@ -59,9 +59,10 @@ class RecipesRakeTest < ActiveSupport::TestCase
   end
 
   def self.load_tasks_once
-    return if @tasks_loaded
+    return if @tasks_loaded || Rake::Task.task_defined?("recipes:backfill_metadata")
 
-    Rails.application.load_tasks
+    Rake::Task.define_task(:environment) unless Rake::Task.task_defined?(:environment)
+    load Rails.root.join("lib/tasks/recipes.rake")
     @tasks_loaded = true
   end
 

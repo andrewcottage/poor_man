@@ -24,7 +24,7 @@ class Admin::SeedRecipesController < ApplicationController
       redirect_to admin_seed_recipe_path(@generation), notice: notice
     else
       @seed_generations = seed_generations_scope.limit(20)
-      render :index, status: :unprocessable_entity
+      render :index, status: :unprocessable_content
     end
   end
 

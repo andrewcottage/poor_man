@@ -14,7 +14,7 @@ class Api::BaseController < ApplicationController
   end
 
   def render_unprocessable(entity)
-    render json: { errors: entity.errors.full_messages }, status: :unprocessable_entity
+    render json: { errors: entity.errors.full_messages }, status: :unprocessable_content
   end
 
   def render_forbidden

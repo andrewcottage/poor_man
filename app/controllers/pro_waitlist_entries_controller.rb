@@ -8,7 +8,7 @@ class ProWaitlistEntriesController < ApplicationController
     if @waitlist_entry.save
       redirect_to pricing_path, notice: "You are on the #{Billing::PlanCatalog::PRO_DISPLAY_NAME} waitlist."
     else
-      render "pricing/show", status: :unprocessable_entity
+      render "pricing/show", status: :unprocessable_content
     end
   end
 

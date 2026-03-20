@@ -37,8 +37,8 @@ class CategoriesController < ApplicationController
         format.html { redirect_to category_url(@category.slug), notice: "Category was successfully created." }
         format.json { render :show, status: :created, location: @category }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @category.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: @category.errors, status: :unprocessable_content }
       end
     end
   end
@@ -50,8 +50,8 @@ class CategoriesController < ApplicationController
         format.html { redirect_to category_url(@category.slug), notice: "Category was successfully updated." }
         format.json { render :show, status: :ok, location: @category }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @category.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @category.errors, status: :unprocessable_content }
       end
     end
   end

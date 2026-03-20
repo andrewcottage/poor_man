@@ -74,7 +74,7 @@ class Recipes::GenerationsControllerTest < ActionDispatch::IntegrationTest
       post recipes_generations_url, params: { recipe_generation: { prompt: "Another prompt" } }
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_select "div#error_explanation", text: /free AI generation trial/
   end
 
@@ -98,7 +98,7 @@ class Recipes::GenerationsControllerTest < ActionDispatch::IntegrationTest
       post recipes_generations_url, params: { recipe_generation: { prompt: "Blocked pro prompt" } }
     end
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_select "div#error_explanation", text: /15 Stovaro Pro generations/
   end
 

@@ -9,15 +9,15 @@ class Recipes::GenerationHelperTest < ActionView::TestCase
   test "generation_status_badge returns correct badge for generation with data" do
     badge = generation_status_badge(@complete_generation)
     assert_includes badge, "Recipe Generated"
-    assert_includes badge, "bg-yellow-100"
-    assert_includes badge, "text-yellow-800"
+    assert_includes badge, "bg-amber-100"
+    assert_includes badge, "text-amber-800"
   end
 
   test "generation_status_badge returns correct badge for processing generation" do
     badge = generation_status_badge(@processing_generation)
     assert_includes badge, "Processing"
-    assert_includes badge, "bg-blue-100"
-    assert_includes badge, "text-blue-800"
+    assert_includes badge, "bg-slate-200"
+    assert_includes badge, "text-slate-800"
   end
 
   test "generation_progress_bar returns correct progress for data only generation" do

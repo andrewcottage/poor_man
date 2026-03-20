@@ -64,6 +64,7 @@ group :test do
   gem "capybara"
   gem "minitest", "~> 5.25"
   gem "selenium-webdriver"
+  gem "webmock", "~> 3.25"
 end
 
 gem "tailwindcss-rails", "~> 2.6"

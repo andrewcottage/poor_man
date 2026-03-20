@@ -60,19 +60,17 @@ class Chat::ToolExecutorTest < ActiveSupport::TestCase
   end
 
   test "admin can create a seed preview" do
-    generation = recipe_generations(:one)
-    generation.update!(seed_tool: true)
-    Recipe::SeedRunCreator.any_instance.expects(:call).once.returns(generation)
+    stub_seed_preview_generation
 
     result = JSON.parse(@admin_executor.call(
       tool_name: "preview_seed_recipe",
       arguments: { "prompt" => "Create a vegan noodle bowl", "publish_immediately" => false }
     ))
 
-    assert_equal generation.id, result["generation_id"]
-    assert_equal "Pasta with Tomatoes and Basil", result["title"]
-    assert_equal "generating", result["status"]
-    assert_match %r{/admin/seed_recipes/#{generation.id}}, result["preview_url"]
+    assert_equal "Roasted Cauliflower Grain Bowl", result["title"]
+    assert_equal "ready", result["status"]
+    assert_equal 4, result["image_urls"].length
+    assert_match %r{/admin/seed_recipes/\d+}, result["preview_url"]
   end
 
   test "non admin cannot use seed tools" do
@@ -82,5 +80,47 @@ class Chat::ToolExecutorTest < ActiveSupport::TestCase
     ))
 
     assert_equal "This tool is only available to admins.", result["error"]
+  end
+
+  test "admin can publish a completed seed preview" do
+    stub_openai_image_generation_sequence(count: 1, prefix: "grain-bowls-category")
+
+    generation = recipe_generations(:processing)
+    generation.update!(
+      user: @admin,
+      seed_tool: true,
+      data: {
+        "title" => "Roasted Cauliflower Grain Bowl",
+        "blurb" => "A hearty bowl with roasted vegetables and tahini dressing.",
+        "ingredients" => [
+          { "quantity" => "1", "unit" => "head", "name" => "cauliflower" }
+        ],
+        "instructions" => "<p>Roast the cauliflower.</p>",
+        "tags" => [ "vegetarian" ],
+        "difficulty" => 2,
+        "prep_time" => 35,
+        "cost" => 14.5,
+        "servings" => 4,
+        "category" => "Grain Bowls"
+      }
+    )
+    generation.image.attach(
+      io: File.open(Rails.root.join("test/fixtures/files/vaporwave.jpeg")),
+      filename: "main.jpeg",
+      content_type: "image/jpeg"
+    )
+    generation.images.attach(
+      io: File.open(Rails.root.join("test/fixtures/files/vaporwave.jpeg")),
+      filename: "gallery.jpeg",
+      content_type: "image/jpeg"
+    )
+
+    result = JSON.parse(@admin_executor.call(
+      tool_name: "publish_seed_recipe",
+      arguments: { "generation_id" => generation.id }
+    ))
+
+    assert result["published"]
+    assert_equal "/recipes/roasted-cauliflower-grain-bowl", result.dig("recipe", "url")
   end
 end

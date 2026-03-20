@@ -37,8 +37,8 @@ class Recipes::GenerationController < ApplicationController
         format.html { redirect_to recipes_generation_url(@generation), notice: "Recipe Generation is in progress." }
         format.json { render :show, status: :created, location: @generation }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @generation.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: @generation.errors, status: :unprocessable_content }
       end
     end
   end
@@ -50,8 +50,8 @@ class Recipes::GenerationController < ApplicationController
         format.html { redirect_to recipes_generation_url(@generation), notice: "Recipe Generation was successfully updated." }
         format.json { render :show, status: :ok, location: @generation }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @generation.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @generation.errors, status: :unprocessable_content }
       end
     end
   end

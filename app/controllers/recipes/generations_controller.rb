@@ -42,7 +42,7 @@ class Recipes::GenerationsController < ApplicationController
 
     unless Current.user.can_generate_recipe?
       @generation.errors.add(:base, generation_limit_message)
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
       return
     end
 
@@ -52,8 +52,8 @@ class Recipes::GenerationsController < ApplicationController
         format.html { redirect_to recipes_generation_url(@generation), notice: "Recipe Generation is in progress." }
         format.json { render :show, status: :created, location: @generation }
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @generation.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: @generation.errors, status: :unprocessable_content }
       end
     end
   end
@@ -65,8 +65,8 @@ class Recipes::GenerationsController < ApplicationController
         format.html { redirect_to recipes_generation_url(@generation), notice: "Recipe Generation was successfully updated." }
         format.json { render :show, status: :ok, location: @generation }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @generation.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @generation.errors, status: :unprocessable_content }
       end
     end
   end

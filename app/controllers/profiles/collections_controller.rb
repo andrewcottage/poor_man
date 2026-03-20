@@ -26,7 +26,7 @@ class Profiles::CollectionsController < ApplicationController
       redirect_to profiles_collection_path(@collection), notice: "Collection created."
     else
       @collections = Current.user.collections.includes(:recipes).descending
-      render :index, status: :unprocessable_entity
+      render :index, status: :unprocessable_content
     end
   end
 
@@ -37,7 +37,7 @@ class Profiles::CollectionsController < ApplicationController
     if @collection.update(collection_params)
       redirect_to profiles_collection_path(@collection), notice: "Collection updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
