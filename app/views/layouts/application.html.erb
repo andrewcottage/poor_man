@@ -30,7 +30,7 @@
     <%= yield %>
   </main>
 
-  <%= render 'layouts/footer' %>
+  <%= render 'layouts/footer' unless content_for?(:hide_footer) %>
 </body>
 
 </html>

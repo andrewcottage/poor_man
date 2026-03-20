@@ -62,7 +62,7 @@ class ChatTest < ApplicationSystemTestCase
     visit chat_url
 
     assert_selector "h1", text: "Seed Copilot"
-    assert_text "What should I create for the site?"
+    assert_text "What should I create?"
     assert_selector "button", text: "Preview a vegan sheet-pan dinner with crispy tofu and chili crisp."
   end
 

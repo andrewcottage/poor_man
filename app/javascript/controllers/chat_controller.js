@@ -1,11 +1,31 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["messages", "input", "submit", "form", "emptyState", "attachmentsInput", "attachmentPreview"]
+  static targets = ["messages", "input", "submit", "form", "emptyState", "attachmentsInput", "attachmentPreview", "sidebar", "sidebarBackdrop"]
 
   connect() {
     this.observeMessages()
     this.scrollToBottom()
+  }
+
+  disconnect() {
+    document.body.classList.remove("overflow-hidden")
+  }
+
+  toggleSidebar() {
+    if (!this.hasSidebarTarget) return
+
+    const isOpen = !this.sidebarTarget.classList.contains("-translate-x-full")
+
+    if (isOpen) {
+      this.sidebarTarget.classList.add("-translate-x-full")
+      this.sidebarBackdropTarget.classList.add("hidden")
+      document.body.classList.remove("overflow-hidden")
+    } else {
+      this.sidebarTarget.classList.remove("-translate-x-full")
+      this.sidebarBackdropTarget.classList.remove("hidden")
+      document.body.classList.add("overflow-hidden")
+    }
   }
 
   send(event) {
@@ -17,8 +37,6 @@ export default class extends Controller {
       return
     }
 
-    // Let Turbo handle the form submission naturally.
-    // Clear UI after a tick so the form data is captured first.
     this.submitTarget.disabled = true
 
     setTimeout(() => {
@@ -30,6 +48,7 @@ export default class extends Controller {
       if (this.hasAttachmentPreviewTarget) {
         this.attachmentPreviewTarget.innerHTML = ""
         this.attachmentPreviewTarget.classList.add("hidden")
+        this.attachmentPreviewTarget.classList.remove("flex")
       }
 
       if (this.hasEmptyStateTarget) {
@@ -55,6 +74,7 @@ export default class extends Controller {
     const suggestion = event.currentTarget.dataset.suggestion
     this.inputTarget.value = suggestion
     this.inputTarget.focus()
+    this.autoResize()
   }
 
   openFilePicker() {
@@ -71,14 +91,16 @@ export default class extends Controller {
 
     if (files.length === 0) {
       this.attachmentPreviewTarget.classList.add("hidden")
+      this.attachmentPreviewTarget.classList.remove("flex")
       return
     }
 
     this.attachmentPreviewTarget.classList.remove("hidden")
+    this.attachmentPreviewTarget.classList.add("flex")
 
     files.slice(0, 3).forEach((file) => {
       const wrapper = document.createElement("div")
-      wrapper.className = "relative h-20 w-20 overflow-hidden rounded-2xl border border-stone-200 bg-stone-100 shadow-sm"
+      wrapper.className = "relative h-16 w-16 overflow-hidden rounded-xl border border-stone-200 bg-stone-100"
 
       const image = document.createElement("img")
       image.className = "h-full w-full object-cover"
