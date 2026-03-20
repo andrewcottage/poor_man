@@ -16,6 +16,9 @@ if ENV["RAILS_ENV"] == "production"
   require "concurrent-ruby"
   worker_count = Integer(ENV.fetch("WEB_CONCURRENCY") { Concurrent.physical_processor_count })
   workers worker_count if worker_count > 1
+  # Solid Queue's Puma plugin forks the supervisor from Puma, so the app must
+  # already be loaded in the parent process when running in production.
+  preload_app!
 end
 
 # Specifies the `worker_timeout` threshold that Puma will use to wait before
@@ -33,3 +36,4 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
+plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
