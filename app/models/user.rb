@@ -39,10 +39,15 @@ class User < ApplicationRecord
 
   has_secure_password
 
+  generates_token_for :password_reset, expires_in: 15.minutes do
+    password_digest
+  end
+
   before_validation :ensure_username
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :username, presence: true, uniqueness: true
+  validates :password, length: { minimum: 6 }, allow_nil: true
 
   normalizes :email, with: ->(email) { email.downcase }
 

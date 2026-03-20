@@ -75,6 +75,7 @@ Rails.application.routes.draw do
   get "/about", to: redirect("/pages/about")
 
   resources :sessions, only: %i[new create destroy]
+  resources :password_resets, param: :token, only: %i[new create edit update]
   resources :grocery_lists, only: :show, param: :share_token
   resources :auth, only: [] do
     collection do
