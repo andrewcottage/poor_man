@@ -1,7 +1,19 @@
 <% if message.user? %>
   <div class="flex justify-end">
-    <div class="max-w-[80%] rounded-2xl rounded-tr-md bg-slate-900 px-4 py-3 text-sm text-white shadow-sm">
-      <%= simple_format(message.content, {}, wrapper_tag: "span") %>
+    <div class="max-w-[80%] space-y-2">
+      <% if message.content.present? %>
+        <div class="rounded-2xl rounded-tr-md bg-slate-900 px-4 py-3 text-sm text-white shadow-sm">
+          <%= simple_format(message.content, {}, wrapper_tag: "span") %>
+        </div>
+      <% end %>
+
+      <% if message.images.attached? %>
+        <div class="grid gap-2 <%= message.images.many? ? 'grid-cols-2' : 'grid-cols-1' %>">
+          <% message.images.each do |image| %>
+            <%= image_tag image, class: "max-h-64 w-full rounded-2xl border border-stone-200 object-cover shadow-sm" %>
+          <% end %>
+        </div>
+      <% end %>
     </div>
   </div>
 <% elsif message.assistant? %>
@@ -12,8 +24,8 @@
       </svg>
     </div>
     <div class="max-w-[80%] rounded-2xl rounded-tl-md bg-stone-100 px-4 py-3 text-sm text-slate-700 shadow-sm">
-      <div class="prose prose-sm prose-slate prose-a:text-amber-700 prose-a:underline prose-a:decoration-amber-300">
-        <%= sanitize(render_markdown(message.content), tags: %w[p a strong em ul ol li br h3 h4 code pre], attributes: %w[href class]) %>
+      <div class="prose prose-sm prose-slate max-w-none prose-a:text-amber-700 prose-a:underline prose-a:decoration-amber-300 prose-img:my-4 prose-img:rounded-2xl prose-img:border prose-img:border-stone-200 prose-img:shadow-sm">
+        <%= sanitize(render_markdown(message.content), tags: %w[p a strong em ul ol li br h3 h4 code pre img], attributes: %w[href class src alt loading]) %>
       </div>
     </div>
   </div>

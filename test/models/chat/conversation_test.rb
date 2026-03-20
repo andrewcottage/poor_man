@@ -42,4 +42,20 @@ class Chat::ConversationTest < ActiveSupport::TestCase
     api_messages = conversation.messages_for_api
     assert api_messages.all? { |m| m.key?(:role) && m.key?(:content) }
   end
+
+  test "messages_for_api includes multimodal content for image messages" do
+    conversation = chat_conversations(:pro_conversation)
+    message = conversation.messages.create!(role: "user", content: "Identify this dish")
+    message.images.attach(
+      io: File.open(Rails.root.join("test/fixtures/files/vaporwave.jpeg")),
+      filename: "dish.jpg",
+      content_type: "image/jpeg"
+    )
+    message.reload
+
+    api_message = conversation.messages_for_api.last
+
+    assert_kind_of Array, api_message[:content]
+    assert_equal "image_url", api_message[:content].last[:type]
+  end
 end

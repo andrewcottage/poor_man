@@ -23,6 +23,7 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "[data-controller='chat']"
     assert_select "h2", "Recent conversations"
+    assert_select "form#chat_input_form[enctype='multipart/form-data']"
   end
 
   test "admin user can access chat without pro plan" do
@@ -49,6 +50,46 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     conversation = users(:pro_user).chat_conversations.last
     assert_equal "What should I cook tonight?", conversation.messages.where(role: "user").last.content
+  end
+
+  test "pro user can send a message with an image attachment" do
+    login(users(:pro_user))
+    image = Rack::Test::UploadedFile.new(
+      Rails.root.join("test/fixtures/files/vaporwave.jpeg"),
+      "image/jpeg"
+    )
+
+    assert_enqueued_with(job: Chat::RespondJob) do
+      post create_message_chat_url,
+        params: { content: "What did I make?", images: [ image ] },
+        as: :turbo_stream
+    end
+
+    assert_response :success
+    message = users(:pro_user).chat_conversations.last.messages.where(role: "user").last
+    assert_equal "What did I make?", message.content
+    assert_equal 1, message.images.count
+  end
+
+  test "pro user can send an image-only message" do
+    login(users(:pro_user))
+    conversation = users(:pro_user).chat_conversations.create!
+    image = Rack::Test::UploadedFile.new(
+      Rails.root.join("test/fixtures/files/vaporwave.jpeg"),
+      "image/jpeg"
+    )
+
+    assert_enqueued_with(job: Chat::RespondJob) do
+      post create_message_chat_url,
+        params: { images: [ image ], conversation_id: conversation.id },
+        as: :turbo_stream
+    end
+
+    assert_response :success
+    message = conversation.reload.messages.where(role: "user").last
+    assert_nil message.content
+    assert_equal 1, message.images.count
+    assert_equal "Photo recipe chat", conversation.reload.title
   end
 
   test "pro user can start a new conversation" do

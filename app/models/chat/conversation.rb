@@ -26,7 +26,7 @@ class Chat::Conversation < ApplicationRecord
 
   def messages_for_api
     messages.order(:created_at).map do |msg|
-      entry = { role: msg.role, content: msg.content }
+      entry = { role: msg.role, content: msg.api_content }
       entry[:tool_calls] = JSON.parse(msg.tool_calls) if msg.tool_calls.present?
       entry[:tool_call_id] = msg.tool_call_id if msg.tool_call_id.present?
       entry
@@ -34,11 +34,19 @@ class Chat::Conversation < ApplicationRecord
   end
 
   def display_title
-    title.presence || first_user_message&.content.to_s.truncate(48) || "New chat"
+    return title if title.present?
+
+    first_message = first_user_message
+    return "Photo recipe chat" if first_message&.content.blank? && first_message&.images&.attached?
+
+    first_message&.content.to_s.truncate(48).presence || "New chat"
   end
 
   def preview_text
-    messages.visible.chronological.last&.content.to_s.truncate(72)
+    latest_message = messages.visible.chronological.last
+    return "Shared #{latest_message.images.count} photo#{'s' if latest_message.images.count != 1}" if latest_message&.user? && latest_message.content.blank? && latest_message.images.attached?
+
+    latest_message&.content.to_s.truncate(72)
   end
 
   def assign_title_from!(content)

@@ -20,8 +20,13 @@ class ChatController < ApplicationController
     end
 
     @conversation = selected_conversation || Current.user.chat_conversations.recent_first.first || Current.user.chat_conversations.create!
-    @message = @conversation.messages.create!(role: "user", content: params[:content])
-    @conversation.assign_title_from!(params[:content]) if @conversation.title.blank?
+    @message = @conversation.messages.new(role: "user", content: params[:content])
+    @message.images.attach(Array(params[:images])) if params[:images].present?
+    unless @message.save
+      redirect_to chat_conversation_path(@conversation), alert: @message.errors.full_messages.to_sentence, status: :see_other
+      return
+    end
+    assign_conversation_title!(@conversation, @message) if @conversation.title.blank?
     @conversations = Current.user.chat_conversations.includes(:messages).recent_first
 
     Chat::RespondJob.perform_later(@conversation)
@@ -85,5 +90,10 @@ class ChatController < ApplicationController
     return unless params[:conversation_id].present?
 
     Current.user.chat_conversations.find_by(id: params[:conversation_id])
+  end
+
+  def assign_conversation_title!(conversation, message)
+    title_source = message.content.presence || (message.images.attached? ? "Photo recipe chat" : nil)
+    conversation.assign_title_from!(title_source)
   end
 end

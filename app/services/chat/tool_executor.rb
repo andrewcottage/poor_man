@@ -18,6 +18,7 @@ class Chat::ToolExecutor
     when "get_trending_recipes" then get_trending_recipes
     when "get_user_ratings" then get_user_ratings
     when "preview_seed_recipe" then preview_seed_recipe(args)
+    when "queue_seed_recipe_batch" then queue_seed_recipe_batch(args)
     when "preview_seed_category" then preview_seed_category(args)
     when "get_seed_category_preview" then get_seed_category_preview(args)
     when "publish_seed_category" then publish_seed_category(args)
@@ -25,6 +26,7 @@ class Chat::ToolExecutor
     when "get_seed_preview" then get_seed_preview(args)
     when "publish_seed_recipe" then publish_seed_recipe(args)
     when "list_seed_runs" then list_seed_runs
+    when "list_seed_recipes_by_category" then list_seed_recipes_by_category(args)
     else
       { error: "Unknown tool: #{tool_name}" }.to_json
     end
@@ -119,20 +121,59 @@ class Chat::ToolExecutor
   def preview_seed_recipe(args)
     return admin_only_error.to_json unless user.admin?
 
+    auto_publish = ActiveModel::Type::Boolean.new.cast(args["publish_immediately"]) || false
     generation = Recipe::SeedRunCreator.new(user: user).call(
       attributes: seed_attributes_from(args),
-      auto_publish: ActiveModel::Type::Boolean.new.cast(args["publish_immediately"])
+      auto_publish: auto_publish
     )
 
     seed_preview_summary(generation).to_json
   end
 
+  def queue_seed_recipe_batch(args)
+    return admin_only_error.to_json unless user.admin?
+
+    auto_publish = ActiveModel::Type::Boolean.new.cast(args["publish_immediately"]) || false
+    result = Recipe::SeedBatchCreator.new(user: user).call(
+      category_names: args["category_names"],
+      count_per_category: args["count_per_category"],
+      dietary_preference: args["dietary_preference"],
+      skill_level: args["skill_level"],
+      avoid_ingredients: args["avoid_ingredients"],
+      ingredient_swaps: args["ingredient_swaps"],
+      customization_notes: args["customization_notes"],
+      servings: args["servings"].presence || 4,
+      target_difficulty: args["target_difficulty"],
+      auto_publish: auto_publish
+    )
+
+    {
+      status: "queued",
+      message: "Queued #{result.total_count} recipe preview#{'s' if result.total_count != 1} across #{result.category_names.count} categor#{result.category_names.count == 1 ? 'y' : 'ies'}.",
+      total_count: result.total_count,
+      count_per_category: result.count_per_category,
+      categories: result.category_names.map do |category_name|
+        queued = result.generations.select { |generation| inferred_category_from_notes(generation) == category_name }
+
+        {
+          category: category_name,
+          queued_count: queued.count,
+          previews: queued.first(5).map { |generation| queued_seed_preview_summary(generation) }
+        }
+      end,
+      admin_seed_studio_url: admin_seed_recipes_path
+    }.to_json
+  rescue ArgumentError => error
+    { error: error.message }.to_json
+  end
+
   def preview_seed_category(args)
     return admin_only_error.to_json unless user.admin?
 
+    auto_publish = ActiveModel::Type::Boolean.new.cast(args["publish_immediately"]) || false
     category_seed_run = CategorySeedRunCreator.new(user: user).call(
       prompt: args["prompt"],
-      auto_publish: ActiveModel::Type::Boolean.new.cast(args["publish_immediately"])
+      auto_publish: auto_publish
     )
 
     category_seed_preview_summary(category_seed_run).to_json
@@ -214,6 +255,24 @@ class Chat::ToolExecutor
     end.to_json
   end
 
+  def list_seed_recipes_by_category(args)
+    return admin_only_error.to_json unless user.admin?
+
+    category_names = Array(args["category_names"]).map(&:to_s).reject(&:blank?)
+    generations = Recipe::Generation.seed_runs.order(created_at: :desc).limit(100)
+    grouped = generations.group_by do |generation|
+      generation.data["category"].presence || inferred_category_from_notes(generation) || "Uncategorized"
+    end
+    grouped.select! { |category, _| category.in?(category_names) } if category_names.any?
+
+    grouped.map do |category_name, category_generations|
+      {
+        category: category_name,
+        runs: category_generations.first(10).map { |generation| seed_preview_summary(generation) }
+      }
+    end.to_json
+  end
+
   def seed_attributes_from(args)
     {
       prompt: args["prompt"],
@@ -241,6 +300,15 @@ class Chat::ToolExecutor
       published: generation.published_recipe.present?,
       published_recipe_url: generation.published_recipe.present? ? recipe_path(generation.published_recipe.slug) : nil,
       seed_publish_error: generation.seed_publish_error
+    }
+  end
+
+  def queued_seed_preview_summary(generation)
+    {
+      generation_id: generation.id,
+      prompt: generation.prompt,
+      status: seed_run_status(generation),
+      preview_url: admin_seed_recipe_path(generation)
     }
   end
 
@@ -287,6 +355,11 @@ class Chat::ToolExecutor
     return [] unless category_seed_run.image.attached?
 
     [ rails_blob_path(category_seed_run.image, only_path: true) ]
+  end
+
+  def inferred_category_from_notes(generation)
+    match = generation.customization_notes.to_s.match(/exact category title "([^"]+)"/i)
+    match&.captures&.first
   end
 
   def recipe_summary(recipe)

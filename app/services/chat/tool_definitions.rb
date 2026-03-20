@@ -125,6 +125,29 @@ class Chat::ToolDefinitions
       {
         type: "function",
         function: {
+          name: "queue_seed_recipe_batch",
+          description: "Queue a bulk batch of admin-only recipe previews across one or more categories. Use this for requests like generating multiple recipes per category or large preview batches.",
+          parameters: {
+            type: "object",
+            properties: {
+              category_names: { type: "array", items: { type: "string" }, description: "Category titles to generate previews for" },
+              count_per_category: { type: "integer", description: "How many recipe previews to queue per category" },
+              dietary_preference: { type: "string", description: "Optional dietary preference like vegan or gluten-free" },
+              skill_level: { type: "string", description: "Optional skill level like beginner or advanced" },
+              avoid_ingredients: { type: "string", description: "Comma-separated ingredients to avoid" },
+              ingredient_swaps: { type: "string", description: "Optional requested swaps" },
+              customization_notes: { type: "string", description: "Extra editorial notes for the batch" },
+              servings: { type: "integer", description: "Desired servings for each recipe" },
+              target_difficulty: { type: "integer", description: "Target difficulty 1-5 for each recipe" },
+              publish_immediately: { type: "boolean", description: "Set true only when the admin clearly wants the batch published automatically" }
+            },
+            required: [ "category_names", "count_per_category" ]
+          }
+        }
+      },
+      {
+        type: "function",
+        function: {
           name: "preview_seed_category",
           description: "Generate an admin-only category preview with a title, slug, editorial description, and photorealistic image. Use this for standalone category creation requests.",
           parameters: {
@@ -207,6 +230,19 @@ class Chat::ToolDefinitions
           name: "list_seed_runs",
           description: "List recent admin seed runs with their publish state and preview links.",
           parameters: { type: "object", properties: {} }
+        }
+      },
+      {
+        type: "function",
+        function: {
+          name: "list_seed_recipes_by_category",
+          description: "List recent admin seed recipe runs grouped by category. Useful after queueing a large batch.",
+          parameters: {
+            type: "object",
+            properties: {
+              category_names: { type: "array", items: { type: "string" }, description: "Optional category titles to filter by" }
+            }
+          }
         }
       }
     ]

@@ -1,22 +1,46 @@
-<%= form_with url: create_message_chat_path, id: "chat_input_form", data: { chat_target: "form", action: "submit->chat#send" } do |f| %>
+<%= form_with url: create_message_chat_path,
+    id: "chat_input_form",
+    multipart: true,
+    data: { chat_target: "form", action: "submit->chat#send" } do |f| %>
   <%= hidden_field_tag :conversation_id, conversation.id %>
-  <div class="flex items-end gap-3">
-    <div class="flex-1">
-      <textarea
-        name="content"
-        rows="1"
-        placeholder="Ask about recipes..."
-        class="w-full resize-none rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-amber-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-200"
-        data-chat-target="input"
-        data-action="keydown->chat#handleKeydown input->chat#autoResize"
-      ></textarea>
+  <div class="space-y-3">
+    <input type="file"
+           name="images[]"
+           accept="image/*"
+           multiple
+           class="hidden"
+           data-chat-target="attachmentsInput"
+           data-action="change->chat#previewAttachments">
+
+    <div class="hidden flex-wrap gap-2" data-chat-target="attachmentPreview"></div>
+
+    <div class="flex items-end gap-3">
+      <button type="button"
+              class="flex h-11 w-11 flex-none items-center justify-center rounded-xl border border-stone-200 bg-white text-slate-700 shadow-sm transition hover:border-amber-300 hover:bg-amber-50"
+              data-action="click->chat#openFilePicker">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a3 3 0 11-4.243-4.243l8.308-8.308a2 2 0 112.828 2.828l-8.308 8.308a1 1 0 11-1.414-1.414l7.693-7.693" />
+        </svg>
+      </button>
+
+      <div class="flex-1">
+        <textarea
+          name="content"
+          rows="1"
+          placeholder="Ask about recipes or upload a photo of what you cooked..."
+          class="w-full resize-none rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-amber-300 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-200"
+          data-chat-target="input"
+          data-action="keydown->chat#handleKeydown input->chat#autoResize"
+        ></textarea>
+        <p class="mt-2 px-1 text-xs text-slate-500">Upload up to 3 photos. I can help identify the dish, estimate ingredients, or draft a recipe from it.</p>
+      </div>
+      <button type="submit"
+              class="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-slate-900 text-white shadow-sm transition hover:bg-slate-800 disabled:opacity-40"
+              data-chat-target="submit">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+        </svg>
+      </button>
     </div>
-    <button type="submit"
-            class="flex h-11 w-11 flex-none items-center justify-center rounded-xl bg-slate-900 text-white shadow-sm transition hover:bg-slate-800 disabled:opacity-40"
-            data-chat-target="submit">
-      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-      </svg>
-    </button>
   </div>
 <% end %>

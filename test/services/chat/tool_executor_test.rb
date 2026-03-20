@@ -87,6 +87,23 @@ class Chat::ToolExecutorTest < ActiveSupport::TestCase
     assert_match %r{/admin/seed_categories/\d+}, result["preview_url"]
   end
 
+  test "admin can queue a bulk seed recipe batch" do
+    result = JSON.parse(@admin_executor.call(
+      tool_name: "queue_seed_recipe_batch",
+      arguments: {
+        "category_names" => [ "Breakfast", "Dinner" ],
+        "count_per_category" => 2,
+        "dietary_preference" => "vegetarian"
+      }
+    ))
+
+    assert_equal "queued", result["status"]
+    assert_equal 4, result["total_count"]
+    assert_equal "/admin/seed_recipes", result["admin_seed_studio_url"]
+    assert_equal 2, result["categories"].length
+    assert_equal 2, result["categories"].first["queued_count"]
+  end
+
   test "non admin cannot use seed tools" do
     result = JSON.parse(@executor.call(
       tool_name: "preview_seed_recipe",

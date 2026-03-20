@@ -57,4 +57,43 @@ class Chat::MessageTest < ActiveSupport::TestCase
     assert chat_messages(:assistant_message).assistant?
     assert_not chat_messages(:assistant_message).user?
   end
+
+  test "image only message is valid" do
+    message = Chat::Message.new(conversation: chat_conversations(:pro_conversation), role: "user")
+    message.images.attach(
+      io: File.open(Rails.root.join("test/fixtures/files/vaporwave.jpeg")),
+      filename: "dinner.jpg",
+      content_type: "image/jpeg"
+    )
+
+    assert message.valid?
+  end
+
+  test "blank message without images is invalid" do
+    message = Chat::Message.new(conversation: chat_conversations(:pro_conversation), role: "user", content: "")
+
+    assert_not message.valid?
+    assert_includes message.errors.full_messages, "Message can't be blank"
+  end
+
+  test "api_content includes image parts for user uploads" do
+    message = Chat::Message.create!(
+      conversation: chat_conversations(:pro_conversation),
+      role: "user",
+      content: "What did I make?"
+    )
+    message.images.attach(
+      io: File.open(Rails.root.join("test/fixtures/files/vaporwave.jpeg")),
+      filename: "dinner.jpg",
+      content_type: "image/jpeg"
+    )
+    message.reload
+
+    content = message.api_content
+
+    assert_kind_of Array, content
+    assert_equal "text", content.first[:type]
+    assert_equal "image_url", content.second[:type]
+    assert_match(/\Adata:image\/jpeg;base64,/, content.second.dig(:image_url, :url))
+  end
 end
