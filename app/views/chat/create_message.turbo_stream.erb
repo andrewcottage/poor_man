@@ -1,18 +1,18 @@
-<%= turbo_stream.append "chat_messages" do %>
+<%= turbo_stream.append "chat_messages_inner" do %>
   <%= render "chat/message", message: @message %>
 <% end %>
 
-<%= turbo_stream.append "chat_messages" do %>
-  <div id="chat_thinking" class="flex items-start gap-3 px-1">
-    <div class="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-amber-100 text-amber-700">
-      <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+<%= turbo_stream.append "chat_messages_inner" do %>
+  <div id="chat_thinking" class="flex items-start gap-3">
+    <div class="flex h-7 w-7 flex-none items-center justify-center rounded-full bg-amber-100 text-amber-700">
+      <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
       </svg>
     </div>
-    <div class="flex items-center gap-1.5 rounded-2xl rounded-tl-md bg-stone-100 px-4 py-3">
-      <span class="h-2 w-2 animate-bounce rounded-full bg-stone-400" style="animation-delay: 0ms"></span>
-      <span class="h-2 w-2 animate-bounce rounded-full bg-stone-400" style="animation-delay: 150ms"></span>
-      <span class="h-2 w-2 animate-bounce rounded-full bg-stone-400" style="animation-delay: 300ms"></span>
+    <div class="flex items-center gap-1.5 rounded-2xl bg-stone-100 px-4 py-3">
+      <span class="h-1.5 w-1.5 animate-bounce rounded-full bg-stone-400" style="animation-delay: 0ms"></span>
+      <span class="h-1.5 w-1.5 animate-bounce rounded-full bg-stone-400" style="animation-delay: 150ms"></span>
+      <span class="h-1.5 w-1.5 animate-bounce rounded-full bg-stone-400" style="animation-delay: 300ms"></span>
     </div>
   </div>
 <% end %>

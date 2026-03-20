@@ -122,7 +122,7 @@ class Chat::CompletionService
   def broadcast_message(message)
     Turbo::StreamsChannel.broadcast_append_to(
       @conversation,
-      target: "chat_messages",
+      target: "chat_messages_inner",
       partial: "chat/message",
       locals: { message: message }
     )
