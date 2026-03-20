@@ -1,0 +1,23 @@
+<aside class="stovaro-surface flex h-full flex-col overflow-hidden p-4">
+  <div class="flex items-center justify-between gap-3 border-b border-stone-200 pb-4">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Chats</p>
+      <h2 class="mt-1 text-lg font-semibold text-slate-900">Recent conversations</h2>
+    </div>
+    <%= button_to "New chat", create_conversation_chat_path, method: :post, class: "stovaro-btn-secondary px-3 py-2 text-sm" %>
+  </div>
+
+  <div class="mt-4 space-y-2 overflow-y-auto pr-1">
+    <% conversations.each do |conversation| %>
+      <% active = conversation == current_conversation %>
+      <%= link_to chat_conversation_path(conversation),
+          class: [
+            "block rounded-2xl border px-4 py-3 transition",
+            active ? "border-amber-300 bg-amber-50 shadow-sm" : "border-stone-200 bg-white hover:border-stone-300 hover:bg-stone-50"
+          ].join(" ") do %>
+        <p class="text-sm font-semibold text-slate-900"><%= conversation.display_title %></p>
+        <p class="mt-1 text-xs text-slate-500"><%= conversation.preview_text.presence || "No messages yet" %></p>
+      <% end %>
+    <% end %>
+  </div>
+</aside>

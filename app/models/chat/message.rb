@@ -25,7 +25,7 @@ class Chat::Message < ApplicationRecord
 
   ROLES = %w[system user assistant tool].freeze
 
-  belongs_to :conversation, class_name: "Chat::Conversation"
+  belongs_to :conversation, class_name: "Chat::Conversation", touch: true
 
   validates :role, presence: true, inclusion: { in: ROLES }
 

@@ -56,6 +56,7 @@ class User < ApplicationRecord
 
   has_many :recipes, foreign_key: "author_id", dependent: :nullify
   has_many :recipe_generations, class_name: "Recipe::Generation", dependent: :destroy
+  has_many :category_seed_runs, dependent: :destroy
   has_many :ratings
   has_many :favorites
   has_many :favorite_recipes, through: :favorites, source: :recipe

@@ -73,6 +73,20 @@ class Chat::ToolExecutorTest < ActiveSupport::TestCase
     assert_match %r{/admin/seed_recipes/\d+}, result["preview_url"]
   end
 
+  test "admin can create a category seed preview" do
+    stub_seed_category_preview
+
+    result = JSON.parse(@admin_executor.call(
+      tool_name: "preview_seed_category",
+      arguments: { "prompt" => "Create a weeknight pasta category", "publish_immediately" => false }
+    ))
+
+    assert_equal "Weeknight Pasta", result["title"]
+    assert_equal "ready", result["status"]
+    assert_equal 1, result["image_urls"].length
+    assert_match %r{/admin/seed_categories/\d+}, result["preview_url"]
+  end
+
   test "non admin cannot use seed tools" do
     result = JSON.parse(@executor.call(
       tool_name: "preview_seed_recipe",
@@ -122,5 +136,23 @@ class Chat::ToolExecutorTest < ActiveSupport::TestCase
 
     assert result["published"]
     assert_equal "/recipes/roasted-cauliflower-grain-bowl", result.dig("recipe", "url")
+  end
+
+  test "admin can publish a completed category seed preview" do
+    category_seed_run = category_seed_runs(:one)
+    category_seed_run.update!(user: @admin)
+    category_seed_run.image.attach(
+      io: File.open(Rails.root.join("test/fixtures/files/vaporwave.jpeg")),
+      filename: "weeknight-pasta.jpg",
+      content_type: "image/jpeg"
+    )
+
+    result = JSON.parse(@admin_executor.call(
+      tool_name: "publish_seed_category",
+      arguments: { "category_seed_run_id" => category_seed_run.id }
+    ))
+
+    assert result["published"]
+    assert_equal "/categories/weeknight-pasta", result.dig("category_record", "url")
   end
 end

@@ -108,6 +108,45 @@ module OpenAITestHelper
     stub_openai_image_generation_sequence(count: 4, prefix: title.parameterize)
   end
 
+  def stub_openai_category_generation_response(
+    title:,
+    slug:,
+    description:
+  )
+    stub_request(:post, "#{OPENAI_API_BASE}/chat/completions").to_return(
+      status: 200,
+      headers: json_headers,
+      body: {
+        choices: [
+          {
+            message: {
+              role: "assistant",
+              content: {
+                title: title,
+                slug: slug,
+                description: description
+              }.to_json
+            }
+          }
+        ]
+      }.to_json
+    )
+  end
+
+  def stub_seed_category_preview(
+    title: "Weeknight Pasta",
+    slug: "weeknight-pasta",
+    description: "Fast, satisfying pasta recipes built for busy evenings."
+  )
+    stub_openai_category_generation_response(
+      title: title,
+      slug: slug,
+      description: description
+    )
+
+    stub_openai_image_generation_sequence(count: 1, prefix: slug)
+  end
+
   private
 
   def json_headers

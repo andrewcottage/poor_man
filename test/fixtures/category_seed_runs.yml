@@ -1,0 +1,28 @@
+# == Schema Information
+#
+# Table name: category_seed_runs
+#
+#  id                    :integer          not null, primary key
+#  data                  :text
+#  prompt                :text             not null
+#  published_at          :datetime
+#  seed_publish_error    :text
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  published_category_id :integer
+#  user_id               :integer          not null
+#
+# Indexes
+#
+#  index_category_seed_runs_on_published_category_id  (published_category_id)
+#  index_category_seed_runs_on_user_id                (user_id)
+#
+# Foreign Keys
+#
+#  published_category_id  (published_category_id => categories.id)
+#  user_id                (user_id => users.id)
+#
+one:
+  user: admin
+  prompt: Create a weeknight pasta category
+  data: '{"title":"Weeknight Pasta","slug":"weeknight-pasta","description":"Fast, satisfying pasta recipes built for weeknight cooking."}'

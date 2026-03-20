@@ -18,6 +18,10 @@ class Chat::ToolExecutor
     when "get_trending_recipes" then get_trending_recipes
     when "get_user_ratings" then get_user_ratings
     when "preview_seed_recipe" then preview_seed_recipe(args)
+    when "preview_seed_category" then preview_seed_category(args)
+    when "get_seed_category_preview" then get_seed_category_preview(args)
+    when "publish_seed_category" then publish_seed_category(args)
+    when "list_seed_category_runs" then list_seed_category_runs
     when "get_seed_preview" then get_seed_preview(args)
     when "publish_seed_recipe" then publish_seed_recipe(args)
     when "list_seed_runs" then list_seed_runs
@@ -123,6 +127,55 @@ class Chat::ToolExecutor
     seed_preview_summary(generation).to_json
   end
 
+  def preview_seed_category(args)
+    return admin_only_error.to_json unless user.admin?
+
+    category_seed_run = CategorySeedRunCreator.new(user: user).call(
+      prompt: args["prompt"],
+      auto_publish: ActiveModel::Type::Boolean.new.cast(args["publish_immediately"])
+    )
+
+    category_seed_preview_summary(category_seed_run).to_json
+  end
+
+  def get_seed_category_preview(args)
+    return admin_only_error.to_json unless user.admin?
+
+    category_seed_run = user.category_seed_runs.find_by(id: args["category_seed_run_id"]) ||
+      CategorySeedRun.find_by(id: args["category_seed_run_id"])
+    return { error: "Category seed preview not found" }.to_json unless category_seed_run
+
+    category_seed_preview_summary(category_seed_run).to_json
+  end
+
+  def publish_seed_category(args)
+    return admin_only_error.to_json unless user.admin?
+
+    category_seed_run = CategorySeedRun.find_by(id: args["category_seed_run_id"])
+    return { error: "Category seed preview not found" }.to_json unless category_seed_run
+
+    category = CategorySeedRunPublisher.new(category_seed_run).call
+
+    category_seed_preview_summary(category_seed_run.reload).merge(
+      published: true,
+      category_record: {
+        title: category.title,
+        slug: category.slug,
+        url: category_path(category.slug)
+      }
+    ).to_json
+  rescue CategorySeedRunPublisher::PublishError => error
+    { error: error.message }.to_json
+  end
+
+  def list_seed_category_runs
+    return admin_only_error.to_json unless user.admin?
+
+    CategorySeedRun.recent_first.limit(10).map do |category_seed_run|
+      category_seed_preview_summary(category_seed_run)
+    end.to_json
+  end
+
   def get_seed_preview(args)
     return admin_only_error.to_json unless user.admin?
 
@@ -191,10 +244,34 @@ class Chat::ToolExecutor
     }
   end
 
+  def category_seed_preview_summary(category_seed_run)
+    {
+      category_seed_run_id: category_seed_run.id,
+      prompt: category_seed_run.prompt,
+      status: category_seed_run_status(category_seed_run),
+      title: category_seed_run.data["title"],
+      slug: category_seed_run.data["slug"],
+      description: category_seed_run.data["description"],
+      preview_url: admin_seed_category_path(category_seed_run),
+      image_urls: category_seed_image_urls(category_seed_run),
+      published: category_seed_run.published_category.present?,
+      published_category_url: category_seed_run.published_category.present? ? category_path(category_seed_run.published_category.slug) : nil,
+      seed_publish_error: category_seed_run.seed_publish_error
+    }
+  end
+
   def seed_run_status(generation)
     return "published" if generation.published_recipe.present?
     return "needs_attention" if generation.seed_publish_error.present?
     return "ready" if generation.complete?
+
+    "generating"
+  end
+
+  def category_seed_run_status(category_seed_run)
+    return "published" if category_seed_run.published_category.present?
+    return "needs_attention" if category_seed_run.seed_publish_error.present?
+    return "ready" if category_seed_run.complete?
 
     "generating"
   end
@@ -204,6 +281,12 @@ class Chat::ToolExecutor
     urls << rails_blob_path(generation.image, only_path: true) if generation.image.attached?
     urls.concat(generation.images.map { |image| rails_blob_path(image, only_path: true) })
     urls
+  end
+
+  def category_seed_image_urls(category_seed_run)
+    return [] unless category_seed_run.image.attached?
+
+    [ rails_blob_path(category_seed_run.image, only_path: true) ]
   end
 
   def recipe_summary(recipe)

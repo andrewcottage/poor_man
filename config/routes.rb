@@ -9,7 +9,9 @@ Rails.application.routes.draw do
 
   resource :chat, only: [:show], controller: :chat do
     post :create_message
+    post :create_conversation
   end
+  get "chat/:conversation_id", to: "chat#show", as: :chat_conversation
   resources :pro_waitlist_entries, only: :create
 
   namespace :profiles do
@@ -45,6 +47,12 @@ Rails.application.routes.draw do
     end
 
     resources :seed_recipes, only: %i[index show create] do
+      member do
+        post :publish
+      end
+    end
+
+    resources :seed_categories, only: %i[index show] do
       member do
         post :publish
       end

@@ -1,4 +1,6 @@
-<div class="flex items-center gap-3 border-b border-stone-200 pb-4 pt-2">
+<% active_conversation = local_assigns[:conversation] %>
+
+<div id="chat_header" class="flex items-center gap-3 border-b border-stone-200 pb-4 pt-2">
   <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
@@ -7,7 +9,7 @@
   <div>
     <h1 class="text-lg font-semibold text-slate-900"><%= Current.user&.admin? ? "Seed Copilot" : "Recipe Chat" %></h1>
     <p class="text-xs text-slate-500">
-      <%= Current.user&.admin? ? "Preview and publish new recipes, categories, and photorealistic imagery from chat." : "Ask about recipes, get suggestions, explore your favorites" %>
+      <%= active_conversation&.display_title || (Current.user&.admin? ? "Preview and publish new recipes, categories, and photorealistic imagery from chat." : "Ask about recipes, get suggestions, explore your favorites") %>
     </p>
   </div>
 </div>

@@ -20,3 +20,11 @@
 <%= turbo_stream.replace "chat_input_form" do %>
   <%= render "chat/input_form", conversation: @conversation %>
 <% end %>
+
+<%= turbo_stream.replace "chat_header" do %>
+  <%= render "chat/header", conversation: @conversation %>
+<% end %>
+
+<%= turbo_stream.replace "chat_sidebar" do %>
+  <%= render "chat/conversation_sidebar", conversations: @conversations, current_conversation: @conversation %>
+<% end %>

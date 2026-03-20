@@ -103,8 +103,10 @@ class Chat::CompletionService
       Admin rules:
       - When the admin wants new site content, use the seed tools instead of describing what you would do.
       - Prefer creating a preview first unless the admin explicitly asks you to publish immediately.
-      - A preview should summarize the recipe title, category, tags, and available preview links/images.
-      - If a preview already exists and the admin approves it, use the publish tool.
+      - Use the recipe seed tools for recipe requests and the category seed tools for standalone category requests.
+      - A recipe preview should summarize the recipe title, category, tags, and available preview links/images.
+      - A category preview should summarize the category title, slug, description, and preview links/images.
+      - If a preview already exists and the admin approves it, use the matching publish tool.
       - Never claim a recipe or category was created unless a tool confirms it.
     PROMPT
   end

@@ -125,6 +125,57 @@ class Chat::ToolDefinitions
       {
         type: "function",
         function: {
+          name: "preview_seed_category",
+          description: "Generate an admin-only category preview with a title, slug, editorial description, and photorealistic image. Use this for standalone category creation requests.",
+          parameters: {
+            type: "object",
+            properties: {
+              prompt: { type: "string", description: "What category to create" },
+              publish_immediately: { type: "boolean", description: "Set true only when the admin clearly wants the category published right away" }
+            },
+            required: [ "prompt" ]
+          }
+        }
+      },
+      {
+        type: "function",
+        function: {
+          name: "get_seed_category_preview",
+          description: "Retrieve an existing admin seed category preview or published run by id.",
+          parameters: {
+            type: "object",
+            properties: {
+              category_seed_run_id: { type: "integer", description: "Category seed run id" }
+            },
+            required: [ "category_seed_run_id" ]
+          }
+        }
+      },
+      {
+        type: "function",
+        function: {
+          name: "publish_seed_category",
+          description: "Publish an existing admin category preview into a live category.",
+          parameters: {
+            type: "object",
+            properties: {
+              category_seed_run_id: { type: "integer", description: "Category seed run id" }
+            },
+            required: [ "category_seed_run_id" ]
+          }
+        }
+      },
+      {
+        type: "function",
+        function: {
+          name: "list_seed_category_runs",
+          description: "List recent admin category seed runs with their publish state and preview links.",
+          parameters: { type: "object", properties: {} }
+        }
+      },
+      {
+        type: "function",
+        function: {
           name: "get_seed_preview",
           description: "Retrieve an existing admin seed preview or published run by generation id.",
           parameters: {

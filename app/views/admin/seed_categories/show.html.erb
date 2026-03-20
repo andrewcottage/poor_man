@@ -1,0 +1,67 @@
+<% content_for :title, @category_seed_run.data["title"].presence || "Category Preview" %>
+
+<div class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+  <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <p class="text-sm font-semibold uppercase tracking-[0.3em] text-amber-700">Admin Only</p>
+      <h1 class="mt-2 text-3xl font-semibold text-slate-900"><%= @category_seed_run.data["title"].presence || "Category Preview" %></h1>
+      <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-600"><%= @category_seed_run.data["description"].presence || "This category preview is still generating." %></p>
+    </div>
+
+    <% if @category_seed_run.complete? && @category_seed_run.published_category.blank? %>
+      <%= button_to "Publish category", publish_admin_seed_category_path(@category_seed_run), method: :post, class: "stovaro-btn-accent px-5 py-3" %>
+    <% elsif @category_seed_run.published_category.present? %>
+      <%= link_to "View category", category_path(@category_seed_run.published_category.slug), class: "stovaro-btn-secondary px-5 py-3" %>
+    <% end %>
+  </div>
+
+  <div class="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.8fr)]">
+    <section class="stovaro-surface overflow-hidden p-4 sm:p-6">
+      <% if @category_seed_run.image.attached? %>
+        <%= image_tag @category_seed_run.image, class: "aspect-[16/10] w-full rounded-3xl object-cover" %>
+      <% else %>
+        <div class="flex aspect-[16/10] items-center justify-center rounded-3xl bg-stone-100 text-sm text-slate-500">
+          Preview image is still generating.
+        </div>
+      <% end %>
+    </section>
+
+    <aside class="space-y-6">
+      <section class="stovaro-surface p-6">
+        <h2 class="text-lg font-semibold text-slate-900">Preview details</h2>
+        <dl class="mt-4 space-y-4 text-sm">
+          <div>
+            <dt class="font-semibold text-slate-900">Title</dt>
+            <dd class="mt-1 text-slate-600"><%= @category_seed_run.data["title"].presence || "Generating" %></dd>
+          </div>
+          <div>
+            <dt class="font-semibold text-slate-900">Slug</dt>
+            <dd class="mt-1 text-slate-600"><%= @category_seed_run.data["slug"].presence || "Generating" %></dd>
+          </div>
+          <div>
+            <dt class="font-semibold text-slate-900">Source prompt</dt>
+            <dd class="mt-1 text-slate-600"><%= @category_seed_run.prompt %></dd>
+          </div>
+          <% if @category_seed_run.seed_publish_error.present? %>
+            <div>
+              <dt class="font-semibold text-red-800">Publish error</dt>
+              <dd class="mt-1 text-red-700"><%= @category_seed_run.seed_publish_error %></dd>
+            </div>
+          <% end %>
+        </dl>
+      </section>
+
+      <section class="stovaro-surface p-6">
+        <h2 class="text-lg font-semibold text-slate-900">Recent category previews</h2>
+        <div class="mt-4 space-y-3">
+          <% @category_seed_runs.each do |seed_run| %>
+            <%= link_to admin_seed_category_path(seed_run), class: "block rounded-2xl border border-stone-200 p-4 transition hover:border-stone-300 hover:bg-stone-50" do %>
+              <p class="text-sm font-semibold text-slate-900"><%= seed_run.data["title"].presence || seed_run.prompt %></p>
+              <p class="mt-1 text-xs text-slate-500"><%= seed_run.created_at.strftime("%b %-d, %Y") %></p>
+            <% end %>
+          <% end %>
+        </div>
+      </section>
+    </aside>
+  </div>
+</div>

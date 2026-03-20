@@ -1,0 +1,39 @@
+<% content_for :title, "Category Seed Runs" %>
+
+<div class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+  <div class="mb-8">
+    <p class="text-sm font-semibold uppercase tracking-[0.3em] text-amber-700">Admin Only</p>
+    <h1 class="mt-2 text-3xl font-semibold text-slate-900">Category Seed Runs</h1>
+    <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
+      Category previews created from Seed Copilot appear here. Open any run to review the copy and photorealistic preview image before publishing it to the site.
+    </p>
+  </div>
+
+  <div class="grid gap-4">
+    <% if @category_seed_runs.any? %>
+      <% @category_seed_runs.each do |seed_run| %>
+        <% status_label, status_classes = if seed_run.published_category.present?
+          ["Published", "bg-emerald-100 text-emerald-800"]
+        elsif seed_run.seed_publish_error.present?
+          ["Needs attention", "bg-red-100 text-red-800"]
+        elsif seed_run.complete?
+          ["Ready", "bg-amber-100 text-amber-800"]
+        else
+          ["Generating", "bg-slate-100 text-slate-700"]
+        end %>
+
+        <%= link_to admin_seed_category_path(seed_run), class: "stovaro-surface block p-5 transition hover:border-stone-300 hover:bg-stone-50" do %>
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <p class="text-base font-semibold text-slate-900"><%= seed_run.data["title"].presence || seed_run.prompt %></p>
+              <p class="mt-1 text-sm text-slate-600"><%= seed_run.data["description"].presence || "Preview still generating." %></p>
+            </div>
+            <span class="rounded-full px-2.5 py-1 text-xs font-semibold <%= status_classes %>"><%= status_label %></span>
+          </div>
+        <% end %>
+      <% end %>
+    <% else %>
+      <p class="stovaro-surface p-6 text-sm text-slate-500">No category seed runs yet.</p>
+    <% end %>
+  </div>
+</div>

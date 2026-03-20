@@ -22,6 +22,8 @@ class Chat::Conversation < ApplicationRecord
   belongs_to :user
   has_many :messages, class_name: "Chat::Message", foreign_key: :conversation_id, dependent: :destroy
 
+  scope :recent_first, -> { order(updated_at: :desc, id: :desc) }
+
   def messages_for_api
     messages.order(:created_at).map do |msg|
       entry = { role: msg.role, content: msg.content }
@@ -29,5 +31,26 @@ class Chat::Conversation < ApplicationRecord
       entry[:tool_call_id] = msg.tool_call_id if msg.tool_call_id.present?
       entry
     end
+  end
+
+  def display_title
+    title.presence || first_user_message&.content.to_s.truncate(48) || "New chat"
+  end
+
+  def preview_text
+    messages.visible.chronological.last&.content.to_s.truncate(72)
+  end
+
+  def assign_title_from!(content)
+    normalized = content.to_s.squish.truncate(60)
+    return if normalized.blank?
+
+    update!(title: normalized)
+  end
+
+  private
+
+  def first_user_message
+    messages.where(role: "user").chronological.first
   end
 end

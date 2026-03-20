@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_20_101500) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_20_143000) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -69,6 +69,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_101500) do
     t.string "title"
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_categories_on_slug", unique: true
+  end
+
+  create_table "category_seed_runs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "data"
+    t.text "prompt", null: false
+    t.datetime "published_at"
+    t.integer "published_category_id"
+    t.text "seed_publish_error"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["published_category_id"], name: "index_category_seed_runs_on_published_category_id"
+    t.index ["user_id"], name: "index_category_seed_runs_on_user_id"
   end
 
   create_table "chat_conversations", force: :cascade do |t|
@@ -371,6 +384,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_101500) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "analytics_events", "users"
+  add_foreign_key "category_seed_runs", "categories", column: "published_category_id"
+  add_foreign_key "category_seed_runs", "users"
   add_foreign_key "chat_conversations", "users"
   add_foreign_key "chat_messages", "chat_conversations", column: "conversation_id"
   add_foreign_key "collection_recipes", "collections"

@@ -22,6 +22,7 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
     get chat_url
     assert_response :success
     assert_select "[data-controller='chat']"
+    assert_select "h2", "Recent conversations"
   end
 
   test "admin user can access chat without pro plan" do
@@ -48,6 +49,44 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     conversation = users(:pro_user).chat_conversations.last
     assert_equal "What should I cook tonight?", conversation.messages.where(role: "user").last.content
+  end
+
+  test "pro user can start a new conversation" do
+    login(users(:pro_user))
+
+    assert_difference(-> { users(:pro_user).chat_conversations.count }, 1) do
+      post create_conversation_chat_url
+    end
+
+    conversation = users(:pro_user).chat_conversations.order(:created_at).last
+    assert_redirected_to chat_conversation_path(conversation)
+  end
+
+  test "show renders the requested conversation context" do
+    login(users(:pro_user))
+    other_conversation = users(:pro_user).chat_conversations.create!(title: "Meal planning")
+    other_conversation.messages.create!(role: "user", content: "Help me plan lunches")
+
+    get chat_conversation_url(other_conversation)
+
+    assert_response :success
+    assert_select "p", text: "Meal planning"
+    assert_select "#chat_messages", text: /Help me plan lunches/
+    assert_select "input[type=hidden][name=conversation_id][value='#{other_conversation.id}']", visible: false
+  end
+
+  test "message posts to the selected conversation" do
+    login(users(:pro_user))
+    other_conversation = users(:pro_user).chat_conversations.create!
+
+    assert_enqueued_with(job: Chat::RespondJob) do
+      post create_message_chat_url,
+        params: { content: "Use this context", conversation_id: other_conversation.id },
+        as: :turbo_stream
+    end
+
+    assert_equal "Use this context", other_conversation.messages.where(role: "user").last.content
+    assert_equal "Use this context", other_conversation.reload.title
   end
 
   test "admin user can send a message without pro plan" do
