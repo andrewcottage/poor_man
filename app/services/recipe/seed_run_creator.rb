@@ -10,11 +10,16 @@ class Recipe::SeedRunCreator
     generation.skip_background_generation = true
     generation.save!
 
-    generation.generate_recipe
-    generation.generate_image
-    generation.generate_images
+    run_step!(generation, "Recipe generation failed") { generation.generate_recipe }
+    return generation if generation.seed_publish_error.present?
 
-    Recipe::GenerationPublisher.new(generation).call if auto_publish
+    run_step!(generation, "Hero image generation failed") { generation.generate_image }
+    return generation if generation.seed_publish_error.present?
+
+    run_step!(generation, "Gallery image generation failed") { generation.generate_images }
+    return generation if generation.seed_publish_error.present?
+
+    run_step!(generation, "Recipe publish failed") { Recipe::GenerationPublisher.new(generation).call } if auto_publish && generation.complete?
 
     generation
   end
@@ -22,4 +27,10 @@ class Recipe::SeedRunCreator
   private
 
   attr_reader :user
+
+  def run_step!(generation, prefix)
+    yield
+  rescue StandardError => error
+    generation.update_column(:seed_publish_error, "#{prefix}: #{error.message}")
+  end
 end

@@ -1,10 +1,6 @@
-openai_secret = begin
-  Rails.application.credentials.dig(:open_ai, :secret)
-rescue ActiveSupport::EncryptedFile::MissingKeyError, ActiveSupport::MessageEncryptor::InvalidMessage
-  nil
-end
+require Rails.root.join("app/services/open_ai/config")
 
 OpenAI.configure do |config|
-  config.access_token = openai_secret
+  config.access_token = OpenAI::Config.access_token
   config.log_errors = Rails.env.development?
 end

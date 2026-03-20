@@ -18,6 +18,8 @@ module OpenAI
     end
 
     def call
+      OpenAI::Config.ensure_configured!
+
       last_error = nil
 
       models.each do |model|
@@ -34,13 +36,7 @@ module OpenAI
     attr_reader :basename, :client, :prompt, :quality, :size
 
     def models
-      configured_model = begin
-        Rails.application.credentials.dig(:open_ai, :image_model)
-      rescue ActiveSupport::EncryptedFile::MissingKeyError, ActiveSupport::MessageEncryptor::InvalidMessage
-        nil
-      end
-
-      ([ configured_model ] + FALLBACK_MODELS).compact.map(&:to_s).reject(&:blank?).uniq
+      ([ OpenAI::Config.image_model ] + FALLBACK_MODELS).compact.map(&:to_s).reject(&:blank?).uniq
     end
 
     def generate_with_model(model)

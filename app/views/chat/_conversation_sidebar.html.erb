@@ -18,6 +18,21 @@
         <p class="text-sm font-semibold text-slate-900"><%= conversation.display_title %></p>
         <p class="mt-1 text-xs text-slate-500"><%= conversation.preview_text.presence || "No messages yet" %></p>
       <% end %>
+
+      <% if active %>
+        <div class="mt-2 flex items-center gap-2">
+          <%= form_with url: update_chat_conversation_path(conversation), method: :patch, class: "flex flex-1 items-center gap-2" do %>
+            <%= text_field_tag :title, conversation.display_title, class: "stovaro-input h-10 px-3 py-2 text-sm" %>
+            <%= submit_tag "Rename", class: "stovaro-btn-secondary px-3 py-2 text-sm" %>
+          <% end %>
+
+          <%= button_to "Delete",
+              destroy_chat_conversation_path(conversation),
+              method: :delete,
+              form: { data: { turbo_confirm: "Delete this chat?" } },
+              class: "rounded-xl border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50" %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </aside>

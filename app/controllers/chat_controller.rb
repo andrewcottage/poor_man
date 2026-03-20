@@ -19,10 +19,10 @@ class ChatController < ApplicationController
       return
     end
 
-    @conversations = Current.user.chat_conversations.includes(:messages).recent_first
-    @conversation = selected_conversation || @conversations.first || Current.user.chat_conversations.create!
+    @conversation = selected_conversation || Current.user.chat_conversations.recent_first.first || Current.user.chat_conversations.create!
     @message = @conversation.messages.create!(role: "user", content: params[:content])
     @conversation.assign_title_from!(params[:content]) if @conversation.title.blank?
+    @conversations = Current.user.chat_conversations.includes(:messages).recent_first
 
     Chat::RespondJob.perform_later(@conversation)
 
@@ -45,6 +45,34 @@ class ChatController < ApplicationController
 
     conversation = Current.user.chat_conversations.create!
     redirect_to chat_conversation_path(conversation), notice: "Started a new chat.", status: :see_other
+  end
+
+  def update_conversation
+    require_user!
+    return if performed?
+
+    conversation = Current.user.chat_conversations.find(params[:conversation_id])
+    title = params[:title].to_s.squish
+
+    if title.blank?
+      redirect_to chat_conversation_path(conversation), alert: "Chat title can't be blank.", status: :see_other
+      return
+    end
+
+    conversation.update!(title: title)
+    redirect_to chat_conversation_path(conversation), notice: "Chat renamed.", status: :see_other
+  end
+
+  def destroy_conversation
+    require_user!
+    return if performed?
+
+    conversation = Current.user.chat_conversations.find(params[:conversation_id])
+    fallback_conversation = Current.user.chat_conversations.where.not(id: conversation.id).recent_first.first
+    conversation.destroy!
+
+    destination = fallback_conversation ? chat_conversation_path(fallback_conversation) : chat_path
+    redirect_to destination, notice: "Chat deleted.", status: :see_other
   end
 
   private

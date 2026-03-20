@@ -8,6 +8,10 @@ Dir[Rails.root.join("test/support/**/*.rb")].sort.each { |file| require file }
 
 WebMock.disable_net_connect!(allow_localhost: true)
 
+OpenAI.configure do |config|
+  config.access_token ||= "test-openai-token"
+end
+
 module ActiveSupport
   class TestCase
     # Run tests in parallel with specified workers

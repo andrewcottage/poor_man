@@ -89,6 +89,28 @@ class ChatControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Use this context", other_conversation.reload.title
   end
 
+  test "user can rename a conversation" do
+    login(users(:pro_user))
+    conversation = chat_conversations(:pro_conversation)
+
+    patch update_chat_conversation_url(conversation), params: { title: "Dinner ideas" }
+
+    assert_redirected_to chat_conversation_path(conversation)
+    assert_equal "Dinner ideas", conversation.reload.title
+  end
+
+  test "user can delete a conversation" do
+    login(users(:pro_user))
+    conversation = chat_conversations(:pro_conversation)
+    other_conversation = users(:pro_user).chat_conversations.create!(title: "Backup")
+
+    assert_difference("Chat::Conversation.count", -1) do
+      delete destroy_chat_conversation_url(conversation)
+    end
+
+    assert_redirected_to chat_conversation_path(other_conversation)
+  end
+
   test "admin user can send a message without pro plan" do
     login(users(:admin))
 

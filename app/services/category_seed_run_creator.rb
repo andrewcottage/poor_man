@@ -8,10 +8,19 @@ class CategorySeedRunCreator
   def call(prompt:, auto_publish: false)
     category_seed_run = user.category_seed_runs.create!(prompt: prompt)
 
-    category_seed_run.update!(data: generate_data(prompt))
-    attach_preview_image!(category_seed_run)
+    run_step!(category_seed_run, "Category generation failed") do
+      category_seed_run.update!(data: generate_data(prompt))
+    end
+    return category_seed_run if category_seed_run.seed_publish_error.present?
 
-    CategorySeedRunPublisher.new(category_seed_run).call if auto_publish
+    run_step!(category_seed_run, "Category image generation failed") do
+      attach_preview_image!(category_seed_run)
+    end
+    return category_seed_run if category_seed_run.seed_publish_error.present?
+
+    run_step!(category_seed_run, "Category publish failed") do
+      CategorySeedRunPublisher.new(category_seed_run).call
+    end if auto_publish && category_seed_run.complete?
 
     category_seed_run
   end
@@ -21,6 +30,7 @@ class CategorySeedRunCreator
   attr_reader :user
 
   def generate_data(prompt)
+    OpenAI::Config.ensure_configured!
     response = OpenAI::Client.new.chat(
       parameters: {
         model: "gpt-4.1",
@@ -33,7 +43,7 @@ class CategorySeedRunCreator
       }
     )
 
-    JSON.parse(response.dig("choices", 0, "message", "content"))
+    OpenAI::StructuredOutput.parse_json_object!(response.dig("choices", 0, "message", "content"))
   end
 
   def attach_preview_image!(category_seed_run)
@@ -79,5 +89,11 @@ class CategorySeedRunCreator
       textures, premium cookbook styling, clean composition, no text, no packaging, no illustration.
       Category description: #{data["description"]}.
     PROMPT
+  end
+
+  def run_step!(category_seed_run, prefix)
+    yield
+  rescue StandardError => error
+    category_seed_run.update_column(:seed_publish_error, "#{prefix}: #{error.message}")
   end
 end

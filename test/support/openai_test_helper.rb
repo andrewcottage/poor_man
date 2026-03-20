@@ -14,8 +14,28 @@ module OpenAITestHelper
     prep_time:,
     cost:,
     servings:,
-    category:
+    category:,
+    wrap_in_code_fence: false
   )
+    content = {
+      title: title,
+      blurb: blurb,
+      ingredients: ingredients,
+      instructions: instructions,
+      tags: tags,
+      difficulty: difficulty,
+      prep_time: prep_time,
+      cost: cost,
+      servings: servings,
+      category: category
+    }.to_json
+
+    content = <<~CONTENT if wrap_in_code_fence
+      ```json
+      #{content}
+      ```
+    CONTENT
+
     stub_request(:post, "#{OPENAI_API_BASE}/chat/completions").to_return(
       status: 200,
       headers: json_headers,
@@ -24,18 +44,7 @@ module OpenAITestHelper
           {
             message: {
               role: "assistant",
-              content: {
-                title: title,
-                blurb: blurb,
-                ingredients: ingredients,
-                instructions: instructions,
-                tags: tags,
-                difficulty: difficulty,
-                prep_time: prep_time,
-                cost: cost,
-                servings: servings,
-                category: category
-              }.to_json
+              content: content
             }
           }
         ]
@@ -111,8 +120,21 @@ module OpenAITestHelper
   def stub_openai_category_generation_response(
     title:,
     slug:,
-    description:
+    description:,
+    wrap_in_code_fence: false
   )
+    content = {
+      title: title,
+      slug: slug,
+      description: description
+    }.to_json
+
+    content = <<~CONTENT if wrap_in_code_fence
+      ```json
+      #{content}
+      ```
+    CONTENT
+
     stub_request(:post, "#{OPENAI_API_BASE}/chat/completions").to_return(
       status: 200,
       headers: json_headers,
@@ -121,11 +143,7 @@ module OpenAITestHelper
           {
             message: {
               role: "assistant",
-              content: {
-                title: title,
-                slug: slug,
-                description: description
-              }.to_json
+              content: content
             }
           }
         ]
@@ -136,12 +154,14 @@ module OpenAITestHelper
   def stub_seed_category_preview(
     title: "Weeknight Pasta",
     slug: "weeknight-pasta",
-    description: "Fast, satisfying pasta recipes built for busy evenings."
+    description: "Fast, satisfying pasta recipes built for busy evenings.",
+    wrap_in_code_fence: false
   )
     stub_openai_category_generation_response(
       title: title,
       slug: slug,
-      description: description
+      description: description,
+      wrap_in_code_fence: wrap_in_code_fence
     )
 
     stub_openai_image_generation_sequence(count: 1, prefix: slug)

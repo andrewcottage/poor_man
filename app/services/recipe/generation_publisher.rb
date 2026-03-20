@@ -157,15 +157,6 @@ class Recipe::GenerationPublisher
   end
 
   def openai_not_configured?
-    credentials_secret = Rails.application.credentials.dig(:open_ai, :secret)
-  rescue ActiveSupport::EncryptedFile::MissingKeyError, ActiveSupport::MessageEncryptor::InvalidMessage
-    credentials_secret = nil
-    secrets_secret = Rails.application.secrets.dig(:open_ai, :secret) if Rails.application.respond_to?(:secrets)
-
-    credentials_secret.blank? && secrets_secret.blank?
-  else
-    secrets_secret = Rails.application.secrets.dig(:open_ai, :secret) if Rails.application.respond_to?(:secrets)
-
-    credentials_secret.blank? && secrets_secret.blank?
+    !OpenAI::Config.configured?
   end
 end

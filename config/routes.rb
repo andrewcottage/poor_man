@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     post :create_conversation
   end
   get "chat/:conversation_id", to: "chat#show", as: :chat_conversation
+  patch "chat/:conversation_id", to: "chat#update_conversation", as: :update_chat_conversation
+  delete "chat/:conversation_id", to: "chat#destroy_conversation", as: :destroy_chat_conversation
   resources :pro_waitlist_entries, only: :create
 
   namespace :profiles do

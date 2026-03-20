@@ -66,6 +66,7 @@ class Recipe::Generation < ApplicationRecord
   end
 
   def generate_recipe
+    OpenAI::Config.ensure_configured!
     client = OpenAI::Client.new
 
     content = formatted_prompt
@@ -77,12 +78,13 @@ class Recipe::Generation < ApplicationRecord
       }
     )
 
-    update(data: JSON.parse(response.dig("choices", 0, "message", "content")))
+    update(data: OpenAI::StructuredOutput.parse_json_object!(response.dig("choices", 0, "message", "content")))
   end
 
   def generate_instructions
     return if data.blank?
 
+    OpenAI::Config.ensure_configured!
     client = OpenAI::Client.new
     response = client.chat(
       parameters: {
