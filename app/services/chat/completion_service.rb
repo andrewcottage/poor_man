@@ -1,5 +1,7 @@
 class Chat::CompletionService
   MAX_TOOL_LOOPS = 5
+  MAX_RETRIES = 3
+  RETRY_BASE_DELAY = 2 # seconds
 
   SYSTEM_PROMPT = <<~PROMPT.freeze
     You are Stovaro's recipe assistant. You help users discover recipes, plan meals, and answer cooking questions.
@@ -71,9 +73,16 @@ class Chat::CompletionService
     Rails.logger.error("[Chat::CompletionService] Error: #{e.class}: #{e.message}")
     Rails.logger.error("[Chat::CompletionService] Conversation: id=#{@conversation.id} user=#{@user.id} (#{@user.username})")
     Rails.logger.error("[Chat::CompletionService] Backtrace:\n#{e.backtrace&.first(20)&.join("\n")}")
+
+    user_message = if e.is_a?(Faraday::TooManyRequestsError)
+      "I'm being rate-limited by the AI service right now. Please wait a minute and try again."
+    else
+      "Sorry, I ran into a problem. Please try again in a moment."
+    end
+
     error_message = @conversation.messages.create!(
       role: "assistant",
-      content: "Sorry, I ran into a problem. Please try again in a moment."
+      content: user_message
     )
     broadcast_message(error_message)
     broadcast_done
@@ -87,19 +96,33 @@ class Chat::CompletionService
 
   def request_completion(messages)
     client = OpenAI::Client.new
-    Rails.logger.info("[Chat::CompletionService] Requesting completion: conversation=#{@conversation.id} message_count=#{messages.size}")
-    response = client.chat(
-      parameters: {
-        model: "gpt-4.1",
-        messages: messages,
-        tools: Chat::ToolDefinitions.new(user: @user).all
-      }
-    )
-    if response["error"]
-      Rails.logger.error("[Chat::CompletionService] API error response: #{response['error'].inspect}")
+    retries = 0
+
+    begin
+      Rails.logger.info("[Chat::CompletionService] Requesting completion: conversation=#{@conversation.id} message_count=#{messages.size} attempt=#{retries + 1}")
+      response = client.chat(
+        parameters: {
+          model: "gpt-4.1",
+          messages: messages,
+          tools: Chat::ToolDefinitions.new(user: @user).all
+        }
+      )
+      if response["error"]
+        Rails.logger.error("[Chat::CompletionService] API error response: #{response['error'].inspect}")
+      end
+      Rails.logger.info("[Chat::CompletionService] Response finish_reason=#{response.dig('choices', 0, 'finish_reason')} tool_calls=#{response.dig('choices', 0, 'message', 'tool_calls')&.size || 0}")
+      response
+    rescue Faraday::TooManyRequestsError, Faraday::ServerError => e
+      retries += 1
+      if retries <= MAX_RETRIES
+        delay = RETRY_BASE_DELAY ** retries
+        Rails.logger.warn("[Chat::CompletionService] #{e.class} (attempt #{retries}/#{MAX_RETRIES}), retrying in #{delay}s...")
+        sleep(delay)
+        retry
+      end
+      Rails.logger.error("[Chat::CompletionService] #{e.class} persisted after #{MAX_RETRIES} retries, giving up")
+      raise
     end
-    Rails.logger.info("[Chat::CompletionService] Response finish_reason=#{response.dig('choices', 0, 'finish_reason')} tool_calls=#{response.dig('choices', 0, 'message', 'tool_calls')&.size || 0}")
-    response
   end
 
   def system_prompt
