@@ -7,8 +7,9 @@ class Chat::ToolExecutor
 
   def call(tool_name:, arguments:)
     args = arguments.is_a?(String) ? JSON.parse(arguments) : arguments
+    Rails.logger.info("[Chat::ToolExecutor] Executing tool=#{tool_name} args=#{args.inspect.truncate(500)}")
 
-    case tool_name
+    result = case tool_name
     when "search_recipes" then search_recipes(args)
     when "get_recipe_details" then get_recipe_details(args)
     when "get_user_favorites" then get_user_favorites
@@ -28,9 +29,16 @@ class Chat::ToolExecutor
     when "list_seed_runs" then list_seed_runs
     when "list_seed_recipes_by_category" then list_seed_recipes_by_category(args)
     else
+      Rails.logger.warn("[Chat::ToolExecutor] Unknown tool: #{tool_name}")
       { error: "Unknown tool: #{tool_name}" }.to_json
     end
+
+    Rails.logger.info("[Chat::ToolExecutor] Tool=#{tool_name} completed, result_size=#{result.to_s.size}")
+    result
   rescue StandardError => error
+    Rails.logger.error("[Chat::ToolExecutor] Tool=#{tool_name} failed: #{error.class}: #{error.message}")
+    Rails.logger.error("[Chat::ToolExecutor] Args: #{arguments.inspect.truncate(500)}")
+    Rails.logger.error("[Chat::ToolExecutor] Backtrace:\n#{error.backtrace&.first(15)&.join("\n")}")
     { error: error.message }.to_json
   end
 

@@ -68,7 +68,9 @@ class Chat::CompletionService
       end
     end
   rescue StandardError => e
-    Rails.logger.error("[Chat::CompletionService] Error: #{e.message}")
+    Rails.logger.error("[Chat::CompletionService] Error: #{e.class}: #{e.message}")
+    Rails.logger.error("[Chat::CompletionService] Conversation: id=#{@conversation.id} user=#{@user.id} (#{@user.username})")
+    Rails.logger.error("[Chat::CompletionService] Backtrace:\n#{e.backtrace&.first(20)&.join("\n")}")
     error_message = @conversation.messages.create!(
       role: "assistant",
       content: "Sorry, I ran into a problem. Please try again in a moment."
@@ -85,13 +87,19 @@ class Chat::CompletionService
 
   def request_completion(messages)
     client = OpenAI::Client.new
-    client.chat(
+    Rails.logger.info("[Chat::CompletionService] Requesting completion: conversation=#{@conversation.id} message_count=#{messages.size}")
+    response = client.chat(
       parameters: {
         model: "gpt-4.1",
         messages: messages,
         tools: Chat::ToolDefinitions.new(user: @user).all
       }
     )
+    if response["error"]
+      Rails.logger.error("[Chat::CompletionService] API error response: #{response['error'].inspect}")
+    end
+    Rails.logger.info("[Chat::CompletionService] Response finish_reason=#{response.dig('choices', 0, 'finish_reason')} tool_calls=#{response.dig('choices', 0, 'message', 'tool_calls')&.size || 0}")
+    response
   end
 
   def system_prompt
