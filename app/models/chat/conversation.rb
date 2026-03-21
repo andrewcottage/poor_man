@@ -24,9 +24,14 @@ class Chat::Conversation < ApplicationRecord
 
   scope :recent_first, -> { order(updated_at: :desc, id: :desc) }
 
+  MAX_API_MESSAGES = 40
+  MAX_TOOL_CONTENT_SIZE = 2000
+
   def messages_for_api
-    messages.order(:created_at).map do |msg|
-      entry = { role: msg.role, content: msg.api_content }
+    recent = messages.order(:created_at).last(MAX_API_MESSAGES)
+    recent.map do |msg|
+      content = msg.role == "tool" ? truncate_tool_content(msg.api_content) : msg.api_content
+      entry = { role: msg.role, content: content }
       entry[:tool_calls] = JSON.parse(msg.tool_calls) if msg.tool_calls.present?
       entry[:tool_call_id] = msg.tool_call_id if msg.tool_call_id.present?
       entry
@@ -57,6 +62,12 @@ class Chat::Conversation < ApplicationRecord
   end
 
   private
+
+  def truncate_tool_content(content)
+    return content unless content.is_a?(String) && content.size > MAX_TOOL_CONTENT_SIZE
+
+    content.truncate(MAX_TOOL_CONTENT_SIZE)
+  end
 
   def first_user_message
     messages.where(role: "user").chronological.first

@@ -43,6 +43,71 @@ class Chat::ConversationTest < ActiveSupport::TestCase
     assert api_messages.all? { |m| m.key?(:role) && m.key?(:content) }
   end
 
+  test "messages_for_api caps at MAX_API_MESSAGES" do
+    conversation = chat_conversations(:pro_conversation)
+
+    # Create more messages than the limit
+    (Chat::Conversation::MAX_API_MESSAGES + 10).times do |i|
+      conversation.messages.create!(role: "user", content: "Message #{i}")
+    end
+
+    api_messages = conversation.messages_for_api
+    assert_operator api_messages.size, :<=, Chat::Conversation::MAX_API_MESSAGES
+  end
+
+  test "messages_for_api returns most recent messages when over limit" do
+    conversation = chat_conversations(:pro_conversation)
+    conversation.messages.destroy_all
+
+    (Chat::Conversation::MAX_API_MESSAGES + 5).times do |i|
+      conversation.messages.create!(role: "user", content: "Message #{i}")
+    end
+
+    api_messages = conversation.messages_for_api
+    last_content = api_messages.last[:content]
+    assert_equal "Message #{Chat::Conversation::MAX_API_MESSAGES + 4}", last_content
+  end
+
+  test "messages_for_api truncates large tool content" do
+    conversation = chat_conversations(:pro_conversation)
+    large_json = ({ data: "x" * 3000 }).to_json
+    conversation.messages.create!(
+      role: "tool",
+      content: large_json,
+      tool_call_id: "call_123",
+      tool_name: "search_recipes"
+    )
+
+    api_messages = conversation.messages_for_api
+    tool_message = api_messages.find { |m| m[:role] == "tool" }
+    assert_operator tool_message[:content].size, :<=, Chat::Conversation::MAX_TOOL_CONTENT_SIZE
+  end
+
+  test "messages_for_api does not truncate small tool content" do
+    conversation = chat_conversations(:pro_conversation)
+    small_json = '{"title":"Pasta"}'
+    conversation.messages.create!(
+      role: "tool",
+      content: small_json,
+      tool_call_id: "call_456",
+      tool_name: "get_recipe_details"
+    )
+
+    api_messages = conversation.messages_for_api
+    tool_message = api_messages.find { |m| m[:role] == "tool" }
+    assert_equal small_json, tool_message[:content]
+  end
+
+  test "messages_for_api does not truncate user or assistant content" do
+    conversation = chat_conversations(:pro_conversation)
+    long_content = "x" * 5000
+    conversation.messages.create!(role: "user", content: long_content)
+
+    api_messages = conversation.messages_for_api
+    user_message = api_messages.select { |m| m[:role] == "user" }.last
+    assert_equal long_content, user_message[:content]
+  end
+
   test "messages_for_api includes multimodal content for image messages" do
     conversation = chat_conversations(:pro_conversation)
     message = conversation.messages.create!(role: "user", content: "Identify this dish")

@@ -2,6 +2,9 @@ class Chat::CompletionService
   MAX_TOOL_LOOPS = 5
   MAX_RETRIES = 3
   RETRY_BASE_DELAY = 2 # seconds
+  TOOL_MODEL = "gpt-4.1-mini"
+  FINAL_MODEL = "gpt-4.1"
+  MIN_REQUEST_INTERVAL = 3 # seconds between requests per user
 
   SYSTEM_PROMPT = <<~PROMPT.freeze
     You are Stovaro's recipe assistant. You help users discover recipes, plan meals, and answer cooking questions.
@@ -24,11 +27,14 @@ class Chat::CompletionService
   end
 
   def call
+    throttle_request!
     messages = build_messages
     tool_loops = 0
 
     loop do
-      response = request_completion(messages)
+      # Use cheaper model for tool-calling rounds, full model for final response
+      model = tool_loops > 0 ? TOOL_MODEL : FINAL_MODEL
+      response = request_completion(messages, model: model)
       choice = response.dig("choices", 0, "message")
 
       if choice["tool_calls"].present? && tool_loops < MAX_TOOL_LOOPS
@@ -94,15 +100,31 @@ class Chat::CompletionService
     [ { role: "system", content: system_prompt } ] + @conversation.messages_for_api
   end
 
-  def request_completion(messages)
+  def throttle_request!
+    cache_key = "chat_rate_limit:user:#{@user.id}"
+    last_request_at = Rails.cache.read(cache_key)
+
+    if last_request_at
+      elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC) - last_request_at
+      if elapsed < MIN_REQUEST_INTERVAL
+        wait_time = MIN_REQUEST_INTERVAL - elapsed
+        Rails.logger.info("[Chat::CompletionService] Throttling user=#{@user.id} for #{wait_time.round(1)}s")
+        sleep(wait_time)
+      end
+    end
+
+    Rails.cache.write(cache_key, Process.clock_gettime(Process::CLOCK_MONOTONIC), expires_in: MIN_REQUEST_INTERVAL.seconds)
+  end
+
+  def request_completion(messages, model: FINAL_MODEL)
     client = OpenAI::Client.new
     retries = 0
 
     begin
-      Rails.logger.info("[Chat::CompletionService] Requesting completion: conversation=#{@conversation.id} message_count=#{messages.size} attempt=#{retries + 1}")
+      Rails.logger.info("[Chat::CompletionService] Requesting completion: conversation=#{@conversation.id} model=#{model} message_count=#{messages.size} attempt=#{retries + 1}")
       response = client.chat(
         parameters: {
-          model: "gpt-4.1",
+          model: model,
           messages: messages,
           tools: Chat::ToolDefinitions.new(user: @user).all
         }
