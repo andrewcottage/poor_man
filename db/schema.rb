@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_20_143000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_21_133641) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -82,26 +82,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_143000) do
     t.integer "user_id", null: false
     t.index ["published_category_id"], name: "index_category_seed_runs_on_published_category_id"
     t.index ["user_id"], name: "index_category_seed_runs_on_user_id"
-  end
-
-  create_table "chat_conversations", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "title"
-    t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
-    t.index ["user_id"], name: "index_chat_conversations_on_user_id"
-  end
-
-  create_table "chat_messages", force: :cascade do |t|
-    t.text "content"
-    t.integer "conversation_id", null: false
-    t.datetime "created_at", null: false
-    t.string "role", null: false
-    t.string "tool_call_id"
-    t.text "tool_calls"
-    t.string "tool_name"
-    t.datetime "updated_at", null: false
-    t.index ["conversation_id"], name: "index_chat_messages_on_conversation_id"
   end
 
   create_table "collection_recipes", force: :cascade do |t|
@@ -386,8 +366,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_20_143000) do
   add_foreign_key "analytics_events", "users"
   add_foreign_key "category_seed_runs", "categories", column: "published_category_id"
   add_foreign_key "category_seed_runs", "users"
-  add_foreign_key "chat_conversations", "users"
-  add_foreign_key "chat_messages", "chat_conversations", column: "conversation_id"
   add_foreign_key "collection_recipes", "collections"
   add_foreign_key "collection_recipes", "recipes"
   add_foreign_key "collections", "users"

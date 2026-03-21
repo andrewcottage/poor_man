@@ -2,8 +2,6 @@
 <% categories_active = controller_path == "categories" %>
 <% pricing_active = controller_path == "pricing" || controller_path == "pro_waitlist_entries" || controller_path.start_with?("billing/") %>
 <% about_active = controller_path == "pages" && action_name == "about" %>
-<% chat_active = controller_path == "chat" %>
-
 <nav class="relative flex items-center justify-between gap-6 px-5 py-4 sm:px-6 lg:px-8" aria-label="Global">
   <div class="flex min-w-0 flex-1 items-center gap-4">
     <%= link_to root_path, class: "group flex min-w-0 items-center gap-3" do %>
@@ -31,7 +29,6 @@
       <%= link_to "Recipes", recipes_path, class: stovaro_nav_link_classes(recipes_active) %>
       <%= link_to "Categories", categories_path, class: stovaro_nav_link_classes(categories_active) %>
       <%= link_to "Pricing", pricing_path, class: stovaro_nav_link_classes(pricing_active) %>
-      <%= link_to "Chat", chat_path, class: stovaro_nav_link_classes(chat_active) %>
       <%= link_to "About", about_pages_path, class: stovaro_nav_link_classes(about_active) %>
     </div>
   </div>
@@ -65,7 +62,6 @@
             <%= link_to "Collections", profiles_collections_path, class: stovaro_account_menu_link_classes, role: "menuitem", tabindex: "-1" %>
             <%= link_to "AI Generator", recipes_generations_path, class: stovaro_account_menu_link_classes, role: "menuitem", tabindex: "-1" %>
             <% if Current.user.admin? %>
-              <%= link_to "Seed Copilot", chat_path, class: stovaro_account_menu_link_classes, role: "menuitem", tabindex: "-1" %>
               <%= link_to "Moderation", admin_recipe_submissions_path, class: stovaro_account_menu_link_classes, role: "menuitem", tabindex: "-1" %>
             <% end %>
           </div>

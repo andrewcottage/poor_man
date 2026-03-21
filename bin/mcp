@@ -1,0 +1,96 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "mcp"
+require "mcp/server/transports/stdio_transport"
+require "net/http"
+require "json"
+require "uri"
+
+api_key = ENV["STOVARO_API_KEY"]
+unless api_key && !api_key.empty?
+  warn "STOVARO_API_KEY environment variable is required"
+  exit 1
+end
+
+base_url = ENV.fetch("STOVARO_URL", "https://stovaro.com")
+base_uri = URI.parse(base_url)
+
+def http_request(base_uri, method, path, api_key, body: nil)
+  uri = base_uri.dup
+  uri.path = path
+
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = uri.scheme == "https"
+  http.open_timeout = 10
+  http.read_timeout = 30
+
+  request = case method
+  when :get then Net::HTTP::Get.new(uri)
+  when :post then Net::HTTP::Post.new(uri)
+  end
+
+  request["Authorization"] = "Bearer #{api_key}"
+  request["Content-Type"] = "application/json"
+  request["Accept"] = "application/json"
+  request.body = body if body
+
+  http.request(request)
+end
+
+# Discover tools from the server
+response = http_request(base_uri, :get, "/api/mcp/tools", api_key)
+
+unless response.is_a?(Net::HTTPSuccess)
+  warn "Failed to discover tools: #{response.code} #{response.body}"
+  exit 1
+end
+
+manifest = JSON.parse(response.body)
+instructions = manifest["instructions"]
+tools_data = manifest["tools"]
+
+# Build MCP tools that proxy to the server
+tools = tools_data.map do |tool_data|
+  tool_name = tool_data["name"]
+  schema = tool_data["inputSchema"]
+
+  MCP::Tool.define(
+    name: tool_name,
+    description: tool_data["description"],
+    input_schema: schema
+  ) do |**kwargs|
+    kwargs.delete(:server_context)
+    begin
+      resp = http_request(base_uri, :post, "/api/mcp/tools/#{tool_name}", api_key, body: kwargs.to_json)
+
+      if resp.is_a?(Net::HTTPSuccess)
+        result = JSON.parse(resp.body)
+        MCP::Tool::Response.new(
+          result["content"],
+          error: result["isError"] || false
+        )
+      else
+        MCP::Tool::Response.new(
+          [ { "type" => "text", "text" => { error: "HTTP #{resp.code}: #{resp.body}" }.to_json } ],
+          error: true
+        )
+      end
+    rescue StandardError => e
+      MCP::Tool::Response.new(
+        [ { "type" => "text", "text" => { error: e.message }.to_json } ],
+        error: true
+      )
+    end
+  end
+end
+
+server = MCP::Server.new(
+  name: "stovaro",
+  version: "1.0.0",
+  instructions: instructions,
+  tools: tools
+)
+
+transport = MCP::Server::Transports::StdioTransport.new(server)
+transport.open

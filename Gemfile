@@ -83,5 +83,6 @@ gem "money-rails", "~> 1.15"
 gem "net-imap", ">= 0.5.11"
 
 gem "mocha", "~> 2.7", group: :test
+gem "mcp"
 gem "mission_control-jobs"
 gem "thruster"

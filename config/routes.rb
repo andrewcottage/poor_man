@@ -3,17 +3,15 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     resources :recipes, param: :slug, only: %i[create update]
+
+    namespace :mcp do
+      get "tools", to: "tools#index"
+      post "tools/:tool_name", to: "tools#create"
+    end
   end
 
   resource :pricing, only: :show, controller: :pricing
 
-  resource :chat, only: [:show], controller: :chat do
-    post :create_message
-    post :create_conversation
-  end
-  get "chat/:conversation_id", to: "chat#show", as: :chat_conversation
-  patch "chat/:conversation_id", to: "chat#update_conversation", as: :update_chat_conversation
-  delete "chat/:conversation_id", to: "chat#destroy_conversation", as: :destroy_chat_conversation
   resources :pro_waitlist_entries, only: :create
 
   namespace :profiles do

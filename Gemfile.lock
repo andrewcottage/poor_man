@@ -507,6 +507,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   kamal (~> 2.4)
+  mcp
   minitest (~> 5.25)
   mission_control-jobs
   mocha (~> 2.7)
